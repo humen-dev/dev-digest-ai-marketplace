@@ -1,0 +1,18 @@
+# Normalise line endings in the repo; check out text files as-is per platform.
+* text=auto
+
+# Files executed or parsed on POSIX shells must keep LF even on Windows,
+# otherwise hook scripts fail with "bad interpreter: /bin/bash^M".
+*.sh   text eol=lf
+*.bash text eol=lf
+*.mjs  text eol=lf
+*.js   text eol=lf
+*.json text eol=lf
+*.md   text eol=lf
+*.yml  text eol=lf
+*.yaml text eol=lf
+
+# Windows-only scripts keep CRLF.
+*.cmd text eol=crlf
+*.bat text eol=crlf
+*.ps1 text eol=crlf

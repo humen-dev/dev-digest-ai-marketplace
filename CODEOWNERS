@@ -1,0 +1,11 @@
+# Default owner for everything.
+*                       @humen-dev
+
+# Per-plugin owners go below, e.g.:
+# /plugins/devdigest-backend/   @humen-dev
+
+# Security-sensitive files always need the owner's review.
+/.claude-plugin/        @humen-dev
+**/hooks/               @humen-dev
+**/.mcp.json            @humen-dev
+/.github/               @humen-dev
