@@ -106,6 +106,31 @@ Every plugin has a `README.md` with: what it adds (list of skills / agents /
 commands / hooks), install command, any hooks or MCP servers and what they run,
 and requirements (tools, env vars).
 
+If the plugin has hooks, MCP servers or env vars, describe them in a section
+named exactly `## What it runs`, with one `### <name>` sub-heading per item.
+`<name>` is the hook's script basename (e.g. `validate-schema` for
+`scripts/validate-schema.mjs`), the MCP server key from `.mcp.json`, or the env
+var name. The first paragraph under each sub-heading is shown next to that item
+in the catalog site's "What this runs on your machine" section
+([spec §8.2](specs/catalog-site.md#82-author-notes)). Use it for advice that
+config cannot express:
+
+```markdown
+## What it runs
+
+### validate-schema
+
+Runs `npx prisma validate` after every edit. Takes ~1 s; fails quietly.
+
+### postgres
+
+Read-only SQL access to your database.
+
+### DATABASE_URL
+
+Use a read-only role: the server can run any query the role allows.
+```
+
 ## Before opening a PR
 
 ```bash
