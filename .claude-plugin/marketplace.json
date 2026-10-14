@@ -1,0 +1,10 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dev-digest-ai-marketplace",
+  "description": "Claude Code plugins (skills, agents, commands, hooks) for building and maintaining DevDigest.",
+  "owner": {
+    "name": "humen-dev",
+    "url": "https://github.com/humen-dev"
+  },
+  "plugins": []
+}
