@@ -55,9 +55,22 @@ or enable auto-update in `/plugin` → Marketplaces. After an update, run
 
 ## Plugins
 
-| Plugin | Description |
-|--------|-------------|
-| _none yet_ | |
+| Plugin | Kind | What it adds |
+|--------|------|--------------|
+| [`sdd-engineering`](plugins/sdd-engineering/) | product | Spec-Driven Development: `spec-creator`, `implementation-planner`, `implementer`, `plan-verifier` agents; `/sdd-engineering:run-plan`, `/sdd-engineering:workflow-retro`; guard hooks |
+| [`engineering-paved-path`](plugins/engineering-paved-path/) | dependency | 12 engineering skills: React, Next.js, Fastify, Drizzle, PostgreSQL, TypeScript, Zod, testing, security, architecture, Mermaid |
+| [`research-tools`](plugins/research-tools/) | dependency | read-only `researcher` agent |
+| [`architecture-review`](plugins/architecture-review/) | dependency | read-only `architecture-reviewer` agent + Bash guard |
+
+```mermaid
+graph TD
+  SDD[sdd-engineering] -->|^1.0.0| EPP[engineering-paved-path]
+  SDD -->|^1.0.0| RT[research-tools]
+  SDD -->|^1.0.0| AR[architecture-review]
+  AR -->|^1.0.0| EPP
+```
+
+Installing `sdd-engineering` installs its dependencies automatically.
 
 ## Repository layout
 
