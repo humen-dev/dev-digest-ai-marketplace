@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#161826;color:#e9e9ed;font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:#d2cefd;text-decoration:none}
+a:hover{color:#f5f4ff;text-decoration:underline}
+::selection{background:#423a6a}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid #9184d9;outline-offset:2px}
+input::placeholder{color:#75798c}
+</style>
+</helmet>
+<div style="min-height:100vh;background:radial-gradient(1200px 500px at 10% -10%, #20223a 0%, #161826 60%);">
+  <header style="position:sticky;top:0;z-index:20;background:rgba(22,24,38,0.86);backdrop-filter:blur(10px);border-bottom:1px solid #292b31;">
+    <div style="max-width:1240px;margin:0 auto;padding:0 24px;height:52px;display:flex;align-items:center;gap:28px;">
+      <a href="#" style="display:flex;align-items:center;gap:8px;color:#e9e9ed;text-decoration:none;font-weight:500;">
+        <span style="width:22px;height:22px;border-radius:6px;border:1px solid #9184d9;display:grid;place-items:center;color:#b5abfc;font-size:13px;"><i class="ph ph-stack"></i></span>
+        <span>DevDigest Marketplace</span>
+      </a>
+      <nav style="display:flex;gap:4px;flex:1;min-width:0;overflow-x:auto;">
+        <a href="#" style="padding:6px 10px;border-radius:6px;color:#e9e9ed;background:#232532;font-size:14px;text-decoration:none;">Catalog</a>
+        <a href="#" style="padding:6px 10px;border-radius:6px;color:#b2b6ca;font-size:14px;text-decoration:none;" style-hover="color:#e9e9ed;background:#232532;">Collections</a>
+        <a href="#" style="padding:6px 10px;border-radius:6px;color:#b2b6ca;font-size:14px;text-decoration:none;" style-hover="color:#e9e9ed;background:#232532;">Changelog</a>
+        <a href="#" style="padding:6px 10px;border-radius:6px;color:#b2b6ca;font-size:14px;text-decoration:none;" style-hover="color:#e9e9ed;background:#232532;">Contribute</a>
+      </nav>
+      <a href="https://github.com/humen-dev/dev-digest-ai-marketplace" style="display:flex;align-items:center;gap:6px;color:#b2b6ca;font-size:14px;text-decoration:none;white-space:nowrap;"><i class="ph ph-github-logo" style="font-size:16px;"></i>Repository</a>
+    </div>
+  </header>
+
+  <main style="max-width:1240px;margin:0 auto;padding:48px 24px 140px;">
+    <section style="max-width:760px;">
+      <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9397ab;margin-bottom:10px;">{{ statsLine }}</div>
+      <h1 style="font-size:42px;font-weight:500;line-height:1.1;letter-spacing:-0.02em;margin:0 0 10px;text-wrap:balance;">Describe the job. Get the plugin that does it.</h1>
+      <p style="margin:0 0 24px;color:#b2b6ca;max-width:60ch;text-wrap:pretty;">Search every skill, agent, command, hook and MCP server in the marketplace. See what each plugin runs before you install it.</p>
+      <label style="position:relative;display:block;">
+        <i class="ph ph-magnifying-glass" style="position:absolute;left:16px;top:50%;transform:translateY(-50%);font-size:19px;color:#9397ab;"></i>
+        <input value="{{ query }}" onInput="{{ onQuery }}" placeholder="e.g. I need a skill for writing release notes" style="width:100%;height:54px;padding:0 96px 0 46px;background:#232532;border:1px solid #3f424d;border-radius:8px;color:#e9e9ed;font:inherit;font-size:16px;outline:none;" style-focus="border-color:#9184d9;box-shadow:0 0 0 4px rgba(145,132,217,0.16);">
+        <sc-if value="{{ hasQuery }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ clearQuery }}" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);height:32px;padding:0 10px;border:0;background:transparent;color:#9397ab;border-radius:6px;cursor:pointer;font-size:13px;" style-hover="color:#e9e9ed;background:#292b31;">Clear</button>
+        </sc-if>
+      </label>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:12px;align-items:center;">
+        <span style="font-size:13px;color:#75798c;margin-right:4px;">Try</span>
+        <sc-for list="{{ examples }}" as="ex" hint-placeholder-count="4">
+          <button onClick="{{ ex.run }}" style="height:28px;padding:0 10px;border:1px solid #3f424d;background:transparent;border-radius:999px;font-size:13px;color:#b2b6ca;cursor:pointer;white-space:nowrap;" style-hover="border-color:#9184d9;color:#e9e9ed;">{{ ex.label }}</button>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="display:flex;gap:40px;margin-top:48px;align-items:flex-start;flex-wrap:wrap;">
+      <sc-if value="{{ showRail }}" hint-placeholder-val="{{ true }}">
+        <aside style="flex:0 0 200px;display:flex;flex-direction:column;gap:28px;position:sticky;top:76px;">
+          <div>
+            <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9397ab;margin-bottom:8px;">Kind</div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <sc-for list="{{ kindFilters }}" as="k" hint-placeholder-count="6">
+                <button onClick="{{ k.toggle }}" style="display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border:0;border-radius:6px;background:{{ k.bg }};color:{{ k.color }};cursor:pointer;text-align:left;font-size:14px;" style-hover="background:#232532;color:#e9e9ed;">
+                  <i class="ph {{ k.icon }}" style="font-size:16px;"></i>
+                  <span style="flex:1;">{{ k.label }}</span>
+                  <span style="font-size:12px;color:#75798c;font-variant-numeric:tabular-nums;">{{ k.count }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+          <div>
+            <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9397ab;margin-bottom:8px;">Executes code</div>
+            <div style="display:flex;flex-direction:column;gap:2px;">
+              <sc-for list="{{ execFilters }}" as="e" hint-placeholder-count="3">
+                <button onClick="{{ e.pick }}" style="display:flex;align-items:center;gap:8px;height:32px;padding:0 8px;border:0;border-radius:6px;background:{{ e.bg }};color:{{ e.color }};cursor:pointer;text-align:left;font-size:14px;" style-hover="background:#232532;color:#e9e9ed;">
+                  <span style="width:14px;height:14px;border-radius:50%;border:1px solid {{ e.ring }};display:grid;place-items:center;"><span style="width:6px;height:6px;border-radius:50%;background:{{ e.dot }};"></span></span>
+                  <span>{{ e.label }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <p style="font-size:12px;color:#75798c;margin:10px 0 0;line-height:1.5;">Hooks run shell commands on Claude Code events. MCP servers start local processes.</p>
+          </div>
+        </aside>
+      </sc-if>
+
+      <div style="flex:1 1 520px;min-width:0;">
+        <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-bottom:16px;">
+          <h2 style="font-size:20px;font-weight:500;margin:0;letter-spacing:-0.01em;">{{ resultsTitle }}</h2>
+          <span style="font-size:13px;color:#9397ab;">{{ resultsMeta }}</span>
+        </div>
+
+        <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:12px;">
+            <sc-for list="{{ results }}" as="r" hint-placeholder-count="6">
+              <article style="display:flex;flex-direction:column;gap:10px;padding:{{ cardPad }};background:#232532;border-radius:8px;box-shadow:0 0 0 1px #3f424d;" style-hover="box-shadow:0 0 0 1px #595d6c, 0 6px 18px rgba(0,0,0,0.45);">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:4px;background:#2b2741;color:#d2cefd;font-size:12px;"><i class="ph {{ r.icon }}"></i>{{ r.kindLabel }}</span>
+                  <span style="font-size:12px;color:#9397ab;">in</span>
+                  <button onClick="{{ r.open }}" style="border:0;background:none;padding:0;font-size:13px;color:#b2b6ca;cursor:pointer;" style-hover="color:#e9e9ed;text-decoration:underline;">{{ r.plugin }}</button>
+                  <span style="margin-left:auto;font-size:12px;color:#75798c;">v{{ r.version }}</span>
+                </div>
+                <div>
+                  <h3 style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:16px;font-weight:500;margin:0 0 4px;letter-spacing:-0.01em;">{{ r.name }}</h3>
+                  <p style="margin:0;font-size:14px;color:#b2b6ca;line-height:1.5;text-wrap:pretty;">{{ r.desc }}</p>
+                </div>
+                <sc-if value="{{ r.executes }}" hint-placeholder-val="{{ false }}">
+                  <sc-if value="{{ prominentExec }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:flex-start;gap:8px;padding:8px 10px;border-radius:6px;background:#2b2741;box-shadow:inset 0 0 0 1px #5d5294;font-size:12.5px;color:#e7e5fe;line-height:1.45;">
+                      <i class="ph ph-warning-diamond" style="font-size:15px;color:#b5abfc;margin-top:1px;"></i>
+                      <span>Plugin executes code: {{ r.execSummary }}</span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ subtleExec }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                      <sc-for list="{{ r.execBadges }}" as="b" hint-placeholder-count="1">
+                        <span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:4px;border:1px solid #5d5294;color:#d2cefd;font-size:12px;"><i class="ph {{ b.icon }}"></i>{{ b.label }}</span>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+                </sc-if>
+                <div style="margin-top:auto;display:flex;align-items:center;gap:6px;height:36px;padding:0 4px 0 10px;background:#161826;border-radius:6px;box-shadow:inset 0 0 0 1px #292b31;">
+                  <code style="flex:1;min-width:0;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:11.5px;color:#cfd3e5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.cmd }}</code>
+                  <button onClick="{{ r.copy }}" title="Copy install command" style="flex-shrink:0;width:28px;justify-content:center;height:28px;padding:0;border:0;border-radius:4px;background:transparent;color:{{ r.copyColor }};cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;" style-hover="background:#292b31;color:#e9e9ed;"><i class="ph {{ r.copyIcon }}" style="font-size:15px;"></i></button>
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <button onClick="{{ r.open }}" style="flex:1;min-width:0;white-space:nowrap;height:32px;border:1px solid #3f424d;border-radius:6px;background:transparent;color:#e9e9ed;cursor:pointer;font-size:13px;" style-hover="border-color:#595d6c;background:#292b31;">Details</button>
+                  <button onClick="{{ r.toggleSet }}" style="flex-shrink:0;white-space:nowrap;height:32px;padding:0 10px;border:1px solid {{ r.setBorder }};border-radius:6px;background:{{ r.setBg }};color:{{ r.setColor }};cursor:pointer;font-size:13px;display:flex;align-items:center;gap:5px;" style-hover="border-color:#b5abfc;"><i class="ph {{ r.setIcon }}"></i>{{ r.setLabel }}</button>
+                </div>
+              </article>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+          <div style="padding:32px;border-radius:8px;background:#232532;box-shadow:0 0 0 1px #3f424d;max-width:620px;">
+            <i class="ph ph-magnifying-glass-minus" style="font-size:24px;color:#9397ab;"></i>
+            <h3 style="font-size:20px;font-weight:500;margin:10px 0 6px;">Nothing covers “{{ query }}” yet</h3>
+            <p style="margin:0 0 18px;color:#b2b6ca;font-size:14px;text-wrap:pretty;">Open a request and the maintainers will triage it. The issue is prefilled with your search.</p>
+            <a href="{{ requestUrl }}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:1px solid #9184d9;border-radius:6px;color:#e9e9ed;text-decoration:none;font-size:14px;" style-hover="background:#2b2741;">Request a skill<i class="ph ph-arrow-up-right"></i></a>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ hasResults }}" hint-placeholder-val="{{ true }}">
+          <p style="margin:28px 0 0;font-size:13px;color:#9397ab;">Not what you need? <a href="{{ requestUrl }}" target="_blank">Request a skill</a> or <a href="#">scaffold a plugin</a>.</p>
+        </sc-if>
+      </div>
+    </section>
+  </main>
+
+  <sc-if value="{{ hasSet }}" hint-placeholder-val="{{ false }}">
+    <div style="position:fixed;left:24px;bottom:24px;z-index:30;display:flex;align-items:center;gap:14px;padding:10px 10px 10px 16px;background:#232532;border-radius:10px;box-shadow:0 0 0 1px #595d6c, 0 16px 40px rgba(0,0,0,0.6);max-width:calc(100vw - 48px);">
+      <i class="ph ph-package" style="font-size:18px;color:#b5abfc;"></i>
+      <div style="min-width:0;">
+        <div style="font-size:14px;">{{ setCountLabel }}</div>
+        <div style="font-size:12px;color:#9397ab;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:340px;">{{ setNames }}</div>
+      </div>
+      <button onClick="{{ openSet }}" style="height:34px;padding:0 14px;border:1px solid #9184d9;border-radius:6px;background:transparent;color:#e9e9ed;cursor:pointer;font-size:13px;white-space:nowrap;" style-hover="background:#2b2741;">Generate install</button>
+      <button onClick="{{ clearSet }}" title="Clear set" style="width:34px;height:34px;border:0;border-radius:6px;background:transparent;color:#9397ab;cursor:pointer;" style-hover="background:#292b31;color:#e9e9ed;"><i class="ph ph-x"></i></button>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ hasPanel }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closePanel }}" style="position:fixed;inset:0;z-index:40;background:rgba(10,11,18,0.6);"></div>
+    <aside style="position:fixed;top:0;right:0;bottom:0;z-index:41;width:560px;max-width:100vw;background:#1b1d2b;box-shadow:-1px 0 0 #3f424d, -20px 0 50px rgba(0,0,0,0.5);overflow-y:auto;">
+      <div style="padding:20px 28px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #292b31;position:sticky;top:0;background:#1b1d2b;z-index:1;">
+        <i class="ph ph-puzzle-piece" style="font-size:18px;color:#b5abfc;"></i>
+        <span style="font-size:13px;color:#9397ab;">Plugin</span>
+        <button onClick="{{ closePanel }}" style="margin-left:auto;width:32px;height:32px;border:0;border-radius:6px;background:transparent;color:#9397ab;cursor:pointer;font-size:16px;" style-hover="background:#292b31;color:#e9e9ed;"><i class="ph ph-x"></i></button>
+      </div>
+      <div style="padding:24px 28px 40px;display:flex;flex-direction:column;gap:28px;">
+        <div>
+          <h2 style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:24px;font-weight:500;margin:0 0 6px;">{{ panel.name }}</h2>
+          <div style="font-size:13px;color:#9397ab;margin-bottom:10px;">v{{ panel.version }} · updated {{ panel.updated }} · {{ panel.owner }}</div>
+          <p style="margin:0;color:#cfd3e5;text-wrap:pretty;">{{ panel.desc }}</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div style="display:flex;align-items:center;gap:6px;height:40px;padding:0 4px 0 12px;background:#161826;border-radius:6px;box-shadow:inset 0 0 0 1px #3f424d;">
+            <code style="flex:1;min-width:0;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;color:#e4e7f5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ panel.cmd }}</code>
+            <button onClick="{{ panel.copy }}" style="height:32px;padding:0 10px;border:0;border-radius:4px;background:transparent;color:{{ panel.copyColor }};cursor:pointer;font-size:12px;display:flex;align-items:center;gap:4px;" style-hover="background:#292b31;color:#e9e9ed;"><i class="ph {{ panel.copyIcon }}"></i>{{ panel.copyLabel }}</button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button onClick="{{ panel.toggleSet }}" style="height:34px;padding:0 14px;border:1px solid #9184d9;border-radius:6px;background:{{ panel.setBg }};color:#e9e9ed;cursor:pointer;font-size:13px;display:flex;align-items:center;gap:6px;" style-hover="background:#2b2741;"><i class="ph {{ panel.setIcon }}"></i>{{ panel.setLabel }}</button>
+            <a href="{{ panel.source }}" target="_blank" style="display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 12px;border-radius:6px;color:#b2b6ca;font-size:13px;text-decoration:none;" style-hover="background:#232532;color:#e9e9ed;"><i class="ph ph-code"></i>View source</a>
+          </div>
+        </div>
+
+        <div>
+          <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9397ab;margin-bottom:10px;">What it executes</div>
+          <sc-if value="{{ panel.executes }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column;gap:8px;">
+              <sc-for list="{{ panel.execRows }}" as="x" hint-placeholder-count="2">
+                <div style="padding:12px 14px;border-radius:8px;background:#232532;box-shadow:0 0 0 1px #5d5294;">
+                  <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px;font-size:13px;">
+                    <i class="ph {{ x.icon }}" style="color:#b5abfc;font-size:15px;"></i>
+                    <span style="color:#e9e9ed;">{{ x.title }}</span>
+                    <span style="margin-left:auto;color:#9397ab;font-size:12px;">{{ x.meta }}</span>
+                  </div>
+                  <code style="display:block;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;color:#d2cefd;background:#161826;padding:8px 10px;border-radius:4px;white-space:pre-wrap;word-break:break-all;">{{ x.command }}</code>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ panel.safe }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;gap:10px;align-items:flex-start;padding:12px 14px;border-radius:8px;background:#232532;box-shadow:0 0 0 1px #3f424d;font-size:14px;color:#cfd3e5;">
+              <i class="ph ph-shield-check" style="font-size:18px;color:#b5abfc;"></i>
+              <span>No hooks and no MCP servers. This plugin only adds prompts and instructions.</span>
+            </div>
+          </sc-if>
+          <sc-if value="{{ panel.hasTools }}" hint-placeholder-val="{{ false }}">
+            <div style="margin-top:10px;font-size:13px;color:#9397ab;display:flex;flex-wrap:wrap;gap:6px;align-items:center;">
+              <span>Allowed tools</span>
+              <sc-for list="{{ panel.tools }}" as="t" hint-placeholder-count="2">
+                <code style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12px;padding:2px 6px;border-radius:4px;background:#292b31;color:#cfd3e5;">{{ t }}</code>
+              </sc-for>
+            </div>
+          </sc-if>
+        </div>
+
+        <div>
+          <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9397ab;margin-bottom:10px;">What it adds · {{ panel.count }}</div>
+          <div style="display:flex;flex-direction:column;">
+            <sc-for list="{{ panel.artifacts }}" as="a" hint-placeholder-count="4">
+              <div style="display:grid;grid-template-columns:22px minmax(0,1fr);gap:10px;padding:12px 0;border-top:1px solid #292b31;">
+                <i class="ph {{ a.icon }}" style="font-size:17px;color:#b2b6ca;margin-top:2px;"></i>
+                <div>
+                  <div style="display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;">
+                    <span style="font-family:'JetBrains Mono',ui-monospace,monospace;font-size:14px;color:#e9e9ed;">{{ a.name }}</span>
+                    <span style="font-size:12px;color:#9397ab;">{{ a.kindLabel }}</span>
+                  </div>
+                  <div style="font-size:13.5px;color:#b2b6ca;line-height:1.5;">{{ a.desc }}</div>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </sc-if>
+
+  <sc-if value="{{ setOpen }}" hint-placeholder-val="{{ false }}">
+    <div onClick="{{ closeSet }}" style="position:fixed;inset:0;z-index:50;background:rgba(10,11,18,0.7);"></div>
+    <div style="position:fixed;z-index:51;left:50%;top:50%;transform:translate(-50%,-50%);width:640px;max-width:calc(100vw - 32px);max-height:calc(100vh - 48px);overflow:auto;background:#232532;border-radius:14px;box-shadow:0 0 0 1px #9397ab, 0 16px 40px rgba(0,0,0,0.65);padding:24px;">
+      <div style="display:flex;align-items:flex-start;gap:12px;margin-bottom:6px;">
+        <h3 style="font-size:22px;font-weight:500;margin:0;flex:1;">Install {{ setCountLabel }}</h3>
+        <button onClick="{{ closeSet }}" style="width:32px;height:32px;border:0;border-radius:6px;background:transparent;color:#9397ab;cursor:pointer;" style-hover="background:#292b31;color:#e9e9ed;"><i class="ph ph-x"></i></button>
+      </div>
+      <p style="margin:0 0 18px;color:#b2b6ca;font-size:14px;">{{ setHelp }}</p>
+      <div style="display:inline-flex;padding:3px;background:#161826;border-radius:8px;box-shadow:inset 0 0 0 1px #3f424d;margin-bottom:12px;">
+        <sc-for list="{{ setTabs }}" as="tab" hint-placeholder-count="2">
+          <button onClick="{{ tab.pick }}" style="height:30px;padding:0 14px;border:0;border-radius:6px;background:{{ tab.bg }};color:{{ tab.color }};cursor:pointer;font-size:13px;">{{ tab.label }}</button>
+        </sc-for>
+      </div>
+      <div style="position:relative;">
+        <pre style="margin:0;padding:16px 18px;background:#161826;border-radius:8px;box-shadow:inset 0 0 0 1px #292b31;font-family:'JetBrains Mono',ui-monospace,monospace;font-size:12.5px;line-height:1.6;color:#e4e7f5;overflow-x:auto;white-space:pre;">{{ setCode }}</pre>
+        <button onClick="{{ copySet }}" style="position:absolute;top:8px;right:8px;height:30px;padding:0 10px;border:1px solid #3f424d;border-radius:6px;background:#232532;color:{{ setCopyColor }};cursor:pointer;font-size:12px;display:flex;align-items:center;gap:5px;" style-hover="border-color:#9184d9;color:#e9e9ed;"><i class="ph {{ setCopyIcon }}"></i>{{ setCopyLabel }}</button>
+      </div>
+      <sc-if value="{{ setExecutes }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;gap:8px;align-items:flex-start;margin-top:14px;font-size:13px;color:#cfd3e5;">
+          <i class="ph ph-warning-diamond" style="font-size:16px;color:#b5abfc;margin-top:1px;"></i>
+          <span>{{ setExecNote }}</span>
+        </div>
+      </sc-if>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;executesStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;subtle&quot;,&quot;prominent&quot;],&quot;default&quot;:&quot;subtle&quot;,&quot;tsType&quot;:&quot;'subtle'|'prominent'&quot;,&quot;section&quot;:&quot;Cards&quot;},&quot;density&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;comfortable&quot;,&quot;compact&quot;],&quot;default&quot;:&quot;comfortable&quot;,&quot;tsType&quot;:&quot;'comfortable'|'compact'&quot;,&quot;section&quot;:&quot;Cards&quot;},&quot;showRail&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Layout&quot;}}">
+const MKT = 'dev-digest-ai-marketplace';
+const REPO = 'humen-dev/dev-digest-ai-marketplace';
+const KINDS = {
+  skill: { label: 'Skill', icon: 'ph-book-open-text' },
+  agent: { label: 'Agent', icon: 'ph-robot' },
+  command: { label: 'Command', icon: 'ph-terminal-window' },
+  hook: { label: 'Hook', icon: 'ph-lightning' },
+  mcp: { label: 'MCP server', icon: 'ph-plugs' }
+};
+const PLUGINS = [
+  { name: 'release-tools', version: '0.9.2', updated: 'Oct 9', owner: '@humen-dev', desc: 'Turns merged PRs and conventional commits into release notes, changelog entries and version bumps.', tools: ['Bash(git log:*)', 'Bash(gh pr list:*)'], hooks: [], mcp: [], artifacts: [
+    ['skill', 'release-notes', 'Draft user-facing release notes from merged PRs and conventional commits, grouped by impact.', 'release notes changelog writing announce version реліз нотатки'],
+    ['skill', 'changelog-keeper', 'Keep CHANGELOG.md in Keep-a-Changelog format and move Unreleased entries on tag.', 'changelog release version semver'],
+    ['command', '/release-notes', 'Generate notes for the range since the last tag and open them for editing.', 'release notes tag range']] },
+  { name: 'devdigest-backend', version: '1.4.0', updated: 'Oct 12', owner: '@backend-guild', desc: 'Conventions for the DevDigest API: Postgres migrations, endpoint scaffolding and a backend review agent.', tools: ['Bash(npx prisma:*)'], hooks: [{ event: 'PostToolUse', matcher: 'Edit|Write', command: 'npx prisma validate --schema prisma/schema.prisma' }], mcp: [{ name: 'postgres', command: 'npx -y @modelcontextprotocol/server-postgres $DATABASE_URL' }], artifacts: [
+    ['skill', 'db-migration', 'Write reversible Postgres migrations with a rollback plan and lock-time estimate.', 'migration database postgres schema sql rollback міграція'],
+    ['skill', 'api-endpoint', 'Scaffold a REST endpoint with validation, error mapping and contract tests.', 'api endpoint rest route scaffold'],
+    ['agent', 'backend-reviewer', 'Reviews diffs against DevDigest backend conventions before you open a PR.', 'review code backend pr'],
+    ['command', '/migrate-check', 'Dry-run pending migrations against a shadow database.', 'migration check database'],
+    ['hook', 'validate-schema', 'Validates the Prisma schema after every edit.', 'prisma schema validate'],
+    ['mcp', 'postgres', 'Read-only SQL access to the database in $DATABASE_URL.', 'postgres database sql query']] },
+  { name: 'devdigest-frontend', version: '2.1.0', updated: 'Oct 3', owner: '@web-guild', desc: 'Component patterns, accessibility checks and lint-on-save for the DevDigest web app.', tools: [], hooks: [{ event: 'PostToolUse', matcher: 'Edit|Write', command: 'npx eslint --fix "$CLAUDE_FILE_PATHS"' }], mcp: [], artifacts: [
+    ['skill', 'react-component', 'Build a typed React component with stories and a test, following the design tokens.', 'react component ui frontend storybook'],
+    ['skill', 'a11y-audit', 'Audit a page or component for WCAG 2.2 AA issues and propose fixes.', 'accessibility a11y wcag audit'],
+    ['agent', 'ui-reviewer', 'Checks UI diffs for token misuse, layout regressions and missing states.', 'review ui frontend design'],
+    ['hook', 'lint-on-save', 'Runs ESLint with --fix on files Claude edits.', 'lint eslint format']] },
+  { name: 'security-review', version: '1.0.3', updated: 'Sep 28', owner: '@sec-team', desc: 'Dependency audits, secret scanning and a guard that blocks destructive shell commands.', tools: ['Bash(npm audit:*)', 'Bash(gitleaks:*)'], hooks: [{ event: 'PreToolUse', matcher: 'Bash', command: '${CLAUDE_PLUGIN_ROOT}/scripts/block-dangerous.sh' }], mcp: [], artifacts: [
+    ['agent', 'security-auditor', 'Threat-models a change and flags injection, authz and data-exposure risks.', 'security audit threat review безпека'],
+    ['skill', 'secrets-scan', 'Scan the working tree and history for leaked credentials and explain rotation.', 'secrets credentials leak gitleaks scan'],
+    ['command', '/audit-deps', 'Audit dependencies and summarise exploitable advisories only.', 'dependencies audit npm vulnerabilities'],
+    ['hook', 'block-dangerous', 'Blocks rm -rf, force-push and similar commands before they run.', 'guard block dangerous bash']] },
+  { name: 'docs-writer', version: '0.6.0', updated: 'Oct 1', owner: '@humen-dev', desc: 'Writing help for ADRs, READMEs and API reference pages.', tools: [], hooks: [], mcp: [], artifacts: [
+    ['skill', 'adr-writer', 'Draft an architecture decision record with context, options and consequences.', 'adr architecture decision writing docs'],
+    ['skill', 'readme-polish', 'Tighten a README: install, usage, configuration, troubleshooting.', 'readme docs writing documentation'],
+    ['skill', 'api-docs', 'Generate reference docs from OpenAPI specs with runnable examples.', 'api docs openapi reference documentation'],
+    ['command', '/adr', 'Start a new numbered ADR in docs/adr/.', 'adr decision']] },
+  { name: 'observability', version: '0.3.1', updated: 'Sep 19', owner: '@sre', desc: 'Query logs and errors from Sentry and write alert rules that page the right people.', tools: [], hooks: [], mcp: [{ name: 'sentry', command: 'npx -y @sentry/mcp-server --org devdigest' }], artifacts: [
+    ['skill', 'log-query', 'Turn a question into a log query and summarise what the results say.', 'logs query errors debug incident'],
+    ['skill', 'alert-rules', 'Write alert rules with sensible thresholds, runbook links and owners.', 'alerts monitoring paging incident'],
+    ['mcp', 'sentry', 'Read issues, events and releases from Sentry.', 'sentry errors issues monitoring']] },
+  { name: 'test-kit', version: '1.2.0', updated: 'Oct 7', owner: '@qa', desc: 'Test planning, flaky-test triage and a test-writing agent.', tools: ['Bash(npm test:*)'], hooks: [], mcp: [], artifacts: [
+    ['skill', 'test-plan', 'Write a test plan for a feature: risks, cases, data and what to automate.', 'test plan qa cases тести'],
+    ['skill', 'flaky-test-hunter', 'Find the root cause of a flaky test from CI history and logs.', 'flaky test ci debug тести'],
+    ['agent', 'test-writer', 'Writes missing unit and integration tests for a diff.', 'tests unit integration coverage тести'],
+    ['command', '/cover', 'Show uncovered lines in changed files.', 'coverage tests']] }
+];
+const STOP = new Set('i,need,a,an,the,for,to,me,my,something,that,which,with,want,looking,help,some,of,and,in,on,can,how,do,is,it,find,get,show,all,any,me'.split(','));
+const KINDWORDS = { skill: 'skill', skills: 'skill', agent: 'agent', agents: 'agent', command: 'command', commands: 'command', hook: 'hook', hooks: 'hook', mcp: 'mcp', server: 'mcp', servers: 'mcp' };
+const words = s => s.toLowerCase().split(/[^\p{L}\p{N}]+/u).filter(Boolean);
+const ARTS = [];
+PLUGINS.forEach(p => p.artifacts.forEach(([kind, name, desc, tags]) => ARTS.push({ kind, name, desc, plugin: p, nameW: words(name), tagW: words(tags), descW: words(desc), plugW: words(p.name) })));
+const matchW = (t, list) => {
+  if (t.length < 4) return list.includes(t);
+  const stem = t.slice(0, Math.max(4, t.length - 3));
+  return list.some(w => w.startsWith(stem));
+};
+const cmdFor = p => `/plugin install ${p.name}@${MKT}`;
+
+class Component extends DCLogic {
+  state = { query: 'I need a skill for writing release notes', kinds: [], exec: 'any', panel: null, set: [], setOpen: false, setTab: 'commands', copied: null };
+
+  copy(key, text) {
+    try { navigator.clipboard.writeText(text); } catch (e) {}
+    this.setState({ copied: key });
+    clearTimeout(this._t);
+    this._t = setTimeout(() => this.setState({ copied: null }), 1400);
+  }
+  toggleSet(name) { this.setState(s => ({ set: s.set.includes(name) ? s.set.filter(n => n !== name) : [...s.set, name] })); }
+  execOf(p) { const b = []; if (p.hooks.length) b.push({ icon: 'ph-lightning', label: p.hooks.length + (p.hooks.length > 1 ? ' hooks' : ' hook') }); if (p.mcp.length) b.push({ icon: 'ph-plugs', label: p.mcp.length + ' MCP server' + (p.mcp.length > 1 ? 's' : '') }); return b; }
+
+  search() {
+    const toks = words(this.state.query);
+    const kindHint = new Set(toks.filter(t => KINDWORDS[t]).map(t => KINDWORDS[t]));
+    const content = toks.filter(t => !STOP.has(t) && !KINDWORDS[t]);
+    let list = ARTS.map(a => {
+      let score = 0, hits = 0;
+      content.forEach(t => {
+        let s = 0;
+        if (matchW(t, a.nameW)) s += 4;
+        if (matchW(t, a.tagW)) s += 3;
+        if (matchW(t, a.descW)) s += 1.5;
+        if (matchW(t, a.plugW)) s += 1;
+        if (s) hits++;
+        score += s;
+      });
+      if (kindHint.has(a.kind)) score += content.length ? 2 : 1;
+      return { a, score, hits };
+    });
+    if (content.length) list = list.filter(x => x.hits > 0);
+    else if (kindHint.size) list = list.filter(x => kindHint.has(x.a.kind));
+    list.sort((x, y) => y.score - x.score);
+    return list.map(x => x.a);
+  }
+
+  renderVals() {
+    const st = this.state, P = this.props;
+    const matched = this.search();
+    const execOk = a => { const e = a.plugin.hooks.length + a.plugin.mcp.length > 0; return st.exec === 'any' || (st.exec === 'only' ? e : !e); };
+    const afterExec = matched.filter(execOk);
+    const filtered = st.kinds.length ? afterExec.filter(a => st.kinds.includes(a.kind)) : afterExec;
+    const hasQuery = st.query.trim().length > 0;
+
+    const kindFilters = Object.keys(KINDS).map(k => {
+      const on = st.kinds.includes(k);
+      return { label: KINDS[k].label + 's', icon: KINDS[k].icon, count: afterExec.filter(a => a.kind === k).length,
+        bg: on ? '#2b2741' : 'transparent', color: on ? '#e7e5fe' : '#b2b6ca',
+        toggle: () => this.setState(s => ({ kinds: s.kinds.includes(k) ? s.kinds.filter(x => x !== k) : [...s.kinds, k] })) };
+    });
+    const execFilters = [['any', 'Any'], ['only', 'Runs hooks or MCP'], ['none', 'Prompts only']].map(([id, label]) => {
+      const on = st.exec === id;
+      return { label, bg: on ? '#2b2741' : 'transparent', color: on ? '#e7e5fe' : '#b2b6ca', ring: on ? '#b5abfc' : '#595d6c', dot: on ? '#b5abfc' : 'transparent', pick: () => this.setState({ exec: id }) };
+    });
+
+    const results = filtered.map(a => {
+      const p = a.plugin, key = 'c:' + a.plugin.name + a.name, inSet = st.set.includes(p.name), badges = this.execOf(p);
+      return { kindLabel: KINDS[a.kind].label, icon: KINDS[a.kind].icon, name: a.name, desc: a.desc, plugin: p.name, version: p.version, cmd: cmdFor(p),
+        executes: badges.length > 0, execBadges: badges,
+        execSummary: [p.hooks.length ? p.hooks.map(h => h.event + ' hook').join(', ') : '', p.mcp.length ? p.mcp.map(m => m.name + ' MCP server').join(', ') : ''].filter(Boolean).join(' · '),
+        copy: () => this.copy(key, cmdFor(p)), copyLabel: st.copied === key ? 'Copied' : 'Copy', copyIcon: st.copied === key ? 'ph-check' : 'ph-copy', copyColor: st.copied === key ? '#d2cefd' : '#9397ab',
+        open: () => this.setState({ panel: p.name }), toggleSet: () => this.toggleSet(p.name),
+        setLabel: inSet ? 'In set' : 'Add to set', setIcon: inSet ? 'ph-check' : 'ph-plus', setBg: inSet ? '#2b2741' : 'transparent', setBorder: inSet ? '#9184d9' : '#3f424d', setColor: inSet ? '#e7e5fe' : '#b2b6ca' };
+    });
+
+    let panel = {};
+    const pp = PLUGINS.find(p => p.name === st.panel);
+    if (pp) {
+      const inSet = st.set.includes(pp.name), key = 'p:' + pp.name;
+      const execRows = [...pp.hooks.map(h => ({ icon: 'ph-lightning', title: h.event + ' hook', meta: 'matcher: ' + h.matcher, command: h.command })),
+        ...pp.mcp.map(m => ({ icon: 'ph-plugs', title: m.name + ' MCP server', meta: 'stdio process', command: m.command }))];
+      panel = { name: pp.name, version: pp.version, updated: pp.updated, owner: pp.owner, desc: pp.desc, cmd: cmdFor(pp),
+        copy: () => this.copy(key, cmdFor(pp)), copyLabel: st.copied === key ? 'Copied' : 'Copy', copyIcon: st.copied === key ? 'ph-check' : 'ph-copy', copyColor: st.copied === key ? '#d2cefd' : '#9397ab',
+        toggleSet: () => this.toggleSet(pp.name), setLabel: inSet ? 'In install set' : 'Add to install set', setIcon: inSet ? 'ph-check' : 'ph-plus', setBg: inSet ? '#2b2741' : 'transparent',
+        source: `https://github.com/${REPO}/tree/main/plugins/${pp.name}`,
+        executes: execRows.length > 0, safe: execRows.length === 0, execRows, hasTools: pp.tools.length > 0, tools: pp.tools,
+        count: pp.artifacts.length, artifacts: pp.artifacts.map(([kind, name, desc]) => ({ kind, name, desc, icon: KINDS[kind].icon, kindLabel: KINDS[kind].label })) };
+    }
+
+    const setPlugins = PLUGINS.filter(p => st.set.includes(p.name));
+    const n = setPlugins.length;
+    const commands = [`/plugin marketplace add ${REPO}`, ...setPlugins.map(cmdFor)].join('\n');
+    const settings = JSON.stringify({ extraKnownMarketplaces: { [MKT]: { source: { source: 'github', repo: REPO } } }, enabledPlugins: Object.fromEntries(setPlugins.map(p => [`${p.name}@${MKT}`, true])) }, null, 2);
+    const setCode = st.setTab === 'commands' ? commands : settings;
+    const execPlugins = setPlugins.filter(p => p.hooks.length + p.mcp.length);
+    const total = ARTS.length;
+
+    return {
+      statsLine: `${PLUGINS.length} plugins · ${total} artifacts · updated Oct 12`,
+      query: st.query, hasQuery,
+      onQuery: e => this.setState({ query: e.target.value }),
+      clearQuery: () => this.setState({ query: '' }),
+      examples: ['release notes', 'postgres migration', 'flaky tests', 'hooks', 'тести', 'grafana dashboards'].map(label => ({ label, run: () => this.setState({ query: label }) })),
+      showRail: P.showRail ?? true,
+      kindFilters, execFilters,
+      resultsTitle: hasQuery ? (filtered.length ? `${filtered.length} match${filtered.length === 1 ? '' : 'es'}` : 'No matches') : 'All artifacts',
+      resultsMeta: hasQuery ? `for “${st.query.trim()}” · searched ${total} artifacts` : `${filtered.length} across ${PLUGINS.length} plugins`,
+      results, hasResults: results.length > 0, noResults: results.length === 0,
+      cardPad: (P.density ?? 'comfortable') === 'compact' ? '12px' : '18px',
+      prominentExec: (P.executesStyle ?? 'subtle') === 'prominent', subtleExec: (P.executesStyle ?? 'subtle') !== 'prominent',
+      requestUrl: `https://github.com/${REPO}/issues/new?template=skill-request.yml&title=${encodeURIComponent('Skill request: ' + st.query.trim())}&body=${encodeURIComponent('Searched the catalog for: "' + st.query.trim() + '"')}`,
+      hasPanel: !!pp, panel, closePanel: () => this.setState({ panel: null }),
+      hasSet: n > 0, setCountLabel: `${n} plugin${n === 1 ? '' : 's'}`, setNames: setPlugins.map(p => p.name).join(', '),
+      openSet: () => this.setState({ setOpen: true, panel: null }), closeSet: () => this.setState({ setOpen: false }), clearSet: () => this.setState({ set: [] }),
+      setOpen: st.setOpen && n > 0,
+      setHelp: st.setTab === 'commands' ? 'Paste into Claude Code, one line at a time.' : 'Commit as .claude/settings.json so everyone on the project gets the same plugins.',
+      setTabs: [['commands', 'Commands'], ['settings', '.claude/settings.json']].map(([id, label]) => ({ label, bg: st.setTab === id ? '#2b2741' : 'transparent', color: st.setTab === id ? '#e7e5fe' : '#9397ab', pick: () => this.setState({ setTab: id }) })),
+      setCode, copySet: () => this.copy('set', setCode),
+      setCopyLabel: st.copied === 'set' ? 'Copied' : 'Copy', setCopyIcon: st.copied === 'set' ? 'ph-check' : 'ph-copy', setCopyColor: st.copied === 'set' ? '#d2cefd' : '#b2b6ca',
+      setExecutes: execPlugins.length > 0,
+      setExecNote: `${execPlugins.map(p => p.name).join(', ')} ${execPlugins.length === 1 ? 'runs' : 'run'} hooks or MCP servers. Review them before committing.`
+    };
+  }
+}
+</script>
+</body>
+</html>

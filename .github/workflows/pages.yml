@@ -1,0 +1,65 @@
+name: Deploy GitHub Pages
+
+# Until the Astro catalog site (docs/specs/catalog-site.md) lands, Pages only
+# serves the design files from design/ under /design/. When site/ is added,
+# copy design/ into the Astro build output instead of _site/.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - design/**
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Assemble site
+        run: |
+          mkdir -p _site
+          cp -R design _site/design
+          cat > _site/index.html <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+          <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+          <title>DevDigest Marketplace</title>
+          <style>body{margin:0;background:#10111b;color:#e9e9ed;font:15px/1.55 system-ui,sans-serif}main{max-width:640px;margin:0 auto;padding:64px 16px}a{color:#d2cefd}</style>
+          </head>
+          <body>
+          <main>
+          <h1>DevDigest Marketplace</h1>
+          <p>The catalog site is not built yet. See the <a href="design/">catalog design</a> or the
+          <a href="https://github.com/humen-dev/dev-digest-ai-marketplace">repository</a>.</p>
+          </main>
+          </body>
+          </html>
+          EOF
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

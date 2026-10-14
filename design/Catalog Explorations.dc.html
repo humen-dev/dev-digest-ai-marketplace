@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://unpkg.com/@phosphor-icons/web@2.1.1/src/regular/style.css">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#10111b;color:#e9e9ed;font-family:Inter,system-ui,sans-serif;font-size:15px;line-height:1.55;-webkit-font-smoothing:antialiased}
+a{color:#d2cefd;text-decoration:none}
+a:hover{color:#f5f4ff;text-decoration:underline}
+</style>
+</helmet>
+
+<section style="padding:64px;display:flex;flex-direction:column;gap:28px;">
+  <div style="display:flex;align-items:baseline;gap:16px;">
+    <h2 style="margin:0;font-size:28px;font-weight:500;letter-spacing:-0.015em;">Screens</h2>
+    <span style="color:#9397ab;">Plugin page, install set and security view, built on the <a href="#1a">1a</a> shell.</span>
+  </div>
+  <div style="display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start;">
+
+    <div id="2a" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:13px;padding:2px 8px;border-radius:4px;background:#2b2741;color:#d2cefd;">2a</span><span style="font-size:15px;">Plugin detail · devdigest-backend</span></div>
+      <div style="width:1280px;background:#161826;border-radius:12px;box-shadow:0 0 0 1px #3f424d;overflow:hidden;">
+        <div style="height:34px;display:flex;align-items:center;padding:0 16px;gap:8px;background:#1b1d2b;border-bottom:1px solid #292b31;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9397ab;"><i class="ph ph-lock-simple"></i>humen-dev.github.io/dev-digest-ai-marketplace/plugins/devdigest-backend/</div>
+        <div style="height:52px;display:flex;align-items:center;gap:28px;padding:0 32px;border-bottom:1px solid #292b31;">
+          <span style="display:flex;align-items:center;gap:8px;font-weight:500;"><span style="width:22px;height:22px;border-radius:6px;border:1px solid #9184d9;display:grid;place-items:center;color:#b5abfc;font-size:13px;"><i class="ph ph-stack"></i></span>DevDigest Marketplace</span>
+          <div style="display:flex;gap:4px;font-size:14px;color:#b2b6ca;"><span style="padding:6px 10px;border-radius:6px;background:#232532;color:#e9e9ed;">Catalog</span><span style="padding:6px 10px;">Security</span><span style="padding:6px 10px;">Collections</span><span style="padding:6px 10px;">Changelog</span><span style="padding:6px 10px;">Contribute</span></div>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:8px;height:30px;padding:0 10px;border-radius:6px;background:#232532;box-shadow:inset 0 0 0 1px #3f424d;color:#75798c;font-size:13px;width:260px;"><i class="ph ph-magnifying-glass"></i>Search catalog</span>
+        </div>
+        <div style="padding:32px 32px 56px;display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:48px;">
+          <div style="display:flex;flex-direction:column;gap:36px;">
+            <div>
+              <div style="font-size:13px;color:#9397ab;margin-bottom:14px;">Catalog / Plugins / devdigest-backend</div>
+              <h1 style="margin:0 0 8px;font-family:'JetBrains Mono',monospace;font-size:34px;font-weight:500;letter-spacing:-0.02em;">devdigest-backend</h1>
+              <p style="margin:0 0 14px;font-size:17px;color:#cfd3e5;max-width:62ch;text-wrap:pretty;">{{ be.desc }}</p>
+              <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                <span style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:4px;border:1px solid #5d5294;color:#d2cefd;font-size:12.5px;"><i class="ph ph-lightning"></i>1 hook</span>
+                <span style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:4px;border:1px solid #5d5294;color:#d2cefd;font-size:12.5px;"><i class="ph ph-plugs"></i>1 MCP server</span>
+                <span style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 9px;border-radius:4px;border:1px solid #5d5294;color:#d2cefd;font-size:12.5px;"><i class="ph ph-key"></i>Needs DATABASE_URL</span>
+              </div>
+            </div>
+
+            <div style="border-radius:10px;background:#1d1f2e;box-shadow:0 0 0 1px #5d5294;overflow:hidden;">
+              <div style="padding:16px 20px;display:flex;align-items:center;gap:10px;border-bottom:1px solid #2b2741;">
+                <i class="ph ph-shield-warning" style="font-size:20px;color:#b5abfc;"></i>
+                <h3 style="margin:0;font-size:17px;font-weight:500;">What this runs on your machine</h3>
+                <span style="margin-left:auto;font-size:12.5px;color:#9397ab;">Parsed from hooks.json and .mcp.json at build</span>
+              </div>
+              <div style="padding:4px 20px 18px;">
+                <sc-for list="{{ beRuns }}" as="x" hint-placeholder-count="4">
+                  <div style="display:grid;grid-template-columns:150px minmax(0,1fr);gap:16px;padding:14px 0;border-bottom:1px solid #292b31;">
+                    <div style="display:flex;flex-direction:column;gap:2px;">
+                      <span style="display:flex;align-items:center;gap:6px;font-size:14px;"><i class="ph {{ x.icon }}" style="color:#b5abfc;"></i>{{ x.kind }}</span>
+                      <span style="font-size:12.5px;color:#9397ab;">{{ x.meta }}</span>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:6px;min-width:0;">
+                      <code style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#e7e5fe;background:#161826;padding:8px 10px;border-radius:4px;white-space:pre-wrap;word-break:break-all;">{{ x.command }}</code>
+                      <span style="font-size:13px;color:#b2b6ca;">{{ x.note }}</span>
+                    </div>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <div>
+              <h3 style="margin:0 0 6px;font-size:17px;font-weight:500;">Contents · 6</h3>
+              <sc-for list="{{ beArts }}" as="a" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:24px 180px minmax(0,1fr) 190px;gap:12px;align-items:baseline;padding:12px 0;border-top:1px solid #292b31;">
+                  <i class="ph {{ a.icon }}" style="font-size:17px;color:#b2b6ca;"></i>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:14px;">{{ a.name }}</span>
+                  <span style="font-size:14px;color:#b2b6ca;">{{ a.desc }}</span>
+                  <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9397ab;text-align:right;">{{ a.invoke }}</code>
+                </div>
+              </sc-for>
+            </div>
+
+            <div style="border-top:1px solid #292b31;padding-top:28px;max-width:68ch;">
+              <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9397ab;margin-bottom:12px;">README.md</div>
+              <h2 style="margin:0 0 10px;font-size:24px;font-weight:500;">DevDigest backend conventions</h2>
+              <p style="margin:0 0 12px;color:#cfd3e5;text-wrap:pretty;">Installs the patterns the backend guild reviews against. Migrations must be reversible and announce their lock time; endpoints validate at the edge and map domain errors to problem+json.</p>
+              <h4 style="margin:18px 0 6px;font-size:16px;font-weight:500;">Setup</h4>
+              <p style="margin:0;color:#cfd3e5;">Export a read-only <code style="font-family:'JetBrains Mono',monospace;font-size:13px;background:#232532;padding:1px 5px;border-radius:4px;">DATABASE_URL</code> before starting Claude Code so the postgres server can connect.</p>
+            </div>
+          </div>
+
+          <aside style="display:flex;flex-direction:column;gap:20px;">
+            <div style="padding:18px;border-radius:10px;background:#232532;box-shadow:0 0 0 1px #3f424d;display:flex;flex-direction:column;gap:12px;">
+              <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9397ab;">Install</div>
+              <div style="display:flex;align-items:center;gap:6px;height:38px;padding:0 4px 0 10px;background:#161826;border-radius:6px;box-shadow:inset 0 0 0 1px #3f424d;">
+                <code style="flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#e4e7f5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">/plugin install devdigest-backend@dev-digest-ai-marketplace</code>
+                <span style="width:30px;height:30px;display:grid;place-items:center;color:#9397ab;"><i class="ph ph-copy"></i></span>
+              </div>
+              <span style="height:36px;border:1px solid #9184d9;border-radius:6px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:14px;"><i class="ph ph-plus"></i>Add to install set</span>
+              <span style="font-size:12.5px;color:#9397ab;">First time? Run <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#cfd3e5;">/plugin marketplace add humen-dev/dev-digest-ai-marketplace</code></span>
+            </div>
+            <div style="display:grid;grid-template-columns:auto 1fr;gap:8px 16px;font-size:13.5px;padding:0 4px;">
+              <span style="color:#9397ab;">Version</span><span>1.4.0</span>
+              <span style="color:#9397ab;">Updated</span><span>Oct 12, 2026</span>
+              <span style="color:#9397ab;">Owner</span><span>@backend-guild</span>
+              <span style="color:#9397ab;">License</span><span>MIT</span>
+              <span style="color:#9397ab;">Source</span><a href="#">plugins/devdigest-backend</a>
+            </div>
+            <div style="padding:0 4px;">
+              <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9397ab;margin-bottom:8px;">Recent changes</div>
+              <div style="font-size:13.5px;color:#cfd3e5;display:flex;flex-direction:column;gap:6px;"><span><span style="color:#9397ab;">1.4.0</span> · postgres MCP server added</span><span><span style="color:#9397ab;">1.3.2</span> · db-migration estimates lock time</span></div>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </div>
+
+    <div id="2b" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:13px;padding:2px 8px;border-radius:4px;background:#2b2741;color:#d2cefd;">2b</span><span style="font-size:15px;">Install set · 4 plugins</span></div>
+      <div style="width:1280px;background:#161826;border-radius:12px;box-shadow:0 0 0 1px #3f424d;overflow:hidden;">
+        <div style="height:34px;display:flex;align-items:center;padding:0 16px;gap:8px;background:#1b1d2b;border-bottom:1px solid #292b31;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9397ab;"><i class="ph ph-lock-simple"></i>humen-dev.github.io/dev-digest-ai-marketplace/install/?set=devdigest-backend,devdigest-frontend,test-kit,security-review</div>
+        <div style="height:52px;display:flex;align-items:center;gap:28px;padding:0 32px;border-bottom:1px solid #292b31;">
+          <span style="display:flex;align-items:center;gap:8px;font-weight:500;"><span style="width:22px;height:22px;border-radius:6px;border:1px solid #9184d9;display:grid;place-items:center;color:#b5abfc;font-size:13px;"><i class="ph ph-stack"></i></span>DevDigest Marketplace</span>
+          <div style="display:flex;gap:4px;font-size:14px;color:#b2b6ca;"><span style="padding:6px 10px;">Catalog</span><span style="padding:6px 10px;">Security</span><span style="padding:6px 10px;">Collections</span><span style="padding:6px 10px;">Changelog</span><span style="padding:6px 10px;">Contribute</span></div>
+          <span style="margin-left:auto;display:flex;align-items:center;gap:6px;height:30px;padding:0 10px;border-radius:6px;border:1px solid #9184d9;font-size:13px;"><i class="ph ph-package"></i>Install set · 4</span>
+        </div>
+        <div style="padding:32px 32px 56px;display:grid;grid-template-columns:380px minmax(0,1fr);gap:48px;">
+          <div>
+            <h1 style="margin:0 0 8px;font-size:30px;font-weight:500;letter-spacing:-0.02em;">Install set</h1>
+            <p style="margin:0 0 22px;color:#b2b6ca;text-wrap:pretty;">Share this page's URL, or commit the settings file so the whole team gets the same plugins.</p>
+            <sc-for list="{{ setRows }}" as="s" hint-placeholder-count="4">
+              <div style="display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid #292b31;">
+                <div style="flex:1;min-width:0;">
+                  <div style="font-family:'JetBrains Mono',monospace;font-size:14px;">{{ s.name }}</div>
+                  <div style="font-size:12.5px;color:#9397ab;">{{ s.summary }}</div>
+                </div>
+                <sc-for list="{{ s.badges }}" as="b" hint-placeholder-count="1">
+                  <span title="{{ b.label }}" style="width:26px;height:24px;display:grid;place-items:center;border-radius:4px;border:1px solid #5d5294;color:#d2cefd;font-size:13px;"><i class="ph {{ b.icon }}"></i></span>
+                </sc-for>
+                <span style="width:28px;height:28px;display:grid;place-items:center;color:#75798c;"><i class="ph ph-x"></i></span>
+              </div>
+            </sc-for>
+            <div style="margin-top:14px;padding:14px;border-radius:8px;background:#1d1f2e;box-shadow:0 0 0 1px #5d5294;font-size:13.5px;color:#cfd3e5;display:flex;gap:10px;">
+              <i class="ph ph-shield-warning" style="font-size:18px;color:#b5abfc;"></i>
+              <span>This set runs <strong style="font-weight:500;color:#e9e9ed;">3 hooks</strong> and starts <strong style="font-weight:500;color:#e9e9ed;">1 MCP server</strong>. Needs <code style="font-family:'JetBrains Mono',monospace;font-size:12px;">DATABASE_URL</code>. <a href="#2c">Review</a></span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:24px;min-width:0;">
+            <div>
+              <div style="display:flex;align-items:center;margin-bottom:8px;gap:10px;"><span style="font-size:15px;font-weight:500;">Shell commands</span><span style="font-size:13px;color:#9397ab;">paste into Claude Code</span><span style="margin-left:auto;display:flex;align-items:center;gap:5px;height:28px;padding:0 10px;border:1px solid #3f424d;border-radius:6px;font-size:12px;color:#b2b6ca;"><i class="ph ph-copy"></i>Copy</span></div>
+              <pre style="margin:0;padding:16px 18px;background:#1b1d2b;border-radius:8px;box-shadow:inset 0 0 0 1px #292b31;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;color:#e4e7f5;overflow-x:auto;">{{ setCommands }}</pre>
+            </div>
+            <div>
+              <div style="display:flex;align-items:center;margin-bottom:8px;gap:10px;"><span style="font-size:15px;font-weight:500;">.claude/settings.json</span><span style="font-size:13px;color:#9397ab;">commit to the project</span><span style="margin-left:auto;display:flex;align-items:center;gap:5px;height:28px;padding:0 10px;border:1px solid #3f424d;border-radius:6px;font-size:12px;color:#b2b6ca;"><i class="ph ph-download-simple"></i>Download</span><span style="display:flex;align-items:center;gap:5px;height:28px;padding:0 10px;border:1px solid #3f424d;border-radius:6px;font-size:12px;color:#b2b6ca;"><i class="ph ph-copy"></i>Copy</span></div>
+              <pre style="margin:0;padding:16px 18px;background:#1b1d2b;border-radius:8px;box-shadow:inset 0 0 0 1px #292b31;font-family:'JetBrains Mono',monospace;font-size:12.5px;line-height:1.7;color:#e4e7f5;overflow-x:auto;">{{ setSettings }}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="2c" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:13px;padding:2px 8px;border-radius:4px;background:#2b2741;color:#d2cefd;">2c</span><span style="font-size:15px;">Security view · everything that executes</span></div>
+      <div style="width:1280px;background:#161826;border-radius:12px;box-shadow:0 0 0 1px #3f424d;overflow:hidden;">
+        <div style="height:34px;display:flex;align-items:center;padding:0 16px;gap:8px;background:#1b1d2b;border-bottom:1px solid #292b31;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9397ab;"><i class="ph ph-lock-simple"></i>humen-dev.github.io/dev-digest-ai-marketplace/security/?has=hooks,mcp</div>
+        <div style="height:52px;display:flex;align-items:center;gap:28px;padding:0 32px;border-bottom:1px solid #292b31;">
+          <span style="display:flex;align-items:center;gap:8px;font-weight:500;"><span style="width:22px;height:22px;border-radius:6px;border:1px solid #9184d9;display:grid;place-items:center;color:#b5abfc;font-size:13px;"><i class="ph ph-stack"></i></span>DevDigest Marketplace</span>
+          <div style="display:flex;gap:4px;font-size:14px;color:#b2b6ca;"><span style="padding:6px 10px;">Catalog</span><span style="padding:6px 10px;border-radius:6px;background:#232532;color:#e9e9ed;">Security</span><span style="padding:6px 10px;">Collections</span><span style="padding:6px 10px;">Changelog</span><span style="padding:6px 10px;">Contribute</span></div>
+        </div>
+        <div style="padding:32px 32px 56px;">
+          <h1 style="margin:0 0 8px;font-size:30px;font-weight:500;letter-spacing:-0.02em;">What runs on your machine</h1>
+          <p style="margin:0 0 22px;color:#b2b6ca;max-width:70ch;text-wrap:pretty;">Every hook command and MCP server in the marketplace, read from the plugin manifests at build time. 5 of 7 plugins execute code; 2 add prompts only.</p>
+          <div style="display:flex;gap:6px;margin-bottom:18px;flex-wrap:wrap;">
+            <span style="height:30px;padding:0 12px;display:flex;align-items:center;gap:6px;border-radius:999px;background:#2b2741;box-shadow:inset 0 0 0 1px #9184d9;color:#e7e5fe;font-size:13px;"><i class="ph ph-lightning"></i>has:hooks · 3</span>
+            <span style="height:30px;padding:0 12px;display:flex;align-items:center;gap:6px;border-radius:999px;background:#2b2741;box-shadow:inset 0 0 0 1px #9184d9;color:#e7e5fe;font-size:13px;"><i class="ph ph-plugs"></i>has:mcp · 3</span>
+            <span style="height:30px;padding:0 12px;display:flex;align-items:center;gap:6px;border-radius:999px;box-shadow:inset 0 0 0 1px #3f424d;color:#b2b6ca;font-size:13px;"><i class="ph ph-key"></i>has:env · 3</span>
+            <span style="height:30px;padding:0 12px;display:flex;align-items:center;gap:6px;border-radius:999px;box-shadow:inset 0 0 0 1px #3f424d;color:#b2b6ca;font-size:13px;"><i class="ph ph-shield-check"></i>Prompts only · 2</span>
+          </div>
+          <div style="border-radius:10px;box-shadow:0 0 0 1px #3f424d;overflow:hidden;">
+            <div style="display:grid;grid-template-columns:200px 110px minmax(0,1fr) 170px;gap:16px;padding:10px 18px;background:#1b1d2b;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#9397ab;">
+              <span>Plugin</span><span>Type</span><span>Command</span><span>Trigger / env</span>
+            </div>
+            <sc-for list="{{ secRows }}" as="r" hint-placeholder-count="6">
+              <div style="display:grid;grid-template-columns:200px 110px minmax(0,1fr) 170px;gap:16px;padding:14px 18px;border-top:1px solid #292b31;align-items:baseline;">
+                <span style="font-family:'JetBrains Mono',monospace;font-size:13.5px;color:{{ r.plugColor }};">{{ r.plugin }}</span>
+                <span style="display:flex;align-items:center;gap:6px;font-size:13.5px;color:#cfd3e5;"><i class="ph {{ r.icon }}" style="color:#b5abfc;"></i>{{ r.type }}</span>
+                <code style="font-family:'JetBrains Mono',monospace;font-size:12.5px;color:#e7e5fe;word-break:break-all;">{{ r.command }}</code>
+                <span style="font-size:13px;color:#9397ab;">{{ r.trigger }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="padding:64px 64px 0;display:flex;flex-direction:column;gap:28px;">
+  <div style="display:flex;align-items:baseline;gap:16px;">
+    <h2 style="margin:0;font-size:28px;font-weight:500;letter-spacing:-0.015em;">Home + search</h2>
+    <span style="color:#9397ab;">Same query, three result layouts. Query lives in the URL.</span>
+  </div>
+  <div style="display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start;">
+
+    <div id="1a" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:13px;padding:2px 8px;border-radius:4px;background:#2b2741;color:#d2cefd;">1a</span><span style="font-size:15px;">Hero + card grid</span><span style="font-size:13px;color:#9397ab;">scannable, install-first</span></div>
+      <div style="width:1280px;background:#161826;border-radius:12px;box-shadow:0 0 0 1px #3f424d;overflow:hidden;">
+        <div style="height:34px;display:flex;align-items:center;padding:0 16px;gap:8px;background:#1b1d2b;border-bottom:1px solid #292b31;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9397ab;"><i class="ph ph-lock-simple"></i>humen-dev.github.io/dev-digest-ai-marketplace/?q=skill+for+writing+release+notes</div>
+        <div style="height:52px;display:flex;align-items:center;gap:28px;padding:0 32px;border-bottom:1px solid #292b31;">
+          <span style="display:flex;align-items:center;gap:8px;font-weight:500;"><span style="width:22px;height:22px;border-radius:6px;border:1px solid #9184d9;display:grid;place-items:center;color:#b5abfc;font-size:13px;"><i class="ph ph-stack"></i></span>DevDigest Marketplace</span>
+          <div style="display:flex;gap:4px;font-size:14px;color:#b2b6ca;"><span style="padding:6px 10px;border-radius:6px;background:#232532;color:#e9e9ed;">Catalog</span><span style="padding:6px 10px;">Security</span><span style="padding:6px 10px;">Collections</span><span style="padding:6px 10px;">Changelog</span><span style="padding:6px 10px;">Contribute</span></div>
+          <span style="margin-left:auto;font-size:14px;color:#b2b6ca;display:flex;align-items:center;gap:6px;"><i class="ph ph-github-logo"></i>Repository</span>
+        </div>
+        <div style="padding:56px 32px 56px;background:radial-gradient(900px 360px at 0% 0%, #20223a 0%, #161826 70%);">
+          <div style="max-width:780px;">
+            <div style="font-size:12px;letter-spacing:0.1em;text-transform:uppercase;color:#9397ab;margin-bottom:10px;">7 plugins · 30 artifacts · updated Oct 12</div>
+            <h1 style="font-size:44px;font-weight:500;line-height:1.08;letter-spacing:-0.02em;margin:0 0 10px;">Describe the job. Get the plugin that does it.</h1>
+            <p style="margin:0 0 24px;color:#b2b6ca;">Search skills, agents, commands, hooks and MCP servers. See what a plugin runs before you install it.</p>
+            <div style="display:flex;align-items:center;gap:10px;height:56px;padding:0 14px 0 16px;background:#232532;border-radius:8px;box-shadow:0 0 0 1px #9184d9, 0 0 0 4px rgba(145,132,217,0.16);">
+              <i class="ph ph-magnifying-glass" style="font-size:19px;color:#9397ab;"></i>
+              <span style="flex:1;font-size:16px;">skill for writing release notes</span>
+              <span style="font-size:12px;color:#75798c;font-family:'JetBrains Mono',monospace;">/</span>
+            </div>
+            <div style="display:flex;gap:6px;margin-top:12px;align-items:center;flex-wrap:wrap;">
+              <span style="font-size:13px;color:#75798c;margin-right:4px;">Refine</span>
+              <sc-for list="{{ syntaxChips }}" as="c" hint-placeholder-count="5">
+                <span style="height:26px;padding:0 9px;display:flex;align-items:center;border-radius:4px;box-shadow:inset 0 0 0 1px {{ c.ring }};background:{{ c.bg }};color:{{ c.color }};font-family:'JetBrains Mono',monospace;font-size:12px;white-space:nowrap;">{{ c.label }}</span>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="padding:8px 32px 48px;">
+          <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:16px;">
+            <h2 style="margin:0;font-size:20px;font-weight:500;">5 matches</h2>
+            <span style="font-size:13px;color:#9397ab;">kind intent: <span style="color:#d2cefd;">skill</span> boosted</span>
+            <span style="margin-left:auto;font-size:13px;color:#9397ab;display:flex;align-items:center;gap:4px;">Sort: relevance<i class="ph ph-caret-down"></i></span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;">
+            <sc-for list="{{ results }}" as="r" hint-placeholder-count="5">
+              <article style="display:flex;flex-direction:column;gap:12px;padding:18px;background:#232532;border-radius:8px;box-shadow:0 0 0 1px {{ r.ring }};">
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <span style="display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:4px;background:#2b2741;color:#d2cefd;font-size:12px;"><i class="ph {{ r.icon }}"></i>{{ r.kindLabel }}</span>
+                  <span style="font-size:13px;color:#9397ab;">in <span style="color:#cfd3e5;">{{ r.plugin }}</span></span>
+                  <span style="margin-left:auto;display:flex;gap:4px;">
+                    <sc-for list="{{ r.badges }}" as="b" hint-placeholder-count="1">
+                      <span title="{{ b.label }}" style="display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 6px;border-radius:4px;border:1px solid #5d5294;color:#d2cefd;font-size:11.5px;white-space:nowrap;"><i class="ph {{ b.icon }}"></i>{{ b.short }}</span>
+                    </sc-for>
+                  </span>
+                </div>
+                <div>
+                  <h3 style="font-family:'JetBrains Mono',monospace;font-size:16px;font-weight:500;margin:0 0 4px;">{{ r.name }}</h3>
+                  <p style="margin:0;font-size:14px;color:#b2b6ca;line-height:1.5;text-wrap:pretty;">{{ r.desc }}</p>
+                </div>
+                <div style="font-size:12.5px;color:#9397ab;display:flex;gap:6px;align-items:baseline;"><span>Invoke</span><code style="font-family:'JetBrains Mono',monospace;color:#cfd3e5;">{{ r.invoke }}</code></div>
+                <div style="margin-top:auto;display:flex;align-items:center;gap:6px;height:36px;padding:0 4px 0 10px;background:#161826;border-radius:6px;box-shadow:inset 0 0 0 1px #292b31;">
+                  <code style="flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#cfd3e5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ r.cmd }}</code>
+                  <span style="width:28px;height:28px;display:grid;place-items:center;color:#9397ab;"><i class="ph ph-copy"></i></span>
+                </div>
+                <div style="display:flex;gap:6px;">
+                  <span style="flex:1;height:32px;display:flex;align-items:center;justify-content:center;border:1px solid #3f424d;border-radius:6px;font-size:13px;white-space:nowrap;">Details</span>
+                  <span style="height:32px;padding:0 10px;display:flex;align-items:center;gap:5px;border:1px solid {{ r.setRing }};background:{{ r.setBg }};border-radius:6px;font-size:13px;color:{{ r.setColor }};white-space:nowrap;"><i class="ph {{ r.setIcon }}"></i>{{ r.setLabel }}</span>
+                </div>
+              </article>
+            </sc-for>
+            <div style="padding:18px;border-radius:8px;box-shadow:inset 0 0 0 1px #3f424d;display:flex;flex-direction:column;gap:8px;justify-content:center;">
+              <span style="font-size:15px;">Not what you need?</span>
+              <span style="font-size:13.5px;color:#b2b6ca;">Open a prefilled request with this search.</span>
+              <span style="align-self:flex-start;margin-top:6px;height:32px;padding:0 12px;display:flex;align-items:center;gap:6px;border:1px solid #9184d9;border-radius:6px;font-size:13px;">Request a skill<i class="ph ph-arrow-up-right"></i></span>
+            </div>
+          </div>
+        </div>
+        <div style="margin:0 32px 28px;display:flex;align-items:center;gap:14px;padding:10px 10px 10px 16px;width:max-content;background:#232532;border-radius:10px;box-shadow:0 0 0 1px #595d6c, 0 16px 40px rgba(0,0,0,0.6);">
+          <i class="ph ph-package" style="font-size:18px;color:#b5abfc;"></i>
+          <div><div style="font-size:14px;">1 plugin in set</div><div style="font-size:12px;color:#9397ab;">release-tools</div></div>
+          <span style="height:34px;padding:0 14px;display:flex;align-items:center;border:1px solid #9184d9;border-radius:6px;font-size:13px;">Generate install</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="1b" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:13px;padding:2px 8px;border-radius:4px;background:#2b2741;color:#d2cefd;">1b</span><span style="font-size:15px;">Hero collapses to a bar + dense list</span><span style="font-size:13px;color:#9397ab;">compare many, security column always visible</span></div>
+      <div style="width:1280px;background:#161826;border-radius:12px;box-shadow:0 0 0 1px #3f424d;overflow:hidden;">
+        <div style="height:34px;display:flex;align-items:center;padding:0 16px;gap:8px;background:#1b1d2b;border-bottom:1px solid #292b31;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9397ab;"><i class="ph ph-lock-simple"></i>humen-dev.github.io/dev-digest-ai-marketplace/?q=skill+for+writing+release+notes</div>
+        <div style="height:52px;display:flex;align-items:center;gap:28px;padding:0 32px;border-bottom:1px solid #292b31;">
+          <span style="display:flex;align-items:center;gap:8px;font-weight:500;"><span style="width:22px;height:22px;border-radius:6px;border:1px solid #9184d9;display:grid;place-items:center;color:#b5abfc;font-size:13px;"><i class="ph ph-stack"></i></span>DevDigest Marketplace</span>
+          <div style="display:flex;gap:4px;font-size:14px;color:#b2b6ca;"><span style="padding:6px 10px;border-radius:6px;background:#232532;color:#e9e9ed;">Catalog</span><span style="padding:6px 10px;">Security</span><span style="padding:6px 10px;">Collections</span><span style="padding:6px 10px;">Changelog</span><span style="padding:6px 10px;">Contribute</span></div>
+        </div>
+        <div style="padding:28px 32px 20px;border-bottom:1px solid #292b31;background:linear-gradient(180deg,#1b1d2e,#161826);">
+          <div style="display:flex;align-items:center;gap:10px;height:50px;padding:0 14px 0 16px;background:#232532;border-radius:8px;box-shadow:0 0 0 1px #9184d9;">
+            <i class="ph ph-magnifying-glass" style="font-size:18px;color:#9397ab;"></i>
+            <span style="font-size:16px;">skill for writing release notes</span>
+            <span style="height:26px;padding:0 8px;display:flex;align-items:center;gap:6px;border-radius:4px;background:#2b2741;color:#e7e5fe;font-family:'JetBrains Mono',monospace;font-size:12px;">-has:hooks<i class="ph ph-x" style="font-size:11px;"></i></span>
+            <span style="margin-left:auto;font-size:13px;color:#9397ab;">5 of 30</span>
+          </div>
+          <div style="display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;">
+            <sc-for list="{{ kindTabs }}" as="k" hint-placeholder-count="6">
+              <span style="height:30px;padding:0 12px;display:flex;align-items:center;gap:6px;border-radius:6px;background:{{ k.bg }};color:{{ k.color }};font-size:13px;white-space:nowrap;"><i class="ph {{ k.icon }}"></i>{{ k.label }}<span style="color:#75798c;">{{ k.count }}</span></span>
+            </sc-for>
+          </div>
+        </div>
+        <div style="padding:8px 32px 48px;">
+          <div style="display:grid;grid-template-columns:110px 240px minmax(0,1fr) 150px 220px;gap:20px;padding:12px 0;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;color:#9397ab;">
+            <span>Kind</span><span>Name / plugin</span><span>What it does</span><span>Executes</span><span></span>
+          </div>
+          <sc-for list="{{ results }}" as="r" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:110px 240px minmax(0,1fr) 150px 220px;gap:20px;padding:16px 0;border-top:1px solid #292b31;align-items:center;">
+              <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:#d2cefd;"><i class="ph {{ r.icon }}" style="font-size:16px;"></i>{{ r.kindLabel }}</span>
+              <div style="min-width:0;">
+                <div style="font-family:'JetBrains Mono',monospace;font-size:14.5px;">{{ r.name }}</div>
+                <div style="font-size:12.5px;color:#9397ab;">{{ r.plugin }} · v{{ r.version }}</div>
+              </div>
+              <div style="min-width:0;">
+                <div style="font-size:14px;color:#cfd3e5;text-wrap:pretty;">{{ r.desc }}</div>
+                <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9397ab;">{{ r.invoke }}</code>
+              </div>
+              <span style="font-size:13px;color:{{ r.execColor }};display:flex;align-items:center;gap:6px;"><i class="ph {{ r.execIcon }}"></i>{{ r.execText }}</span>
+              <div style="display:flex;gap:6px;justify-content:flex-end;">
+                <span style="height:32px;padding:0 10px;display:flex;align-items:center;gap:5px;border:1px solid #3f424d;border-radius:6px;font-size:13px;white-space:nowrap;color:#b2b6ca;"><i class="ph ph-copy"></i>Install cmd</span>
+                <span style="width:32px;height:32px;display:grid;place-items:center;border:1px solid {{ r.setRing }};background:{{ r.setBg }};border-radius:6px;color:{{ r.setColor }};"><i class="ph {{ r.setIcon }}"></i></span>
+              </div>
+            </div>
+          </sc-for>
+          <div style="border-top:1px solid #292b31;padding-top:16px;font-size:13px;color:#9397ab;">Not what you need? <a href="#">Request a skill</a> · prefilled with this search</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="1c" style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;align-items:center;gap:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:13px;padding:2px 8px;border-radius:4px;background:#2b2741;color:#d2cefd;">1c</span><span style="font-size:15px;">Hero + results grouped by plugin</span><span style="font-size:13px;color:#9397ab;">matches the install unit</span></div>
+      <div style="width:1280px;background:#161826;border-radius:12px;box-shadow:0 0 0 1px #3f424d;overflow:hidden;">
+        <div style="height:34px;display:flex;align-items:center;padding:0 16px;gap:8px;background:#1b1d2b;border-bottom:1px solid #292b31;font-family:'JetBrains Mono',monospace;font-size:12px;color:#9397ab;"><i class="ph ph-lock-simple"></i>humen-dev.github.io/dev-digest-ai-marketplace/?q=skill+for+writing+release+notes</div>
+        <div style="height:52px;display:flex;align-items:center;gap:28px;padding:0 32px;border-bottom:1px solid #292b31;">
+          <span style="display:flex;align-items:center;gap:8px;font-weight:500;"><span style="width:22px;height:22px;border-radius:6px;border:1px solid #9184d9;display:grid;place-items:center;color:#b5abfc;font-size:13px;"><i class="ph ph-stack"></i></span>DevDigest Marketplace</span>
+          <div style="display:flex;gap:4px;font-size:14px;color:#b2b6ca;"><span style="padding:6px 10px;border-radius:6px;background:#232532;color:#e9e9ed;">Catalog</span><span style="padding:6px 10px;">Security</span><span style="padding:6px 10px;">Collections</span><span style="padding:6px 10px;">Changelog</span><span style="padding:6px 10px;">Contribute</span></div>
+        </div>
+        <div style="padding:48px 32px 32px;display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:48px;align-items:end;">
+          <div>
+            <h1 style="font-size:40px;font-weight:500;line-height:1.08;letter-spacing:-0.02em;margin:0 0 20px;">What do you need Claude Code to do?</h1>
+            <div style="display:flex;align-items:center;gap:10px;height:56px;padding:0 16px;background:#232532;border-radius:8px;box-shadow:0 0 0 1px #9184d9, 0 0 0 4px rgba(145,132,217,0.16);">
+              <i class="ph ph-magnifying-glass" style="font-size:19px;color:#9397ab;"></i>
+              <span style="font-size:16px;">skill for writing release notes</span>
+            </div>
+          </div>
+          <div style="font-size:13px;color:#9397ab;line-height:1.7;">
+            <div style="color:#cfd3e5;margin-bottom:4px;">Search syntax</div>
+            <div><code style="font-family:'JetBrains Mono',monospace;color:#d2cefd;">type:agent</code> only agents</div>
+            <div><code style="font-family:'JetBrains Mono',monospace;color:#d2cefd;">has:mcp</code> starts an MCP server</div>
+            <div><code style="font-family:'JetBrains Mono',monospace;color:#d2cefd;">-has:hooks</code> no hooks</div>
+          </div>
+        </div>
+        <div style="padding:8px 32px 48px;display:flex;flex-direction:column;gap:16px;">
+          <div style="font-size:13px;color:#9397ab;">5 matching artifacts in 2 plugins</div>
+          <sc-for list="{{ groups }}" as="g" hint-placeholder-count="2">
+            <div style="border-radius:10px;background:#1d1f2e;box-shadow:0 0 0 1px #3f424d;overflow:hidden;">
+              <div style="display:flex;align-items:center;gap:14px;padding:16px 20px;background:#232532;">
+                <i class="ph ph-puzzle-piece" style="font-size:20px;color:#b5abfc;"></i>
+                <div style="min-width:0;flex:1;">
+                  <div style="display:flex;align-items:baseline;gap:10px;"><span style="font-family:'JetBrains Mono',monospace;font-size:17px;">{{ g.name }}</span><span style="font-size:12.5px;color:#9397ab;">v{{ g.version }} · {{ g.total }} artifacts</span></div>
+                  <div style="font-size:13.5px;color:#b2b6ca;">{{ g.desc }}</div>
+                </div>
+                <sc-for list="{{ g.badges }}" as="b" hint-placeholder-count="1">
+                  <span style="display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 8px;border-radius:4px;border:1px solid #5d5294;color:#d2cefd;font-size:12px;white-space:nowrap;"><i class="ph {{ b.icon }}"></i>{{ b.label }}</span>
+                </sc-for>
+                <div style="display:flex;align-items:center;gap:6px;height:34px;padding:0 4px 0 10px;background:#161826;border-radius:6px;box-shadow:inset 0 0 0 1px #3f424d;width:330px;">
+                  <code style="flex:1;min-width:0;font-family:'JetBrains Mono',monospace;font-size:11.5px;color:#cfd3e5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">{{ g.cmd }}</code>
+                  <i class="ph ph-copy" style="color:#9397ab;padding:0 6px;"></i>
+                </div>
+                <span style="height:34px;padding:0 12px;display:flex;align-items:center;gap:5px;border:1px solid {{ g.setRing }};background:{{ g.setBg }};border-radius:6px;font-size:13px;white-space:nowrap;"><i class="ph {{ g.setIcon }}"></i>{{ g.setLabel }}</span>
+              </div>
+              <sc-for list="{{ g.items }}" as="r" hint-placeholder-count="2">
+                <div style="display:grid;grid-template-columns:120px 220px minmax(0,1fr) 200px;gap:16px;padding:12px 20px 12px 54px;border-top:1px solid #292b31;align-items:baseline;">
+                  <span style="display:flex;align-items:center;gap:6px;font-size:13px;color:#d2cefd;"><i class="ph {{ r.icon }}"></i>{{ r.kindLabel }}</span>
+                  <span style="font-family:'JetBrains Mono',monospace;font-size:14px;">{{ r.name }}</span>
+                  <span style="font-size:14px;color:#b2b6ca;">{{ r.desc }}</span>
+                  <code style="font-family:'JetBrains Mono',monospace;font-size:12px;color:#9397ab;text-align:right;">{{ r.invoke }}</code>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+          <div style="font-size:13px;color:#9397ab;">Not what you need? <a href="#">Request a skill</a></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div style="height:64px;"></div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const MKT = 'dev-digest-ai-marketplace', REPO = 'humen-dev/dev-digest-ai-marketplace';
+const K = { skill: ['Skill', 'ph-book-open-text'], agent: ['Agent', 'ph-robot'], command: ['Command', 'ph-terminal-window'], hook: ['Hook', 'ph-lightning'], mcp: ['MCP server', 'ph-plugs'] };
+const P = {
+  'release-tools': { version: '0.9.2', desc: 'Release notes, changelog entries and version bumps from merged PRs.', hooks: 0, mcp: 1, env: 'GITHUB_TOKEN', total: 4 },
+  'docs-writer': { version: '0.6.0', desc: 'Writing help for ADRs, READMEs and API reference pages.', hooks: 0, mcp: 0, total: 4 }
+};
+const RES = [
+  ['skill', 'release-notes', 'release-tools', 'Draft user-facing release notes from merged PRs and conventional commits, grouped by impact.', 'auto · “draft release notes”', true],
+  ['command', '/release-notes', 'release-tools', 'Generate notes for the range since the last tag and open them for editing.', '/release-notes v1.4.0..HEAD', true],
+  ['skill', 'changelog-keeper', 'release-tools', 'Keep CHANGELOG.md in Keep-a-Changelog format and move Unreleased entries on tag.', 'auto · on version bump', true],
+  ['skill', 'readme-polish', 'docs-writer', 'Tighten a README: install, usage, configuration, troubleshooting.', 'auto · “polish the README”', false],
+  ['skill', 'adr-writer', 'docs-writer', 'Draft an architecture decision record with context, options and consequences.', 'auto · “write an ADR”', false]
+];
+const badgesOf = p => [...(p.hooks ? [{ icon: 'ph-lightning', label: p.hooks + ' hook', short: 'hook' }] : []), ...(p.mcp ? [{ icon: 'ph-plugs', label: p.mcp + ' MCP server', short: 'MCP' }] : [])];
+const cmd = n => `/plugin install ${n}@${MKT}`;
+const setStyle = on => ({ setLabel: on ? 'In set' : 'Add to set', setIcon: on ? 'ph-check' : 'ph-plus', setBg: on ? '#2b2741' : 'transparent', setRing: on ? '#9184d9' : '#3f424d', setColor: on ? '#e7e5fe' : '#b2b6ca' });
+const SET = [
+  { name: 'devdigest-backend', summary: '6 artifacts · migrations, endpoints, reviewer', h: 1, m: 1 },
+  { name: 'devdigest-frontend', summary: '4 artifacts · components, a11y, lint-on-save', h: 1, m: 0 },
+  { name: 'security-review', summary: '4 artifacts · audits, secrets scan, command guard', h: 1, m: 0 },
+  { name: 'test-kit', summary: '4 artifacts · test plans, flaky tests, test writer', h: 0, m: 0 }
+];
+
+class Component extends DCLogic {
+  renderVals() {
+    const results = RES.map(([kind, name, plugin, desc, invoke, inSet]) => {
+      const p = P[plugin], b = badgesOf(p);
+      return { kindLabel: K[kind][0], icon: K[kind][1], name, plugin, desc, invoke, version: p.version, cmd: cmd(plugin), badges: b,
+        ring: '#3f424d', execText: b.length ? b.map(x => x.label).join(' · ') : 'Prompts only', execIcon: b.length ? 'ph-plugs' : 'ph-shield-check', execColor: b.length ? '#d2cefd' : '#9397ab', ...setStyle(inSet) };
+    });
+    const groups = Object.keys(P).map(n => ({ name: n, ...P[n], cmd: cmd(n), badges: badgesOf(P[n]).map(b => ({ ...b, label: b.label + (P[n].env ? ' · ' + P[n].env : '') })), items: results.filter(r => r.plugin === n), ...setStyle(n === 'release-tools') }));
+    const setCommands = [`/plugin marketplace add ${REPO}`, ...SET.map(s => cmd(s.name))].join('\n');
+    const setSettings = JSON.stringify({ extraKnownMarketplaces: { [MKT]: { source: { source: 'github', repo: REPO } } }, enabledPlugins: Object.fromEntries(SET.map(s => [`${s.name}@${MKT}`, true])) }, null, 2);
+    return {
+      results, groups,
+      syntaxChips: [['type:skill', true], ['type:agent'], ['has:mcp'], ['-has:hooks'], ['тести']].map(([label, on]) => ({ label, bg: on ? '#2b2741' : 'transparent', ring: on ? '#9184d9' : '#3f424d', color: on ? '#e7e5fe' : '#b2b6ca' })),
+      kindTabs: [['All', 'ph-squares-four', 5, true], ['Skills', K.skill[1], 4], ['Agents', K.agent[1], 0], ['Commands', K.command[1], 1], ['Hooks', K.hook[1], 0], ['MCP', K.mcp[1], 0]].map(([label, icon, count, on]) => ({ label, icon, count, bg: on ? '#2b2741' : 'transparent', color: on ? '#e7e5fe' : '#b2b6ca' })),
+      be: { desc: 'Conventions for the DevDigest API: Postgres migrations, endpoint scaffolding and a backend review agent.' },
+      beRuns: [
+        { icon: 'ph-lightning', kind: 'Hook', meta: 'PostToolUse · Edit|Write', command: 'npx prisma validate --schema prisma/schema.prisma', note: 'Runs after every file Claude edits or writes.' },
+        { icon: 'ph-plugs', kind: 'MCP server', meta: 'postgres · stdio', command: 'npx -y @modelcontextprotocol/server-postgres $DATABASE_URL', note: 'Starts with Claude Code. Downloads the package from npm on first run.' },
+        { icon: 'ph-key', kind: 'Env vars', meta: 'read by MCP server', command: 'DATABASE_URL', note: 'Use a read-only role; the server can run any query the role allows.' },
+        { icon: 'ph-wrench', kind: 'Allowed tools', meta: 'pre-approved', command: 'Bash(npx prisma:*)', note: 'Claude can run these without asking.' }
+      ],
+      beArts: [['skill', 'db-migration', 'Reversible Postgres migrations with rollback plan and lock-time estimate.', 'auto'], ['skill', 'api-endpoint', 'REST endpoint with validation, error mapping and contract tests.', 'auto'], ['agent', 'backend-reviewer', 'Reviews diffs against backend conventions before a PR.', '@agent-backend-reviewer'], ['command', '/migrate-check', 'Dry-run pending migrations against a shadow database.', '/migrate-check'], ['hook', 'validate-schema', 'Validates the Prisma schema after edits.', 'PostToolUse'], ['mcp', 'postgres', 'Read-only SQL access via $DATABASE_URL.', 'mcp__postgres__query']].map(([k, name, desc, invoke]) => ({ icon: K[k][1], name, desc, invoke })),
+      setRows: SET.map(s => ({ name: s.name, summary: s.summary, badges: [...(s.h ? [{ icon: 'ph-lightning', label: 'hook' }] : []), ...(s.m ? [{ icon: 'ph-plugs', label: 'MCP server' }] : [])] })),
+      setCommands, setSettings,
+      secRows: [
+        ['devdigest-backend', 'ph-lightning', 'Hook', 'npx prisma validate --schema prisma/schema.prisma', 'PostToolUse · Edit|Write'],
+        ['devdigest-backend', 'ph-plugs', 'MCP', 'npx -y @modelcontextprotocol/server-postgres $DATABASE_URL', 'env: DATABASE_URL'],
+        ['devdigest-frontend', 'ph-lightning', 'Hook', 'npx eslint --fix "$CLAUDE_FILE_PATHS"', 'PostToolUse · Edit|Write'],
+        ['release-tools', 'ph-plugs', 'MCP', 'npx -y @modelcontextprotocol/server-github', 'env: GITHUB_TOKEN'],
+        ['security-review', 'ph-lightning', 'Hook', '${CLAUDE_PLUGIN_ROOT}/scripts/block-dangerous.sh', 'PreToolUse · Bash'],
+        ['observability', 'ph-plugs', 'MCP', 'npx -y @sentry/mcp-server --org devdigest', 'env: SENTRY_TOKEN']
+      ].map(([plugin, icon, type, command, trigger], i, a) => ({ plugin: i && a[i - 1][0] === plugin ? '' : plugin, plugColor: '#e9e9ed', icon, type, command, trigger }))
+    };
+  }
+}
+</script>
+</body>
+</html>
