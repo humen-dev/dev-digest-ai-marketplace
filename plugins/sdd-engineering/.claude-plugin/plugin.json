@@ -1,0 +1,31 @@
+{
+  "name": "sdd-engineering",
+  "version": "1.0.0",
+  "description": "Spec-Driven Development workflow: spec-creator, implementation-planner, implementer and plan-verifier agents, run-plan and workflow-retro skills, guard hooks.",
+  "author": {
+    "name": "humen-dev",
+    "url": "https://github.com/humen-dev"
+  },
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "sdd",
+    "spec-driven-development",
+    "agents",
+    "workflow",
+    "planning"
+  ],
+  "dependencies": [
+    {
+      "name": "engineering-paved-path",
+      "version": "^1.0.0"
+    },
+    {
+      "name": "research-tools",
+      "version": "^1.0.0"
+    },
+    {
+      "name": "architecture-review",
+      "version": "^1.0.0"
+    }
+  ]
+}

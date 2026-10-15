@@ -1,8 +1,11 @@
 # Default owner for everything.
 *                       @humen-dev
 
-# Per-plugin owners go below, e.g.:
-# /plugins/devdigest-backend/   @humen-dev
+# Per-plugin owners
+/plugins/sdd-engineering/         @humen-dev
+/plugins/engineering-paved-path/  @humen-dev
+/plugins/research-tools/          @humen-dev
+/plugins/architecture-review/     @humen-dev
 
 # Security-sensitive files always need the owner's review.
 /.claude-plugin/        @humen-dev

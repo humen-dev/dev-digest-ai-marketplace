@@ -8,3 +8,6 @@ Thumbs.db
 
 # Node
 node_modules/
+
+# claude plugin eval output
+plugins/*/evals/results/

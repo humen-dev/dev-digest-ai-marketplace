@@ -36,18 +36,17 @@
 - Keep `version` in `plugin.json` only, never in the marketplace entry.
 - No files from outside a plugin's folder, no Git LFS.
 
-## Syncing from DevDigest
+## Porting skills and agents from another project
 
-Plugins here are **copies** of skills/agents that originate in
-[humen-dev/dev-digest](https://github.com/humen-dev/dev-digest). When you port
-one:
+Plugins here are public and project-agnostic (see
+[docs/specs/sdd-plugins.md §5.5](docs/specs/sdd-plugins.md)):
 
-- Strip references to paths that exist only in the DevDigest checkout, or make
-  them relative to the user's project.
-- Note the source path in the plugin README (`Ported from dev-digest: <path>`)
-  so later changes can be synced back and forth.
+- Remove names, paths, package names and repository URLs of the source project.
+- Read project-specific values from `.claude/sdd.json` or the caller's prompt.
+- Third-party skills are copied unchanged and credited in the plugin's
+  `THIRD_PARTY_NOTICES.md`.
 
 ## Commits
 
 Short imperative subject, scoped by plugin when relevant:
-`devdigest-backend: add drizzle migration skill`.
+`sdd-engineering: add plan template`.

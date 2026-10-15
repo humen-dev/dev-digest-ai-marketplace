@@ -1,0 +1,16 @@
+{
+  "description": "Limits Bash for the architecture-review:architecture-reviewer agent to read-only git and the project's configured architectureCheck. Inert for every other session and agent.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/bash-guard.mjs\""
+          }
+        ]
+      }
+    ]
+  }
+}
