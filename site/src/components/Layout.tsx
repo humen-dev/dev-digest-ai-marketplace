@@ -84,7 +84,6 @@ function Footer() {
     <footer className="footer">
       <div className="wrap">
         {catalog.sample && <span>Preview with sample plugins: the marketplace has no published plugins yet.</span>}
-        <a href={`${import.meta.env.BASE_URL}design/`}>Design explorations</a>
         {sha && (
           <span>
             Built from <a href={`${REPO_URL}/commit/${sha}`}>{sha.slice(0, 7)}</a>

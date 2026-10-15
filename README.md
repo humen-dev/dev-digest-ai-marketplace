@@ -69,7 +69,6 @@ docs/SECURITY.md                  hooks, MCP and secrets policy
 docs/RELEASES.md                  versioning, updates, rollback
 scripts/validate-marketplace.mjs  structural linter (no dependencies)
 site/                             catalog website (Vite + React), see site/README.md
-design/                           Claude Design explorations for the site
 ```
 
 ## Develop locally

@@ -1,19 +1,17 @@
 name: Site
 
 # Builds the catalog site (site/, Vite + React) and deploys it to GitHub Pages.
-# The build also copies design/ to /design/. Pull requests only build and test.
+# Pull requests only build and test.
 
 on:
   push:
     branches: [main]
     paths:
       - site/**
-      - design/**
       - .github/workflows/pages.yml
   pull_request:
     paths:
       - site/**
-      - design/**
       - .github/workflows/pages.yml
   workflow_dispatch:
 

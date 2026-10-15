@@ -1,6 +1,6 @@
 import type { Catalog } from './types';
 
-// Sample data from the Claude Design explorations (design/). The marketplace
+// Sample data from the Claude Design catalog explorations. The marketplace
 // has no plugins yet; replace this with a catalog generated from
 // .claude-plugin/marketplace.json and plugins/ (docs/specs/catalog-site.md §6).
 // Hooks and MCP servers are listed as config; their catalog entries, names and

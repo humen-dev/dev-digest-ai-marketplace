@@ -4,8 +4,9 @@ The marketplace catalog website: search, plugin pages, install set and
 security view. Vite + React + TypeScript, deployed to GitHub Pages at
 <https://humen-dev.github.io/dev-digest-ai-marketplace/>.
 
-The UI follows the Claude Design explorations in [`../design/`](../design/),
-which are published unchanged at `/design/`.
+The UI follows the "Catalog Explorations" design in the
+[Claude Design project](https://claude.ai/design/p/05132151-eaa3-4c14-a87d-a89c14a1b622) (access required).
+The mockups are not stored in this repository.
 
 > The catalog data in `src/data/catalog.ts` is **sample data** from the
 > design. The marketplace has no plugins yet; generating the catalog from
@@ -22,8 +23,7 @@ npm install
 npm run dev
 ```
 
-Open <http://localhost:5173/>. The dev server reloads on save and also serves
-`../design/` at <http://localhost:5173/design/>.
+Open <http://localhost:5173/>. The dev server reloads on save.
 
 | Command | What it does |
 |---|---|
