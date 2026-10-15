@@ -61,7 +61,7 @@ or enable auto-update in `/plugin` → Marketplaces. After an update, run
 |--------|------|--------------|
 | [`sdd-engineering`](plugins/sdd-engineering/) | product | Spec-Driven Development: `spec-creator`, `implementation-planner`, `implementer`, `plan-verifier` agents; `/sdd-engineering:run-plan`, `/sdd-engineering:workflow-retro`; guard hooks |
 | [`engineering-paved-path`](plugins/engineering-paved-path/) | dependency | 12 engineering skills: React, Next.js, Fastify, Drizzle, PostgreSQL, TypeScript, Zod, testing, security, architecture, Mermaid |
-| [`research-tools`](plugins/research-tools/) | dependency | read-only `researcher` agent |
+| [`research-tools`](plugins/research-tools/) | dependency | read-only `researcher` agent; `/research-tools:about` |
 | [`architecture-review`](plugins/architecture-review/) | dependency | read-only `architecture-reviewer` agent + Bash guard |
 
 ```mermaid
