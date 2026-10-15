@@ -1,0 +1,19 @@
+{
+  "name": "engineering-paved-path",
+  "version": "1.0.0",
+  "description": "Paved-path engineering skills: React, Next.js, Fastify, Drizzle, PostgreSQL, TypeScript, Zod, testing, security, architecture and Mermaid diagrams.",
+  "author": {
+    "name": "humen-dev",
+    "url": "https://github.com/humen-dev"
+  },
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "skills",
+    "react",
+    "nextjs",
+    "fastify",
+    "typescript",
+    "architecture",
+    "security"
+  ]
+}

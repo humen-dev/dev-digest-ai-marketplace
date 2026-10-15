@@ -1,8 +1,10 @@
-# DevDigest AI Marketplace
+# AI Engineering Marketplace
 
 A [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugins/create-marketplace)
-with the skills, agents, commands and hooks used to build and maintain
-[DevDigest](https://github.com/humen-dev/dev-digest).
+for Spec-Driven Development: agents that write specs, plan, implement and verify
+work, plus the engineering skills and reviewers they rely on. Every plugin is
+project-agnostic — project-specific settings live in your repository's
+`.claude/sdd.json`.
 
 > [!WARNING]
 > **Plugins run code on your machine.** Hooks execute shell commands and MCP
@@ -55,9 +57,22 @@ or enable auto-update in `/plugin` → Marketplaces. After an update, run
 
 ## Plugins
 
-| Plugin | Description |
-|--------|-------------|
-| _none yet_ | |
+| Plugin | Kind | What it adds |
+|--------|------|--------------|
+| [`sdd-engineering`](plugins/sdd-engineering/) | product | Spec-Driven Development: `spec-creator`, `implementation-planner`, `implementer`, `plan-verifier` agents; `/sdd-engineering:run-plan`, `/sdd-engineering:workflow-retro`; guard hooks |
+| [`engineering-paved-path`](plugins/engineering-paved-path/) | dependency | 12 engineering skills: React, Next.js, Fastify, Drizzle, PostgreSQL, TypeScript, Zod, testing, security, architecture, Mermaid |
+| [`research-tools`](plugins/research-tools/) | dependency | read-only `researcher` agent |
+| [`architecture-review`](plugins/architecture-review/) | dependency | read-only `architecture-reviewer` agent + Bash guard |
+
+```mermaid
+graph TD
+  SDD[sdd-engineering] -->|^1.0.0| EPP[engineering-paved-path]
+  SDD -->|^1.0.0| RT[research-tools]
+  SDD -->|^1.0.0| AR[architecture-review]
+  AR -->|^1.0.0| EPP
+```
+
+Installing `sdd-engineering` installs its dependencies automatically.
 
 ## Repository layout
 

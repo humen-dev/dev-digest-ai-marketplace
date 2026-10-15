@@ -25,12 +25,12 @@ Components (`skills/`, `agents/`, `commands/`, `hooks/`, …) sit at the
 ## Naming
 
 - kebab-case: letters, digits, `-`; start with a letter or digit.
-- Prefix DevDigest plugins with `devdigest-` (e.g. `devdigest-backend`).
+- Names describe the capability, not a project (e.g. `research-tools`).
 - Forbidden prefixes: `claude-`, `anthropic-`, `anthropics-`, `cc-plugin-`.
 - The `name` in `plugin.json` **must equal** the `name` of its entry in
   `.claude-plugin/marketplace.json`. The linter enforces this.
-- Components are namespaced by plugin: a skill `review` in `devdigest-review`
-  is invoked as `/devdigest-review:review`.
+- Components are namespaced by plugin: a skill `review` in `example-plugin`
+  is invoked as `/example-plugin:review`.
 - A plugin name is permanent once published. To rename, see
   [RELEASES.md](RELEASES.md#rename-or-remove-a-plugin).
 
@@ -40,11 +40,11 @@ Minimum:
 
 ```json
 {
-  "name": "devdigest-example",
+  "name": "example-plugin",
   "description": "One sentence: what it adds and when to use it.",
   "author": { "name": "humen-dev" },
   "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
-  "keywords": ["devdigest"]
+  "keywords": ["example"]
 }
 ```
 
@@ -60,11 +60,11 @@ Append to `plugins[]` in `.claude-plugin/marketplace.json`:
 
 ```json
 {
-  "name": "devdigest-example",
-  "source": "./plugins/devdigest-example",
+  "name": "example-plugin",
+  "source": "./plugins/example-plugin",
   "description": "Same sentence as plugin.json.",
   "category": "development",
-  "tags": ["devdigest"]
+  "tags": ["example"]
 }
 ```
 
@@ -73,7 +73,7 @@ Append to `plugins[]` in `.claude-plugin/marketplace.json`:
 Installed plugins are **copied** to `~/.claude/plugins/cache/…`. Anything
 outside the plugin folder is not copied.
 
-- Never reference `../` or files elsewhere in this repo or in `dev-digest`.
+- Never reference `../` or files elsewhere in this repo or in another project.
 - Reference plugin files via `${CLAUDE_PLUGIN_ROOT}` (quoted).
 - Persistent state goes to `${CLAUDE_PLUGIN_DATA}`; `${CLAUDE_PLUGIN_ROOT}`
   changes on every update.
@@ -87,8 +87,8 @@ outside the plugin folder is not copied.
   states **when** to use it (that is what triggers it).
 - Skills live at `skills/<name>/SKILL.md` — a `SKILL.md` at the plugin root
   turns the whole plugin into a single skill.
-- Do not hard-code paths of the DevDigest checkout; describe paths relative to
-  the user's project.
+- Do not hard-code paths of any specific project; describe paths relative to
+  the user's project or read them from configuration.
 
 ## Hooks
 
