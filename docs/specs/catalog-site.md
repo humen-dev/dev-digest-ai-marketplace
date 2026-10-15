@@ -2,11 +2,11 @@
 
 | | |
 |---|---|
-| Status | Draft |
+| Status | Draft (rev. 2: design review of catalog, plugin page and install set; see §16) |
 | Owner | @humen-dev |
 | Created | 2026-10-14 |
 | Site URL | `https://humen-dev.github.io/dev-digest-ai-marketplace/` |
-| Stack | Astro (static output), Preact islands, MiniSearch |
+| Stack | **Vite + React SPA** in `site/` (changed 2026-10-14 from ~~Astro static output + Preact islands~~). Search uses a small in-house scorer for now; MiniSearch (§7.1) is still the plan. Not yet revised for the new stack: §5, §5.1, §9.5 (RSS), §10.1 (JS budget), §10.3 (pages need JS), §10.4 (islands), §11, §15.2. |
 
 ## 1. Summary
 
@@ -147,6 +147,9 @@ interface Plugin {
   category: string | null;        // marketplace entry
   tags: string[];                 // marketplace tags ∪ plugin.json keywords
   author: string | null;
+  license: string | null;         // plugin.json `license`
+  owners: string[];               // CODEOWNERS entries matching sourcePath, e.g. ["@backend-guild"]
+  external: boolean;              // non-relative marketplace source; listed, not crawled
   sourcePath: string;             // "plugins/devdigest-backend"
   readmeHtml: string;             // sanitized (§10.4)
   installCommand: string;         // "/plugin install devdigest-backend@dev-digest-ai-marketplace"
@@ -164,6 +167,7 @@ interface Artifact {
   plugin: string;
   description: string;
   invocation: string | null;      // "/devdigest-review:review" for skills/commands; agent name for agents
+                                  // (agent mention syntax to be verified, §15); hook/mcp: null
   path: string;                   // repo-relative file
   githubUrl: string;              // blob URL on main
   frontmatter: Record<string, unknown>;
@@ -174,9 +178,15 @@ interface Artifact {
   updatedAt: string;
 }
 
-interface HookDetails { event: string; matcher: string | null; type: string; command: string | null; }
+interface HookDetails { event: string; matcher: string | null; type: string; command: string | null;
+                        summary: string;              // templated, §8.1
+                        note: string | null;          // author note from README, §8.2
+                        unpinned: boolean; }
 interface McpDetails  { server: string; transport: 'stdio' | 'http' | 'sse'; command: string | null;
-                        args: string[]; url: string | null; env: string[] /* names only */; }
+                        args: string[]; url: string | null; env: string[] /* names only */;
+                        summary: string; note: string | null; unpinned: boolean; }
+// MCP tool names are NOT part of the catalog: they are only known once the server runs,
+// and the build never starts servers.
 ```
 
 ### 6.1 Extraction rules
@@ -187,8 +197,8 @@ interface McpDetails  { server: string; transport: 'stdio' | 'http' | 'sse'; com
 | skill | `skills/<dir>/SKILL.md` | frontmatter `name`, else `<dir>` | frontmatter `description` | `invocation = /<plugin>:<name>` |
 | agent | `agents/*.md` | frontmatter `name`, else filename | frontmatter `description` | Keep `tools`, `model` from frontmatter. |
 | command | `commands/*.md` (recursive) | filename without `.md` | frontmatter `description`, else first paragraph | Keep `argument-hint`, `allowed-tools`. |
-| hook | `hooks/hooks.json` and inline `hooks` in `plugin.json` | `<Event>[:<matcher>]` | generated: "Runs `<command>` on `<Event>`" | One artifact per hook entry. |
-| mcp | `.mcp.json` and inline `mcpServers` in `plugin.json` | server key | generated from transport and command/url | **Never** copy `env` values; keep variable names only. |
+| hook | `hooks/hooks.json` and inline `hooks` in `plugin.json` | basename of the script the command runs via `${CLAUDE_PLUGIN_ROOT}/scripts/<name>.<ext>`; otherwise `<Event>[:<matcher>]` | `summary` (§8.1) | One artifact per hook entry. The invocation column shows `<Event> · <matcher>`. |
+| mcp | `.mcp.json` and inline `mcpServers` in `plugin.json` | server key | `summary` (§8.1) | **Never** copy `env` values; keep variable names only. The invocation column shows `<transport> · <package or url>`, never tool names. |
 
 - Frontmatter is parsed with the `yaml` package. Invalid frontmatter produces a
   `Diagnostic` and the artifact is still listed with the filename as its name.
@@ -265,7 +275,12 @@ parses and has no duplicate keys.
 - State lives in the URL: `/?q=release+notes&type=skill&has=-hooks`. Back and
   forward work, and links can be shared.
 - Matched terms are highlighted in the card name and description.
-- Sorting: relevance (default), name, recently updated.
+- **Kind intent is visible.** When §7.2 step 3 detects a kind, show it as an
+  auto-applied, removable chip above the results: `Skills ✕ · show all types`.
+- **Strong and weak matches are separated.** AND results form the main grid.
+  OR-fallback results go in a separate "Related" section below, with a lighter
+  header. They are never mixed into the main grid.
+- Sorting dropdown: relevance (default), name, recently updated.
 - Empty query: show the full catalog grouped by plugin, then "What's new" and
   "Collections".
 - No results: show the "did you mean" suggestion (MiniSearch `autoSuggest`),
@@ -281,15 +296,23 @@ parses and has no duplicate keys.
 │ Drafts release notes from merged PRs since   │
 │ the last tag. Use when …                     │
 │ #release #git                                │
-│ /devdigest-release:release-notes   [⧉ Copy]  │
-│ [+ Add to install set]      [♡]   Details →  │
+│ /devdigest-release:release-notes        [⧉]  │
+│ [⧉ Copy install]  [+ Add to set]   [♡]       │
 └──────────────────────────────────────────────┘
 ```
 
+- Header row: kind badge, `in <plugin>`, and the version on the right
+  (`v1.4.0`, or `tracks main` when `version` is null).
+
 - Kind badge with a distinct icon and colour per kind.
-- Security badges from §8 (only those that apply).
-- Copy button copies the **plugin install command** for artifacts and plugins
-  alike. The invocation is shown as text and has its own copy button.
+- Security badges from §8, only those that apply. On an artifact card they
+  describe the **parent plugin**, and the label says so: `plugin runs 1 hook ·
+  1 MCP`. A skill itself never runs a hook.
+- The card shows the **invocation** in monospace with its own copy icon. It
+  does **not** print the install command: that string is long, identical for
+  every artifact of a plugin, and gets truncated. The **Copy install** button
+  copies the full `/plugin install <plugin>@dev-digest-ai-marketplace`.
+- There is no separate "Details" button.
 - The whole card links to the detail page. The buttons inside it do not
   navigate.
 
@@ -315,13 +338,51 @@ type SecurityFlag =
   | 'unpinned-dependency';        // npx/uvx/@latest without exact version in hook or MCP command
 ```
 
+- `unpinned-dependency` is evaluated per hook/MCP entry (`unpinned: true`) and
+  shown as an `unpinned · heuristic` badge next to that entry on the plugin
+  page and in the install-set summary. Example that must be flagged:
+  `npx -y @modelcontextprotocol/server-postgres` (no `@<version>`).
 - `network-heuristic` and `unpinned-dependency` are labelled **"heuristic"** in
   the UI and link to `docs/SECURITY.md`.
 - `unpinned-dependency` is also emitted as a `Diagnostic`. A follow-up can
   promote it to a validator error.
 - The plugin page shows a **"What this plugin runs on your machine"** section:
   every hook (event, matcher, full command) and every MCP server (command +
-  args or URL, env var names). It is placed above the README.
+  args or URL, env var names), plus requested tools and env vars. It is placed
+  above the README. Each row has the item's `summary` (§8.1) and, if present,
+  its `note` (§8.2). A caption says "Parsed from hooks.json and .mcp.json at
+  build".
+
+### 8.1 Templated summaries
+
+Each summary is generated from data. No free text is invented at build time.
+
+| Input | Summary |
+|---|---|
+| `PreToolUse` + matcher `M` | "Runs before Claude uses `M`. Can block the call." |
+| `PostToolUse` + matcher `Edit\|Write` / other matcher `M` | "Runs after every file Claude edits or writes." / "Runs after Claude uses `M`." |
+| `SessionStart`, `UserPromptSubmit`, `Stop`, other events | "Runs when a session starts." / "Runs on every prompt you send." / "Runs when Claude finishes a response." / "Runs on `<Event>`." |
+| stdio MCP via `npx`/`uvx`/`bunx` | "Starts with Claude Code. Downloads the package from npm/PyPI on first run." |
+| stdio MCP, other command | "Starts `<command>` as a local process with Claude Code." |
+| http/sse MCP | "Connects to `<host>`." |
+| env var used by MCP | "Read by MCP server `<server>`." |
+| `allowed-tools` / `tools` entry | "Claude can run these without asking." (pre-approved) |
+
+The template table lives in `scripts/lib/catalog/summaries.mjs` and has unit
+tests. Unknown events fall back to "Runs on `<Event>`."
+
+### 8.2 Author notes
+
+Advice like "Use a read-only database role" cannot be derived from config.
+Authors may add it in the plugin README under a section named exactly
+`## What it runs`, with `### <name>` sub-headings. `<name>` matches a hook
+name (§6.1), an MCP server key or an env var name. The first paragraph under
+each sub-heading becomes that item's `note` and is rendered sanitized.
+
+Missing notes are fine. Sub-headings that match nothing produce a
+`Diagnostic`. `docs/PLUGIN-GUIDELINES.md` ("Plugin README") is updated to
+describe this section. That README already has to list hooks and MCP servers,
+so this formalises an existing requirement.
 
 ## 9. Features and pages
 
@@ -330,16 +391,29 @@ Priority: **P0** = MVP, **P1** = v1, **P2** = v2 (see §13).
 
 ### 9.1 Home `/` — P0
 
-Search box (autofocused), filter bar (kind, category, tag, "no hooks", "no
-MCP"), results grid, result count. When the query is empty, it shows the
+Search box (autofocused) with "Try" example chips, a left rail with filters,
+results grid, result count. The rail has **Kind** (with counts) and **Executes
+code**: Any / Runs hooks or MCP / **No hooks or MCP**. Do not say "Prompts
+only": a skill can still request Bash. Category and tag filters are collapsible
+sections. Example chips that are filters (e.g. "hooks") insert the filter
+syntax (`has:hooks`) rather than a search word. When the query is empty, it shows the
 catalog plus "What's new" (5 latest changes) and featured collections.
 
 ### 9.2 Plugin page `/plugins/<plugin>/` — P0 (security section P1)
 
-Header (name, description, version or "tracks main", category, tags, author,
-updated date, GitHub link), install command, components list grouped by kind
-with links, security section (§8), rendered README, "Ported from dev-digest"
-link if present, recent changes for this plugin (P1).
+Breadcrumb, header (name, description, security badges incl. `Needs <ENV>`),
+"What this runs on your machine" (§8, P1), contents list (kind icon, name,
+description, invocation or `<Event> · <matcher>` / `<transport> · <package>`),
+rendered README, "Ported from dev-digest" link if present.
+
+Sidebar:
+- **Install** box with the full install command. It may wrap only after `@`
+  (`<wbr>` there; no mid-word breaks). Below it, an "Add to install set" / "✓ In
+  install set" toggle and the first-time hint `/plugin marketplace add
+  humen-dev/dev-digest-ai-marketplace`.
+- Metadata: version (or "tracks main"), updated, owners (from CODEOWNERS),
+  license, source path linked to GitHub.
+- Recent changes for this plugin (P1).
 
 ### 9.3 Artifact page `/plugins/<plugin>/<kind>/<name>/` — P1
 
@@ -347,13 +421,27 @@ Kind badge, name, description, invocation, parent plugin with install command,
 rendered body (skill/agent/command) or details table (hook/mcp), frontmatter
 table, "View source on GitHub", "Other components in this plugin".
 
-### 9.4 Install set — P1
+### 9.4 Install set `/install/?set=<p1>,<p2>` — P1
 
 A per-browser selection of plugins, kept in `localStorage` (guarded with
 try/catch; the feature still works for the session if storage is
-unavailable). Opened from a header button showing the count.
+unavailable). The header always shows an **Install set (N)** button that links
+to the page.
 
-Outputs, each with Copy and Download:
+The page has its own URL. When the `set` parameter is present it is the source
+of truth, so the URL can be shared. If it differs from the local selection,
+opening it asks for confirmation before replacing that selection.
+
+Left column:
+- A list of plugins (name, artifact count, short component summary,
+  hook/MCP icons, remove ✕).
+- **Risk summary** for the whole set: "This set runs N hooks and starts M MCP
+  servers. Needs `ENV_A`, `ENV_B`." It includes `unpinned` counts and has a
+  "Review" link to the `/security/` page filtered to the set.
+- Empty state: "Your install set is empty" with links to Catalog and
+  Collections.
+
+Right column: outputs in tabs, each with **Copy** and **Download**:
 
 1. **Shell commands**
    ```bash
@@ -380,8 +468,16 @@ Outputs, each with Copy and Download:
    The keys must be checked against the current Claude Code settings reference
    during implementation.
 
-The install set also has a shareable link: `/?set=devdigest-backend,devdigest-review`.
-Opening it pre-fills the set.
+Tabs 1 and 2 show the same commands in two forms: in a shell, and inside a
+Claude Code session. The tab label says where to paste.
+
+### 9.4a Security overview `/security/` — P1
+
+This page serves the reviewer persona (§4). It is a table of every plugin with
+columns for hooks (count + events), MCP servers (transport), env vars, `Bash`
+in requested tools, and heuristic flags. It can be sorted and filtered by flag,
+and accepts `?set=` to scope it to an install set. Each row links to the
+plugin's "What this runs" section. "Security" is a top-level nav item.
 
 ### 9.5 What's new `/changelog/` + `/feed.xml` — P1
 
@@ -447,7 +543,9 @@ a description, diagnostics from the build.
 
 ### 9.11 Global UI — P0 unless noted
 
-- Header with search, Install set button (P1), theme toggle, and GitHub link.
+- Header: logo, nav (Catalog, Security, Collections, Changelog, Contribute),
+  compact search on inner pages, **Install set (N)** (P1), theme toggle, and
+  GitHub link. Nav items for P2 pages are hidden until those pages ship.
 - **Ctrl/⌘+K** command palette (P2): jump to any plugin or artifact, or run
   "Copy install command".
 - Favourites (♡) in `localStorage` with a "Favourites" filter (P2).
@@ -532,7 +630,7 @@ The site always reflects `main` at the deployed commit. The footer shows
 | Layer | What | Tool |
 |---|---|---|
 | Extractor | Each kind from `site/test/fixtures`: names, descriptions, invocations, custom manifest paths, inline hooks/MCP, invalid frontmatter → diagnostic, env values never emitted, deterministic output | `node:test` |
-| Security profile | Each flag set and not set; heuristics on sample commands | `node:test` |
+| Security profile | Each flag set and not set; heuristics on sample commands; every §8.1 template; README `## What it runs` notes matched and unmatched | `node:test` |
 | Query pipeline | Filters, kind intent (EN + UA), stop words, synonyms, AND→OR fallback, soft-filter fallback | `node:test` / Vitest |
 | Relevance | Golden set `site/test/relevance.yml` (query → expected id in top 3), at least 20 cases, run against fixtures | Vitest |
 | Generators | settings.json snippet is valid JSON with the expected keys; ZIP contents pass `validate-marketplace.mjs` | Vitest |
@@ -545,7 +643,7 @@ The site always reflects `main` at the deployed commit. The footer shows
 |---|---|---|
 | **M0 — Prerequisites** | §3: secrets scan, repo public, Pages source, README/SECURITY updates; fixtures with ≥ 1 plugin per kind | Repo is public; fixtures are committed |
 | **M1 — MVP (P0)** | `build-catalog.mjs`, data model, search (§7), home, cards, filters, plugin page (without security section), About, 404, empty state, Pages deploy | Site live; relevance golden set passes; budgets met |
-| **M2 — v1 (P1)** | Artifact pages, security profile (§8), install set and settings snippet, changelog and RSS | A team lead can produce a working `settings.json` from the site |
+| **M2 — v1 (P1)** | Artifact pages, security profile (§8), `/security/` overview, install set page and settings snippet, changelog and RSS | A team lead can produce a working `settings.json` from the site |
 | **M3 — v2 (P2)** | Collections, request a skill, scaffold, validator, stats, Ctrl+K, favourites | All P2 acceptance tests pass |
 | **Later (not in this spec)** | Semantic search: embeddings computed in CI and a multilingual model loaded on demand in the browser via transformers.js | Separate spec |
 
@@ -558,13 +656,17 @@ The site always reflects `main` at the deployed commit. The footer shows
    returns it in the top 3.
 3. `type:hook` returns only hooks. `-has:hooks` excludes every plugin with
    hooks and all of those plugins' artifacts.
-4. Copying from any card puts exactly
-   `/plugin install <plugin>@dev-digest-ai-marketplace` on the clipboard.
+4. **Copy install** on any card puts exactly
+   `/plugin install <plugin>@dev-digest-ai-marketplace` on the clipboard. No
+   card renders a truncated install command.
 5. Reloading `/?q=review&type=agent` restores the same query, filters and
    results.
 6. With an empty `plugins[]`, the site builds and shows the empty state.
 7. No request leaves the site origin during search (verified in E2E via
    network log).
+8. For the query in (2), the main grid contains only skills that match all
+   terms. The "Skills" chip is shown, and weaker matches appear only under
+   "Related".
 
 ## 15. Open questions
 
@@ -577,3 +679,33 @@ The site always reflects `main` at the deployed commit. The footer shows
    `site/content/` and `site/data/`?
 4. Should `unpinned-dependency` become a hard error in
    `validate-marketplace.mjs` (§8)?
+5. **Verify:** the syntax for mentioning a plugin agent in Claude Code. The
+   design shows `@agent-<plugin>:<agent>`. Until this is confirmed against the
+   docs, show only the agent name.
+6. **Verify:** the keys of the project `settings.json` snippet (§9.4) against
+   the current settings reference.
+7. Owners: is CODEOWNERS the right source, or should `plugin.json` `author`
+   be enough?
+
+## 16. Design review log
+
+Decisions from reviewing the hi-fi designs (catalog/search, plugin detail,
+install set). They are already applied in the sections above.
+
+| # | Finding | Decision | Where |
+|---|---|---|---|
+| 1 | Sample plugins named `release-tools`, `docs-writer`, … | All designs and fixtures use `devdigest-*` names | PLUGIN-GUIDELINES, fixtures |
+| 2 | Install command printed on every card and truncated | Card shows invocation; "Copy install" copies the full command | §7.5 |
+| 3 | Unrelated results mixed in for a skill query | Visible kind chip; OR results in a separate "Related" section | §7.4, §14.8 |
+| 4 | `1 hook` badge on a skill card reads as if the skill runs it | Artifact-card badges are labelled as plugin-level | §7.5 |
+| 5 | MCP tools shown as `mcp__postgres__query` | Not shown: plugin tools are named `mcp__plugin_<plugin>_<server>__<tool>` and are unknowable at build time | §6 |
+| 6 | Agent shown as `@agent-<plugin>:<agent>` | Pending verification | §15.5 |
+| 7 | Hand-written explanations in "What this runs" | Templated summaries plus optional README notes | §8.1, §8.2 |
+| 8 | Unpinned `npx -y @…/server-postgres` not flagged | Per-entry `unpinned · heuristic` badge | §8 |
+| 9 | Hook given a friendly name not present in config | Name derived from script basename, else `<Event>:<matcher>` | §6.1 |
+| 10 | Install set lives at `/install/`, set-level risk summary | Adopted | §9.4 |
+| 11 | "Security" nav item | Adopted as `/security/` overview, P1 | §9.4a |
+| 12 | Owner and License in plugin sidebar | Added `owners` (CODEOWNERS) and `license` | §6, §9.2 |
+| 13 | "Prompts only" filter label | Renamed to "No hooks or MCP" | §9.1 |
+| 14 | Install command wraps mid-word | Wrap only after `@` | §9.2 |
+| 15 | Install set shows only in-session commands; no Copy/Download; no empty state | Shell and in-session tabs, Copy + Download, empty state | §9.4 |
