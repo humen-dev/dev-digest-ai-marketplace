@@ -7,8 +7,9 @@ diagrams.
 The plugin contains **skills only**. They load into the main session when a task
 matches their description, you can invoke them by hand, and agents (planners,
 implementers, reviewers) preload them so every step of the work follows the same
-practices. Six skills are our own and project-agnostic; six are third-party skills
-redistributed unchanged (see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)).
+practices. Four skills are our own and project-agnostic; eight are third-party
+skills (six from public skill repositories, two from the AI Agentic Engineering
+workshop materials) — see [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 
 ## Install
 
@@ -30,8 +31,6 @@ loads it when the task matches the trigger.
 
 | Skill | What it covers | Triggers when | Invoke |
 |---|---|---|---|
-| `react-best-practices` | Modern React (2025-26) best practices and anti-pattern catalog: component design, state, hooks misuse, performance, data fetching, error boundaries | Writing, reviewing or refactoring React components, hooks or state | `/engineering-paved-path:react-best-practices` |
-| `react-testing-library` | React Testing Library + Vitest: setup, query priority, `userEvent`, async patterns, MSW-first mocking, few longer user-flow tests | Writing, reviewing or setting up component and hook tests | `/engineering-paved-path:react-testing-library` |
 | `security` | OWASP Top 10:2025 for web apps: auth/authz, input handling, uploads, secrets, API endpoints (React, Express, MongoDB, JWT examples) | Reviewing code for vulnerabilities, building auth, handling untrusted input or secrets | `/engineering-paved-path:security` |
 | `onion-architecture` | Backend rings (domain, application, infrastructure, presentation), import direction, where ports / services / repositories / routes / mappers / adapters / DI live, transactions, optional dependency-cruiser enforcement | Creating, moving, splitting or reviewing backend code; "where should this live?" | `/engineering-paved-path:onion-architecture` |
 | `frontend-ui-architecture` | React / Next.js code organization: where components, hooks, constants, helpers, styles, types and tests live, how to split a component, layer direction, server/client boundary | Creating, moving, splitting or reviewing UI code; structure-focused PR reviews | `/engineering-paved-path:frontend-ui-architecture` |
@@ -43,8 +42,10 @@ it in once for your repository so agents apply the rules to your real folders.
 
 ### Third-party skills
 
-Copied byte-identical from upstream. Source, pinned hash, copyright and licence for
-each are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+Copied from upstream (byte-identical except one documented line in
+`react-best-practices`). Source, pinned hash, copyright and licence for each are in
+[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md). Skills marked 📚 come from the
+workshop materials and have no declared licence.
 
 | Skill | What it covers | Triggers when | Invoke |
 |---|---|---|---|
@@ -54,6 +55,8 @@ each are in [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
 | `postgresql-table-design` | PostgreSQL schema design: data types, indexing, constraints, performance patterns, advanced features | Designing or reviewing a PostgreSQL schema | `/engineering-paved-path:postgresql-table-design` |
 | `typescript-expert` | Type-level programming, performance, monorepos, migrations, modern tooling (includes a diagnostic script) | TypeScript / JavaScript type or tooling questions | `/engineering-paved-path:typescript-expert` |
 | `zod` | Zod schemas: type safety, parsing, error handling, composition, performance | Defining `z.object` schemas, `safeParse`, `z.infer` | `/engineering-paved-path:zod` |
+| `react-best-practices` 📚 | Modern React (2025-26) best practices and anti-pattern catalog: component design, state, hooks misuse, performance, data fetching, error boundaries | Writing, reviewing or refactoring React components, hooks or state | `/engineering-paved-path:react-best-practices` |
+| `react-testing-library` 📚 | React Testing Library + Vitest: setup, query priority, `userEvent`, async patterns, MSW-first mocking, few longer user-flow tests | Writing, reviewing or setting up component and hook tests | `/engineering-paved-path:react-testing-library` |
 
 ⚠️ `next-best-practices` has no declared licence upstream and is redistributed only
 while this marketplace is private. It must be replaced or removed before the

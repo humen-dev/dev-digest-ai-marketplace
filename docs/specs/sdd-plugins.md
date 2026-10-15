@@ -51,8 +51,8 @@ dev-digest installed from other repositories (`skills-lock.json`).
 
 | Skill | DevDigest source | Origin | Licence |
 |---|---|---|---|
-| `react-best-practices` | `.claude/skills/react-best-practices` | own | — |
-| `react-testing-library` | `.claude/skills/react-testing-library` | own | — |
+| `react-best-practices` | `.claude/skills/react-best-practices` | workshop material (burnjohn/ai-demo-marketplace); 1 line generalised | none declared |
+| `react-testing-library` | `.claude/skills/react-testing-library` | workshop material (burnjohn/ai-demo-marketplace) | none declared |
 | `security` | `.claude/skills/security` | own | — |
 | `onion-architecture` | `.claude/skills/onion-architecture` | own — generalise | — |
 | `frontend-ui-architecture` | `.claude/skills/frontend-ui-architecture` | own — generalise | — |
@@ -144,6 +144,11 @@ which live in `engineering-paved-path`.
 
 `dependencies` is an **array** (string or `{name, version, marketplace}`), not a map.
 Installing a plugin installs and enables its dependencies at the same scope.
+Verified on Claude Code 2.1.299 with an isolated `CLAUDE_CONFIG_DIR`: installing
+`sdd-engineering` from a local marketplace installs all three dependencies, and an
+unsatisfiable range (`^9.0.0`) makes the plugin fail to load with
+`Requires "research-tools@dev-digest-ai-marketplace" ^9.0.0, installed 1.0.0` — the
+object form's `version` is enforced (for relative-path sources, at load time).
 
 ## 5. Packaging rules
 

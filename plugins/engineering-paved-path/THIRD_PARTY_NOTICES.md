@@ -1,15 +1,20 @@
 # Third-party notices — engineering-paved-path
 
-This plugin redistributes six skills written by third parties. They are copied
-**byte-identical** from the copies pinned in the source project's `skills-lock.json`
-(the `computedHash` below is the hash recorded there for each skill). No local edits
-have been made to any third-party file. If a local edit is ever needed, it must be
-listed under the skill's entry in this file.
+This plugin redistributes eight skills written by third parties:
 
-The six skills authored for this plugin (`react-best-practices`,
-`react-testing-library`, `security`, `onion-architecture`,
-`frontend-ui-architecture`, `mermaid-diagram`) are not third-party; see
-[Notes](#notes) for one open provenance question.
+- six skills installed from public skill repositories, copied **byte-identical**
+  from the copies pinned in the source project's `skills-lock.json` (the
+  `computedHash` below is the hash recorded there for each skill);
+- two skills that came with the *AI Agentic Engineering* workshop materials from
+  [burnjohn/ai-demo-marketplace](https://github.com/burnjohn/ai-demo-marketplace)
+  (see [Workshop material](#workshop-material-burnjohnai-demo-marketplace)).
+
+Local edits are listed under the skill's entry; any future local edit must be
+listed there too.
+
+The four skills authored or rewritten for this plugin (`security`,
+`onion-architecture`, `frontend-ui-architecture`, `mermaid-diagram`) are not
+third-party.
 
 | Skill | Upstream repository | Upstream path | Licence |
 |---|---|---|---|
@@ -19,6 +24,8 @@ The six skills authored for this plugin (`react-best-practices`,
 | `postgresql-table-design` | [wshobson/agents](https://github.com/wshobson/agents) | `plugins/database-design/skills/postgresql/SKILL.md` | MIT |
 | `typescript-expert` | [sickn33/antigravity-awesome-skills](https://github.com/sickn33/antigravity-awesome-skills) | `skills/typescript-expert/SKILL.md` | MIT |
 | `zod` | [pproenca/dot-skills](https://github.com/pproenca/dot-skills) | `skills/.curated/zod/SKILL.md` | MIT |
+| `react-best-practices` | [burnjohn/ai-demo-marketplace](https://github.com/burnjohn/ai-demo-marketplace) | `plugins/frontend-skills/skills/react-best-practices/SKILL.md` | **none declared** — workshop material |
+| `react-testing-library` | [burnjohn/ai-demo-marketplace](https://github.com/burnjohn/ai-demo-marketplace) | `plugins/testing-skills/skills/react-testing-library/` | **none declared** — workshop material |
 
 ---
 
@@ -225,15 +232,39 @@ SOFTWARE.
 
 ---
 
+## Workshop material (burnjohn/ai-demo-marketplace)
+
+- **Upstream repository:** https://github.com/burnjohn/ai-demo-marketplace —
+  "a Claude Code plugin catalog for the AI Agentic Engineering workshop".
+- **Copyright holder:** burnjohn (repository owner; author of the workshop).
+- **Licence:** **none declared** — no licence file, no `license` field in its
+  `plugin.json`. No redistribution right is granted by default. Used here as
+  workshop material in a private marketplace; **get the author's permission (or a
+  licence) before this marketplace is made public**, or replace these skills.
+- **Provenance check (2026-10-14):** the source project's copies are byte-identical
+  to the upstream `SKILL.md` files. The same upstream repository also ships
+  `next-best-practices` (identical to the copy listed above) and
+  `typescript-expert` (identical; original author listed above).
+
+### react-best-practices
+
+- **Upstream path:** `plugins/frontend-skills/skills/react-best-practices/SKILL.md`
+- **Local edit (1 line):** the bullet recommending the source project's own
+  `useApiQuery` / `useApiMutation` hooks was replaced with generic guidance to
+  build on the project's data-fetching library or its own query wrapper hooks.
+
+### react-testing-library
+
+- **Upstream path:** `plugins/testing-skills/skills/react-testing-library/`
+  (`SKILL.md`, `README.md`)
+- **Local edits:** none. The skill's `README.md` describes it as a rewrite of an
+  earlier "original skill" ("3-6 tests per component"); that earlier version is
+  not published, and the rewrite as distributed is the workshop author's.
+
+---
+
 ## Notes
 
-- **`react-testing-library` provenance — to be confirmed by the owner.** This skill
-  is treated as an own skill, but its `README.md` describes itself as a rewrite of
-  an "original skill" (it lists the changes made relative to that original). The
-  source of that original has not been recorded. The owner must confirm where it
-  came from and, if it was third-party, add its repository, copyright holder and
-  licence text to this file (or confirm that the rewrite shares no protected
-  expression with it).
 - **Updating a third-party skill:** re-copy the whole folder from upstream, update
   the hash in this file, and keep the copy byte-identical. Record any unavoidable
   local edit under the skill's entry above.
