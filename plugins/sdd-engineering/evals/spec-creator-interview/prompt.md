@@ -2,6 +2,7 @@
 runs: 2
 max_turns: 10
 allowed_tools: [Agent, Read, Glob, Grep]
+plugins: ["../..", "../../../engineering-paved-path", "../../../research-tools", "../../../architecture-review"]
 tags: [smoke, spec-creator]
 ---
 

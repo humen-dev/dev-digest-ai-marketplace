@@ -6,6 +6,37 @@ SemVer (Mode B in the marketplace's `docs/RELEASES.md`): `version` lives in
 skill or `.claude/sdd.json` key, or changed hook behaviour; MINOR — a new
 component or option; PATCH — fixes and wording.
 
+## 1.1.0 — 2026-10-15
+
+MINOR: a new hook and a cheaper planner; no agent, skill or `.claude/sdd.json`
+key removed or renamed.
+
+### Added
+
+- **Version trace hook** (`scripts/trace.mjs`, wired on `SessionStart` and
+  `SubagentStart`). Every session is told
+  `Active plugin: sdd-engineering@<marketplace> version <x.y.z>.` (one line of
+  context), read from the loaded copy's own `plugin.json` and the plugin cache
+  path — so it also names the release channel. In a project that opted in
+  (`.claude/sdd.json` or an existing run-state dir) each session start and each
+  `sdd-engineering:*` agent start is appended to `<runStateDir>/trace.jsonl`.
+  Never blocks; any error exits 0.
+- **Evals:** `active-version` (smoke — the session knows the active version from
+  the trace), `planner-interview` (smoke — vague request → Requirements review
+  with the execution-mode question), `planner-fast-path` (approved requirements
+  + mode → plan with correct per-unit *Skills*). Every case now loads the
+  dependency plugins through `plugins:` — without them the agents never load and
+  the 1.0.0 smoke suite could not pass.
+
+### Changed
+
+- **`implementation-planner` preloads 4 skills instead of 12**
+  (`ears-requirements`, `onion-architecture`, `frontend-ui-architecture`,
+  `security`). The 8 stack skills (~77 KB) are named in units' *Skills* fields
+  and read with `Read` only when a plan decision depends on one. Cost per
+  successful plan before/after and the quality gate:
+  [docs/COST-BASELINE.md](../../docs/COST-BASELINE.md).
+
 ## 1.0.0 — 2026-10-14
 
 Initial release: the Spec-Driven Development workflow as a plugin.

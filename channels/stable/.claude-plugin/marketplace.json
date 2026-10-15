@@ -1,0 +1,59 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "dev-digest-ai-marketplace-stable",
+  "description": "Stable channel of dev-digest-ai-marketplace: every plugin pinned to a verified release tag. Promote a release by changing its ref and sha here.",
+  "owner": {
+    "name": "humen-dev",
+    "url": "https://github.com/humen-dev"
+  },
+  "plugins": [
+    {
+      "name": "engineering-paved-path",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/humen-dev/dev-digest-ai-marketplace.git",
+        "path": "plugins/engineering-paved-path",
+        "ref": "engineering-paved-path--v1.0.0",
+        "sha": "956a2ae39bfc057073ddf131574050250447450c"
+      },
+      "description": "Paved-path engineering skills: React, Next.js, Fastify, Drizzle, PostgreSQL, TypeScript, Zod, testing, security, architecture and Mermaid diagrams.",
+      "category": "development"
+    },
+    {
+      "name": "research-tools",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/humen-dev/dev-digest-ai-marketplace.git",
+        "path": "plugins/research-tools",
+        "ref": "research-tools--v1.1.0",
+        "sha": "f4767d28418949aab02176060d747f2321e78fb7"
+      },
+      "description": "Read-only researcher agent that answers questions about a codebase or the web with an evidence-backed, structured report.",
+      "category": "productivity"
+    },
+    {
+      "name": "architecture-review",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/humen-dev/dev-digest-ai-marketplace.git",
+        "path": "plugins/architecture-review",
+        "ref": "architecture-review--v1.0.0",
+        "sha": "956a2ae39bfc057073ddf131574050250447450c"
+      },
+      "description": "Read-only architecture reviewer agent that checks a change set against layering and placement rules and returns a verdict with file:line findings.",
+      "category": "development"
+    },
+    {
+      "name": "sdd-engineering",
+      "source": {
+        "source": "git-subdir",
+        "url": "https://github.com/humen-dev/dev-digest-ai-marketplace.git",
+        "path": "plugins/sdd-engineering",
+        "ref": "sdd-engineering--v1.0.0",
+        "sha": "956a2ae39bfc057073ddf131574050250447450c"
+      },
+      "description": "Spec-Driven Development workflow: spec-creator, implementation-planner, implementer and plan-verifier agents, run-plan and workflow-retro skills, guard hooks.",
+      "category": "development"
+    }
+  ]
+}
