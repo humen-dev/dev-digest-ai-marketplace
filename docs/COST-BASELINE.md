@@ -90,6 +90,16 @@ The same 1.1.0 run also passed the rest of the smoke suite, 3/3 each:
 `active-version` ($0.083 — the new trace hook; it adds one line of context per
 session).
 
+## Stable channel check — 1.0.0
+
+On 2026-10-15 `sdd-engineering@dev-digest-ai-marketplace-stable` installed as
+1.0.0 with its three dependencies resolved from their release tags (all
+enabled in `claude plugin list --json`). The smoke suite run on the tagged
+content (`sdd-engineering--v1.0.0`, worktree method in
+[RELEASES.md](RELEASES.md#roll-back-to-the-stable-channel)) passed 6/6 runs:
+`spec-creator-interview` 2/2, `plan-verifier-no-plan` 2/2,
+`planner-interview` 2/2 (suite cost $2.15).
+
 ## Quality gate
 
 A release of `sdd-engineering` ships (to latest) and is promoted (to the stable
