@@ -1,0 +1,12 @@
+# Fixture CODEOWNERS. Last matching pattern wins.
+*                       @humen-dev
+
+/plugins/devdigest-backend/   @backend-guild
+/plugins/devdigest-frontend/   @web-guild
+/plugins/devdigest-security/   @sec-team
+/plugins/devdigest-observability/   @sre
+/plugins/devdigest-testing/   @qa
+
+# Rules inside a plugin do not own the plugin as a whole.
+**/hooks/               @sec-team
+**/.mcp.json            @sec-team
