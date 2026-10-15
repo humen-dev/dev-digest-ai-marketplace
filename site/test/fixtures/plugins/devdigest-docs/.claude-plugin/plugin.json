@@ -1,0 +1,15 @@
+{
+  "name": "devdigest-docs",
+  "description": "Writing help for ADRs, READMEs and API reference pages.",
+  "author": {
+    "name": "humen-dev"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "devdigest"
+  ],
+  "commands": [
+    "./prompts"
+  ]
+}

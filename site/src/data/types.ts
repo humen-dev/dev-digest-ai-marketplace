@@ -24,8 +24,14 @@ export interface Artifact {
   kind: 'skill' | 'agent' | 'command';
   name: string;
   description: string;
-  /** Extra search words: synonyms, Ukrainian keywords. */
+  /** Extra search words: synonyms, Ukrainian keywords (frontmatter `keywords`). */
   keywords: string;
+  /** File the artifact was read from, relative to the marketplace root. */
+  path?: string;
+  /** Markdown headings of the body, for search. */
+  headings?: string[];
+  /** Plain text of the body, truncated to 8,000 characters, for search. */
+  body?: string;
 }
 
 export interface Plugin {
@@ -49,7 +55,18 @@ export interface Plugin {
    */
   notes: Record<string, string>;
   readme: { title: string; body: string[] };
+  /** Generated catalogs: recent commits touching the plugin folder; `version` holds the commit date (YYYY-MM-DD). */
   changes: { version: string; text: string }[];
+  /** Non-relative marketplace source (github, git, npm …): listed from the marketplace entry, not crawled. */
+  external?: boolean;
+  /** Folder relative to the marketplace root ("plugins/<name>"), or the URL of an external source. */
+  source?: string;
+}
+
+/** A non-fatal extraction issue (invalid frontmatter, unknown README note, …). */
+export interface Diagnostic {
+  path: string;
+  message: string;
 }
 
 export interface Catalog {
@@ -58,4 +75,6 @@ export interface Catalog {
   /** True while the catalog is sample data rather than built from plugins/. */
   sample: boolean;
   plugins: Plugin[];
+  /** Non-fatal issues found while generating the catalog. */
+  diagnostics?: Diagnostic[];
 }

@@ -24,13 +24,24 @@ function spaFallback(): Plugin {
   };
 }
 
-export default defineConfig(({ command, isPreview }) => ({
+// Which generated catalog `@catalog-data` (src/data/catalog.ts) loads:
+// the fixture marketplace for tests and `npm run dev:fixtures`, otherwise
+// the catalog built from this repository (scripts/build-catalog.mjs).
+const catalogFile = (mode: string) =>
+  resolve(import.meta.dirname, 'src/generated', mode === 'test' || mode === 'fixtures' ? 'catalog.fixtures.json' : 'catalog.json');
+
+export default defineConfig(({ command, isPreview, mode }) => ({
   // The dev server runs at /; builds and `vite preview` use the Pages path.
   base: command === 'build' || isPreview ? (process.env.SITE_BASE ?? PAGES_BASE) : '/',
   plugins: [react(), spaFallback()],
+  resolve: { alias: { '@catalog-data': catalogFile(mode) } },
   define: {
     __COMMIT__: JSON.stringify(process.env.GITHUB_SHA ?? ''),
   },
   server: { port: 5173 },
-  test: { environment: 'node' },
+  test: {
+    environment: 'node',
+    // Generates src/generated/catalog.fixtures.json before any test imports it.
+    globalSetup: ['test/global-setup.ts'],
+  },
 }));

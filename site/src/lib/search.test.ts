@@ -83,6 +83,20 @@ describe('search', () => {
   });
 });
 
+describe('body text and headings', () => {
+  it('finds a word that only appears in an artifact body', () => {
+    const r = search(items, 'concurrently', 'all');
+    expect(names(r.best)).toEqual(['skill:db-migration']);
+  });
+
+  it('ranks body matches below description matches', () => {
+    // "lock" is in db-migration's description and only in the bodies of migrate-check and backend-reviewer.
+    const r = search(items, 'lock', 'all');
+    expect(names(r.best)[0]).toBe('skill:db-migration');
+    expect(names(r.best)).toEqual(expect.arrayContaining(['command:migrate-check', 'agent:backend-reviewer']));
+  });
+});
+
 describe('highlight', () => {
   it('marks words that share a stem with a term', () => {
     const parts = highlight('Draft release notes from merged PRs', ['release', 'notes']);

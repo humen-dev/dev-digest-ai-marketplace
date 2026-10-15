@@ -1,0 +1,13 @@
+{
+  "name": "devdigest-testing",
+  "version": "1.2.0",
+  "description": "Test planning, flaky-test triage and a test-writing agent.",
+  "author": {
+    "name": "humen-dev"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "devdigest"
+  ]
+}

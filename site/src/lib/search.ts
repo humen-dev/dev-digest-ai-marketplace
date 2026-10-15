@@ -90,11 +90,40 @@ interface Scored {
   hits: number;
 }
 
+/** Generated skills, agents and commands also carry their body text and headings (§6, §7.1). */
+type WithBody = Item & { headings?: string[]; body?: string };
+
+interface Fields {
+  name: string[];
+  kw: string[];
+  desc: string[];
+  plug: string[];
+  head: string[];
+  body: string[];
+}
+
+// Bodies can be up to 8,000 characters: split each item once, not per keystroke.
+const fieldCache = new WeakMap<Item, Fields>();
+
+function fields(item: Item): Fields {
+  let f = fieldCache.get(item);
+  if (!f) {
+    const { headings, body } = item as WithBody;
+    f = {
+      name: words(item.name),
+      kw: words(item.keywords),
+      desc: words(item.description),
+      plug: words(item.plugin.name),
+      head: words(headings?.join(' ') ?? ''),
+      body: words(body ?? ''),
+    };
+    fieldCache.set(item, f);
+  }
+  return f;
+}
+
 function score(item: Item, terms: string[]): Scored {
-  const name = words(item.name);
-  const kw = words(item.keywords);
-  const desc = words(item.description);
-  const plug = words(item.plugin.name);
+  const { name, kw, desc, plug, head, body } = fields(item);
   let total = 0;
   let hits = 0;
   for (const t of terms) {
@@ -103,6 +132,9 @@ function score(item: Item, terms: string[]): Scored {
     if (matches(t, kw)) s += 3;
     if (matches(t, desc)) s += 2;
     if (matches(t, plug)) s += 1;
+    // Headings and body text rank below name, keywords and description.
+    if (matches(t, head)) s += 1;
+    if (matches(t, body)) s += 0.5;
     if (s) hits++;
     total += s;
   }

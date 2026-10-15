@@ -1,0 +1,73 @@
+{
+  "name": "dev-digest-ai-marketplace",
+  "description": "Fixture marketplace for the catalog site: the sample plugins from the design, as real plugin files.",
+  "owner": {
+    "name": "humen-dev",
+    "url": "https://github.com/humen-dev"
+  },
+  "plugins": [
+    {
+      "name": "devdigest-release",
+      "source": "./plugins/devdigest-release",
+      "description": "Release notes, changelog entries and version bumps from merged PRs.",
+      "category": "development",
+      "tags": [
+        "devdigest"
+      ]
+    },
+    {
+      "name": "devdigest-backend",
+      "source": "./plugins/devdigest-backend",
+      "description": "Conventions for the DevDigest API: Postgres migrations, endpoint scaffolding and a backend review agent.",
+      "category": "development",
+      "tags": [
+        "devdigest"
+      ]
+    },
+    {
+      "name": "devdigest-frontend",
+      "source": "./plugins/devdigest-frontend",
+      "description": "Component patterns, accessibility checks and lint-on-save for the DevDigest web app.",
+      "category": "development",
+      "tags": [
+        "devdigest"
+      ]
+    },
+    {
+      "name": "devdigest-security",
+      "source": "./plugins/devdigest-security",
+      "description": "Dependency audits, secret scanning and a guard that blocks destructive shell commands.",
+      "category": "development",
+      "tags": [
+        "devdigest"
+      ]
+    },
+    {
+      "name": "devdigest-docs",
+      "source": "./plugins/devdigest-docs",
+      "description": "Writing help for ADRs, READMEs and API reference pages.",
+      "category": "development",
+      "tags": [
+        "devdigest"
+      ]
+    },
+    {
+      "name": "devdigest-observability",
+      "source": "./plugins/devdigest-observability",
+      "description": "Query logs and errors from Sentry and write alert rules that page the right people.",
+      "category": "development",
+      "tags": [
+        "devdigest"
+      ]
+    },
+    {
+      "name": "devdigest-testing",
+      "source": "./plugins/devdigest-testing",
+      "description": "Test planning, flaky-test triage and a test-writing agent.",
+      "category": "development",
+      "tags": [
+        "devdigest"
+      ]
+    }
+  ]
+}

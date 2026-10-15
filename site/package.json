@@ -4,7 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "catalog": "node scripts/build-catalog.mjs",
+    "catalog:fixtures": "node scripts/build-catalog.mjs --root test/fixtures --sample --history test/fixtures/history.json --repo humen-dev/dev-digest-ai-marketplace --out src/generated/catalog.fixtures.json",
+    "predev": "npm run catalog",
     "dev": "vite",
+    "dev:fixtures": "npm run catalog:fixtures && vite --mode fixtures",
+    "prebuild": "npm run catalog",
     "build": "tsc --noEmit && vite build",
     "preview": "vite preview",
     "test": "vitest run",
@@ -25,6 +30,7 @@
     "@vitejs/plugin-react": "6.1.2",
     "typescript": "6.0.3",
     "vite": "8.3.4",
-    "vitest": "5.0.4"
+    "vitest": "5.0.4",
+    "yaml": "2.9.1"
   }
 }

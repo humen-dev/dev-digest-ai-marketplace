@@ -1,0 +1,19 @@
+{
+  "name": "devdigest-observability",
+  "version": "0.3.1",
+  "description": "Query logs and errors from Sentry and write alert rules that page the right people.",
+  "author": {
+    "name": "humen-dev"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "devdigest"
+  ],
+  "mcpServers": {
+    "sentry": {
+      "type": "http",
+      "url": "https://mcp.sentry.dev/mcp"
+    }
+  }
+}
