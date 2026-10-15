@@ -6,6 +6,10 @@ work, plus the engineering skills and reviewers they rely on. Every plugin is
 project-agnostic — project-specific settings live in your repository's
 `.claude/sdd.json`.
 
+**Browse the catalog:** <https://humen-dev.github.io/dev-digest-ai-marketplace/>
+— search skills, agents, hooks and MCP servers, and see what each plugin runs
+before you install it.
+
 > [!WARNING]
 > **Plugins run code on your machine.** Hooks execute shell commands and MCP
 > servers start local processes with your permissions. Read a plugin's README and
@@ -102,6 +106,7 @@ claude plugin validate . --strict
 ```
 
 Catalog site dev server: `cd site && npm install && npm run dev`
-(details in [site/README.md](site/README.md)).
+(details in [site/README.md](site/README.md)). Pushes to `main` deploy it to
+[GitHub Pages](https://humen-dev.github.io/dev-digest-ai-marketplace/).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) before adding or changing a plugin.
