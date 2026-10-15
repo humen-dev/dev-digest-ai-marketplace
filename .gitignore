@@ -8,3 +8,6 @@ Thumbs.db
 
 # Node
 node_modules/
+
+# Site build output
+site/dist/

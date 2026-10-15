@@ -1,62 +1,60 @@
-name: Deploy GitHub Pages
+name: Site
 
-# Until the Astro catalog site (docs/specs/catalog-site.md) lands, Pages only
-# serves the design files from design/ under /design/. When site/ is added,
-# copy design/ into the Astro build output instead of _site/.
+# Builds the catalog site (site/, Vite + React) and deploys it to GitHub Pages.
+# The build also copies design/ to /design/. Pull requests only build and test.
 
 on:
   push:
     branches: [main]
     paths:
+      - site/**
+      - design/**
+      - .github/workflows/pages.yml
+  pull_request:
+    paths:
+      - site/**
       - design/**
       - .github/workflows/pages.yml
   workflow_dispatch:
 
 permissions:
   contents: read
-  pages: write
-  id-token: write
 
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: site
     steps:
       - uses: actions/checkout@v4
 
-      - name: Assemble site
-        run: |
-          mkdir -p _site
-          cp -R design _site/design
-          cat > _site/index.html <<'EOF'
-          <!DOCTYPE html>
-          <html lang="en">
-          <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1">
-          <title>DevDigest Marketplace</title>
-          <style>body{margin:0;background:#10111b;color:#e9e9ed;font:15px/1.55 system-ui,sans-serif}main{max-width:640px;margin:0 auto;padding:64px 16px}a{color:#d2cefd}</style>
-          </head>
-          <body>
-          <main>
-          <h1>DevDigest Marketplace</h1>
-          <p>The catalog site is not built yet. See the <a href="design/">catalog design</a> or the
-          <a href="https://github.com/humen-dev/dev-digest-ai-marketplace">repository</a>.</p>
-          </main>
-          </body>
-          </html>
-          EOF
-
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/setup-node@v4
         with:
-          path: _site
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
 
   deploy:
+    if: github.event_name != 'pull_request'
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}

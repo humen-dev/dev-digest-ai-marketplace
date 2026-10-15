@@ -68,6 +68,8 @@ docs/PLUGIN-GUIDELINES.md         how to structure a plugin
 docs/SECURITY.md                  hooks, MCP and secrets policy
 docs/RELEASES.md                  versioning, updates, rollback
 scripts/validate-marketplace.mjs  structural linter (no dependencies)
+site/                             catalog website (Vite + React), see site/README.md
+design/                           Claude Design explorations for the site
 ```
 
 ## Develop locally
@@ -84,5 +86,8 @@ claude plugin install <plugin-name>@dev-digest-ai-marketplace
 node scripts/validate-marketplace.mjs
 claude plugin validate . --strict
 ```
+
+Catalog site dev server: `cd site && npm install && npm run dev`
+(details in [site/README.md](site/README.md)).
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) before adding or changing a plugin.
