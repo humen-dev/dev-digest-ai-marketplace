@@ -1,7 +1,7 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "dev-digest-ai-marketplace",
-  "description": "Claude Code plugins (skills, agents, commands, hooks) for building and maintaining DevDigest.",
+  "description": "Spec-Driven Development agents, engineering skills and reviewers for Claude Code. Project-agnostic; configured per repository via .claude/sdd.json.",
   "owner": {
     "name": "humen-dev",
     "url": "https://github.com/humen-dev"

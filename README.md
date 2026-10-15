@@ -1,8 +1,10 @@
-# DevDigest AI Marketplace
+# AI Engineering Marketplace
 
 A [Claude Code plugin marketplace](https://code.claude.com/docs/en/plugins/create-marketplace)
-with the skills, agents, commands and hooks used to build and maintain
-[DevDigest](https://github.com/humen-dev/dev-digest).
+for Spec-Driven Development: agents that write specs, plan, implement and verify
+work, plus the engineering skills and reviewers they rely on. Every plugin is
+project-agnostic — project-specific settings live in your repository's
+`.claude/sdd.json`.
 
 > [!WARNING]
 > **Plugins run code on your machine.** Hooks execute shell commands and MCP
