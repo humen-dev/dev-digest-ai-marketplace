@@ -12,7 +12,7 @@ export const KINDS: Kind[] = ['skill', 'agent', 'command', 'hook', 'mcp'];
 
 /** Script basename when the hook runs ${CLAUDE_PLUGIN_ROOT}/scripts/<name>.<ext>, else <Event>[:<matcher>]. */
 export function hookName(h: Hook): string {
-  const m = /\$\{CLAUDE_PLUGIN_ROOT\}\/scripts\/([\w.-]+?)(?:\.\w+)?(?:\s|$)/.exec(h.command);
+  const m = /\$\{CLAUDE_PLUGIN_ROOT\}\/scripts\/([\w.-]+?)(?:\.\w+)?(?=["'\s]|$)/.exec(h.command);
   if (m) return m[1];
   return h.matcher ? `${h.event}:${h.matcher}` : h.event;
 }
@@ -177,6 +177,7 @@ export function requestSkillUrl(query: string): string {
   return `https://github.com/${catalog.repo}/issues/new?${params}`;
 }
 
-export const sourceUrl = (p: Plugin) => `https://github.com/${catalog.repo}/tree/main/plugins/${p.name}`;
+export const sourceUrl = (p: Plugin) =>
+  p.external && p.source ? p.source : `https://github.com/${catalog.repo}/tree/main/${p.source ?? `plugins/${p.name}`}`;
 
 export const securityDocUrl = () => `https://github.com/${catalog.repo}/blob/main/docs/SECURITY.md`;

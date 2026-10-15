@@ -111,7 +111,8 @@ export const en = {
       updated: 'Recently updated',
     },
     sortPrefix: 'Sort:',
-    stats: (plugins: number, artifacts: number, updated: string) => `${plugins} plugins · ${artifacts} artifacts · updated ${updated}`,
+    stats: (plugins: number, artifacts: number, updated: string) =>
+      `${plugins} ${plural(plugins, 'plugin')} · ${artifacts} ${plural(artifacts, 'artifact')}${updated ? ` · updated ${updated}` : ''}`,
     title: 'Describe the job. Get the plugin that does it.',
     lede: 'Search skills, agents, commands, hooks and MCP servers. See what a plugin runs before you install it.',
     searchPlaceholder: 'e.g. I need a skill for writing release notes',

@@ -8,10 +8,10 @@ The UI follows the "Catalog Explorations" design in the
 [Claude Design project](https://claude.ai/design/p/05132151-eaa3-4c14-a87d-a89c14a1b622) (access required).
 The mockups are not stored in this repository.
 
-> The catalog data in `src/data/catalog.ts` is **sample data** from the
-> design. The marketplace has no plugins yet; generating the catalog from
-> `.claude-plugin/marketplace.json` and `plugins/` is the next step
-> (see [docs/specs/catalog-site.md](../docs/specs/catalog-site.md) §6).
+The catalog is generated from `.claude-plugin/marketplace.json` and
+`plugins/` at build time (see "Catalog data" below). Until the marketplace has
+plugins, the site shows its empty state; `npm run dev:fixtures` shows sample
+plugins from `test/fixtures/`.
 
 ## Develop
 
@@ -27,8 +27,9 @@ Open <http://localhost:5173/>. The dev server reloads on save.
 
 | Command | What it does |
 |---|---|
-| `npm run dev` | Dev server with hot reload on port 5173 |
-| `npm test` | Unit tests (search, install set) with Vitest |
+| `npm run dev` | Dev server with hot reload on port 5173, catalog from this repository |
+| `npm run dev:fixtures` | Same, with the sample plugins from `test/fixtures/` |
+| `npm test` | Unit tests (generator, search, install set, no hardcoded UI text) with Vitest |
 | `npm run typecheck` | TypeScript check |
 | `npm run build` | Type-check and build to `dist/` for GitHub Pages |
 | `npm run preview` | Serve the production build at `/dev-digest-ai-marketplace/` |
@@ -77,9 +78,13 @@ Generator options: `--root <dir>` (default: the repository root),
 ## Layout
 
 ```text
+scripts/      build-catalog.mjs: repository → catalog JSON
+test/         generator tests and fixtures/ (sample marketplace)
 src/
-  data/       catalog types and (sample) data
-  lib/        search, install-set generators, app state (set + theme)
+  data/       catalog types; loads the generated catalog
+  generated/  catalog.json, catalog.fixtures.json (gitignored)
+  i18n/       en.ts: every user-visible string
+  lib/        catalog helpers, search, install-set generators, app state
   components/ layout (header, footer, install-set bar) and shared UI
   pages/      Home (search), PluginPage, InstallPage, SecurityPage, NotFound
 ```
@@ -92,8 +97,11 @@ src/
 - Pages has no SPA fallback, so the build copies `index.html` to `404.html`.
   Deep links such as `/plugins/devdigest-backend/` then load the app, which
   renders the right page.
-- `.github/workflows/pages.yml` runs `npm ci`, `npm test` and `npm run build`
-  on pull requests, and also deploys on pushes to `main`.
+- `.github/workflows/pages.yml` ("Site") has three checks, separate from the
+  "Validate marketplace" harness check: **Site: tests**, **Site: build**
+  (pull requests and `main`) and **Site: deploy** (`main` only). It runs when
+  `site/**`, `plugins/**`, `.claude-plugin/**` or `CODEOWNERS` change, so a
+  merged plugin appears on the site without manual steps.
 - Repository settings: Settings → Pages → Source: **GitHub Actions**.
 
 ## Translations

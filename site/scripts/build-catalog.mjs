@@ -216,7 +216,7 @@ export function toolList(v) {
 
 /** Mirrors hookName() in src/lib/catalog.ts; used only to check README note names. */
 function hookName(h) {
-  const m = /\$\{CLAUDE_PLUGIN_ROOT\}\/scripts\/([\w.-]+?)(?:\.\w+)?(?:\s|$)/.exec(h.command);
+  const m = /\$\{CLAUDE_PLUGIN_ROOT\}\/scripts\/([\w.-]+?)(?:\.\w+)?(?=["'\s]|$)/.exec(h.command);
   if (m) return m[1];
   return h.matcher ? `${h.event}:${h.matcher}` : h.event;
 }

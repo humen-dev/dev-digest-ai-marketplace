@@ -8,6 +8,8 @@ describe('hooks (§6.1, §8.1)', () => {
     expect(hookName({ event: 'PreToolUse', matcher: 'Bash', command: '${CLAUDE_PLUGIN_ROOT}/scripts/block-dangerous.sh' })).toBe('block-dangerous');
     expect(hookName({ event: 'PostToolUse', matcher: 'Edit|Write', command: 'npx prisma validate' })).toBe('PostToolUse:Edit|Write');
     expect(hookName({ event: 'Stop', matcher: null, command: 'echo done' })).toBe('Stop');
+    // Quoted form recommended by docs/PLUGIN-GUIDELINES.md.
+    expect(hookName({ event: 'PreToolUse', matcher: 'Bash', command: 'bash "${CLAUDE_PLUGIN_ROOT}/scripts/check.sh" --strict' })).toBe('check');
   });
 
   it('uses the templated summaries', () => {
