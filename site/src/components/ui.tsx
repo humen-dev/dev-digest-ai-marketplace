@@ -11,6 +11,7 @@ import {
 } from '@phosphor-icons/react';
 import type { Kind } from '../data/types';
 import { securityDocUrl } from '../lib/catalog';
+import { t } from '../i18n/en';
 import { highlight } from '../lib/search';
 import { useAppState, useCopy } from '../lib/state';
 
@@ -41,7 +42,7 @@ export function Highlight({ text, terms }: { text: string; terms: string[] }) {
 export function SetToggle({ plugin, size = 'md', long = false }: { plugin: string; size?: 'md' | 'lg'; long?: boolean }) {
   const { inSet, toggle } = useAppState();
   const on = inSet(plugin);
-  const label = on ? (long ? 'In install set' : 'In set') : long ? 'Add to install set' : 'Add to set';
+  const label = on ? (long ? t.ui.inSetLong : t.ui.inSet) : long ? t.ui.addToSetLong : t.ui.addToSet;
   return (
     <button
       type="button"
@@ -68,8 +69,8 @@ export function CopyButton({ text, label, className = 'btn', iconOnly = false, t
       aria-label={iconOnly ? title ?? label : undefined}
     >
       {done ? <CheckIcon size={iconOnly ? 15 : 14} aria-hidden /> : <CopyIcon size={iconOnly ? 15 : 14} aria-hidden />}
-      {!iconOnly && (done ? 'Copied' : label)}
-      <span className="sr-only" aria-live="polite">{done ? 'Copied to clipboard' : ''}</span>
+      {!iconOnly && (done ? t.ui.copied : label)}
+      <span className="sr-only" aria-live="polite">{done ? t.ui.copiedToClipboard : ''}</span>
     </button>
   );
 }
@@ -90,8 +91,8 @@ export function InstallCmd({ text }: { text: string }) {
 /** Per-entry badge for the unpinned-dependency heuristic (§8). */
 export function UnpinnedBadge() {
   return (
-    <a className="badge heur" href={securityDocUrl()} title="npx/uvx/bunx package without an exact version. Heuristic: see docs/SECURITY.md">
-      unpinned · heuristic
+    <a className="badge heur" href={securityDocUrl()} title={t.ui.unpinnedTitle}>
+      {t.ui.unpinnedBadge}
     </a>
   );
 }

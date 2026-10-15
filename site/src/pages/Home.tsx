@@ -4,6 +4,7 @@ import { Link, useSearchParams } from 'react-router';
 import { CopyButton, Highlight, KindIcon, SetToggle } from '../components/ui';
 import { catalog } from '../data/catalog';
 import type { Kind } from '../data/types';
+import { t } from '../i18n/en';
 import {
   KIND_LABEL,
   KIND_PLURAL,
@@ -19,12 +20,8 @@ import {
 } from '../lib/catalog';
 import { search, type KindChoice, type SortKey } from '../lib/search';
 
-const EXAMPLES = ['type:agent', 'has:mcp', '-has:hooks', 'тести'];
-const SORTS: [SortKey, string][] = [
-  ['relevance', 'Relevance'],
-  ['name', 'Name'],
-  ['updated', 'Recently updated'],
-];
+const EXAMPLES = t.home.examples;
+const SORTS = Object.entries(t.home.sorts) as [SortKey, string][];
 
 function readKind(v: string | null): KindChoice {
   if (v === 'all') return 'all';
@@ -37,7 +34,7 @@ function Invocation({ item }: { item: Item }) {
   return (
     <span className="invoke">
       <code>{item.invocation}</code>
-      <CopyButton text={item.invocation} label={`Copy ${item.invocation}`} className="icon-btn xs" iconOnly />
+      <CopyButton text={item.invocation} label={t.home.copyInvocation(item.invocation)} className="icon-btn xs" iconOnly />
     </span>
   );
 }
@@ -50,7 +47,7 @@ function ArtifactCard({ item, terms }: { item: Item; terms: string[] }) {
     <article className="card">
       <div className="card-top">
         <span className="badge kind"><KindIcon kind={item.kind} />{KIND_LABEL[item.kind]}</span>
-        <span className="in">in <span className="plug">{p.name}</span></span>
+        <span className="in">{t.home.in} <span className="plug">{p.name}</span></span>
         <span className="ver">{versionLabel(p)}</span>
       </div>
       <div>
@@ -58,9 +55,9 @@ function ArtifactCard({ item, terms }: { item: Item; terms: string[] }) {
         <p><Highlight text={item.description} terms={terms} /></p>
       </div>
       <Invocation item={item} />
-      {runs && <span className="badge exec" style={{ alignSelf: 'flex-start' }}><PlugsIcon aria-hidden />plugin runs {runs}</span>}
+      {runs && <span className="badge exec" style={{ alignSelf: 'flex-start' }}><PlugsIcon aria-hidden />{t.home.pluginRuns(runs)}</span>}
       <div className="card-actions">
-        <CopyButton text={installCommand(p.name)} label="Copy install" className="btn primary" title={installCommand(p.name)} />
+        <CopyButton text={installCommand(p.name)} label={t.home.copyInstall} className="btn primary" title={installCommand(p.name)} />
         <SetToggle plugin={p.name} />
       </div>
     </article>
@@ -75,7 +72,7 @@ function RelatedRow({ item, terms }: { item: Item; terms: string[] }) {
       <Link className="name" to={`/plugins/${p.name}/`}><Highlight text={item.name} terms={terms} /></Link>
       <span className="desc"><Highlight text={item.description} terms={terms} /></span>
       <span className="meta">{item.invocation ?? item.meta} · {p.name}</span>
-      <CopyButton text={installCommand(p.name)} label="Copy install" className="btn sm" title={installCommand(p.name)} />
+      <CopyButton text={installCommand(p.name)} label={t.home.copyInstall} className="btn sm" title={installCommand(p.name)} />
     </div>
   );
 }
@@ -99,7 +96,7 @@ function SortMenu({ value, onChange }: { value: SortKey; onChange: (s: SortKey) 
   return (
     <div className="sort" ref={ref}>
       <button type="button" className="sort-btn" aria-haspopup="menu" aria-expanded={open} onClick={() => setOpen((o) => !o)}>
-        Sort: <b>{label}</b>
+        {t.home.sortPrefix} <b>{label}</b>
         {open ? <CaretUpIcon aria-hidden /> : <CaretDownIcon aria-hidden />}
       </button>
       {open && (
@@ -181,28 +178,28 @@ export function Home() {
         <div className="wrap">
           <div className="hero-inner">
             <div className="eyebrow" style={{ marginBottom: 10 }}>
-              {catalog.plugins.length} plugins · {items.length} artifacts · updated {formatDate(lastUpdated())}
+              {t.home.stats(catalog.plugins.length, items.length, formatDate(lastUpdated()))}
             </div>
-            <h1>Describe the job. Get the plugin that does it.</h1>
-            <p>Search skills, agents, commands, hooks and MCP servers. See what a plugin runs before you install it.</p>
+            <h1>{t.home.title}</h1>
+            <p>{t.home.lede}</p>
             <form className="search-box" role="search" onSubmit={(e) => e.preventDefault()}>
               <MagnifyingGlassIcon size={19} aria-hidden />
               <input
                 ref={inputRef}
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
-                placeholder="e.g. I need a skill for writing release notes"
-                aria-label="Search the catalog"
+                placeholder={t.home.searchPlaceholder}
+                aria-label={t.home.searchLabel}
                 autoFocus
               />
               {draft ? (
-                <button type="button" className="icon-btn" onClick={() => setDraft('')} aria-label="Clear search"><XIcon aria-hidden /></button>
+                <button type="button" className="icon-btn" onClick={() => setDraft('')} aria-label={t.home.clearSearch}><XIcon aria-hidden /></button>
               ) : (
                 <span className="kbd" aria-hidden>/</span>
               )}
             </form>
             <div className="refine">
-              <span>Refine</span>
+              <span>{t.home.refine}</span>
               {EXAMPLES.map((ex) => (
                 <button key={ex} type="button" className="chip" onClick={() => runExample(ex)}>{ex}</button>
               ))}
@@ -214,27 +211,27 @@ export function Home() {
       <section className="results wrap" aria-labelledby="results-title">
         <div className="results-head">
           <h2 id="results-title" aria-live="polite">
-            {!hasQuery ? 'All artifacts' : best.length ? `${best.length} match${best.length === 1 ? '' : 'es'}` : total || hidden.length ? 'No result has all your words' : 'No matches'}
+            {!hasQuery ? t.home.allArtifacts : best.length ? t.home.matches(best.length) : total || hidden.length ? t.home.noAllWords : t.home.noMatches}
           </h2>
           {kind && (
             <span className="filter-chip">
               <KindIcon kind={kind} />
               {KIND_PLURAL[kind]}
-              {autoKind && <span className="auto">AUTO</span>}
-              <button type="button" aria-label={`Remove ${KIND_PLURAL[kind]} filter`} onClick={() => setParam('type', 'all')}><XIcon size={12} aria-hidden /></button>
+              {autoKind && <span className="auto">{t.home.auto}</span>}
+              <button type="button" aria-label={t.home.removeFilter(KIND_PLURAL[kind])} onClick={() => setParam('type', 'all')}><XIcon size={12} aria-hidden /></button>
             </span>
           )}
           {kind && autoKind && (
             <span className="muted" style={{ fontSize: 13 }}>
-              from “{intentWord ?? kind}” in your query · <button type="button" className="link-btn" onClick={() => setParam('type', 'all')}>show all types</button>
+              {t.home.autoFrom(intentWord ?? kind)}<button type="button" className="link-btn" onClick={() => setParam('type', 'all')}>{t.home.showAllTypesLower}</button>
             </span>
           )}
           {(hasQuery || kind) && <SortMenu value={sort} onChange={(s) => setParam('sort', s === 'relevance' ? null : s)} />}
         </div>
 
         {!kind && total > 0 && (
-          <div className="kind-tabs" role="group" aria-label="Filter by kind">
-            <button type="button" className="pill on"><SquaresFourIcon aria-hidden />All <span className="count">{total}</span></button>
+          <div className="kind-tabs" role="group" aria-label={t.home.filterByKind}>
+            <button type="button" className="pill on"><SquaresFourIcon aria-hidden />{t.home.all} <span className="count">{total}</span></button>
             {KINDS.filter((k) => kindCounts[k]).map((k) => (
               <button key={k} type="button" className="pill" onClick={() => setParam('type', k)}>
                 <KindIcon kind={k} />{KIND_PLURAL[k]} <span className="count">{kindCounts[k]}</span>
@@ -245,10 +242,10 @@ export function Home() {
 
         {!catalog.plugins.length ? (
           <div className="empty">
-            <h3>No plugins yet</h3>
-            <p>The marketplace is empty. Add the first plugin or ask for one.</p>
-            <a className="btn primary lg" href={`https://github.com/${catalog.repo}/blob/main/CONTRIBUTING.md`}>Contributing guide</a>{' '}
-            <a className="btn lg" href={requestSkillUrl(query)}>Request a skill</a>
+            <h3>{t.home.emptyTitle}</h3>
+            <p>{t.home.emptyText}</p>
+            <a className="btn primary lg" href={`https://github.com/${catalog.repo}/blob/main/CONTRIBUTING.md`}>{t.home.contributingGuide}</a>{' '}
+            <a className="btn lg" href={requestSkillUrl(query)}>{t.home.requestSkill}</a>
           </div>
         ) : total > 0 || hidden.length > 0 ? (
           <>
@@ -256,19 +253,19 @@ export function Home() {
               {best.map((it) => <ArtifactCard key={it.id} item={it} terms={terms} />)}
               {hidden[0] && kind && (
                 <div className="hidden-card">
-                  <span className="why"><EyeSlashIcon aria-hidden />Hidden by the {KIND_PLURAL[kind]} filter{hidden.length > 1 ? ` · ${hidden.length}` : ''}</span>
+                  <span className="why"><EyeSlashIcon aria-hidden />{t.home.hiddenBy(KIND_PLURAL[kind], hidden.length)}</span>
                   <span className="kind"><KindIcon kind={hidden[0].kind} />{KIND_LABEL[hidden[0].kind]}</span>
                   <code>{hidden[0].invocation ?? hidden[0].meta}</code>
                   <span className="desc">{hidden[0].description}</span>
-                  <button type="button" className="link-btn" onClick={() => setParam('type', 'all')}>Show all types</button>
+                  <button type="button" className="link-btn" onClick={() => setParam('type', 'all')}>{t.home.showAllTypes}</button>
                 </div>
               )}
             </div>
             {related.length > 0 && (
               <>
                 <div className="section-title">
-                  <h3>Related</h3>
-                  <span>match some of your words</span>
+                  <h3>{t.home.related}</h3>
+                  <span>{t.home.relatedHelp}</span>
                 </div>
                 <div className="rows">
                   {related.map((it) => <RelatedRow key={it.id} item={it} terms={terms} />)}
@@ -277,16 +274,16 @@ export function Home() {
             )}
             {hasQuery && (
               <div className="foot-note">
-                Not what you need? <a href={requestSkillUrl(query)}>Request a skill</a> · prefilled with this search
+                {t.home.notWhatYouNeed} <a href={requestSkillUrl(query)}>{t.home.requestSkill}</a>{t.home.prefilled}
               </div>
             )}
           </>
         ) : (
           <div className="empty">
             <MagnifyingGlassMinusIcon size={24} className="muted" aria-hidden />
-            <h3>Nothing covers “{query.trim()}” yet</h3>
-            <p>Open a request and the maintainers will triage it. The issue is prefilled with your search.</p>
-            <a className="btn primary lg" href={requestSkillUrl(query)}>Request a skill<ArrowUpRightIcon aria-hidden /></a>
+            <h3>{t.home.nothingCovers(query.trim())}</h3>
+            <p>{t.home.nothingText}</p>
+            <a className="btn primary lg" href={requestSkillUrl(query)}>{t.home.requestSkill}<ArrowUpRightIcon aria-hidden /></a>
           </div>
         )}
       </section>

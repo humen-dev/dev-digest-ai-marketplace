@@ -54,3 +54,17 @@ src/
 - `.github/workflows/pages.yml` runs `npm ci`, `npm test` and `npm run build`
   on pull requests, and also deploys on pushes to `main`.
 - Repository settings: Settings → Pages → Source: **GitHub Actions**.
+
+## Translations
+
+All user-visible UI text lives in `src/i18n/en.ts`: a plain typed object
+grouped by page or component (`home`, `install`, `plugin`, `security`, ...).
+Strings that need values are small functions, for example
+`matches: (n: number) => ...`. Components import `t` and render
+`{t.home.title}` instead of a literal. Plugin data in `src/data/` is not
+translated here.
+
+To add a string, put it in the right group in `en.ts` and reference it from the
+component. `src/i18n/no-hardcoded-text.test.ts` fails `npm test` when a
+component or page has JSX text or an `aria-label`, `title`, `placeholder` or
+`alt` string literal that contains letters.

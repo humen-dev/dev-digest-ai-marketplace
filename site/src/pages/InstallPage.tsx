@@ -2,6 +2,7 @@ import { DownloadSimpleIcon, LightningIcon, PackageIcon, PlugsIcon, ShieldWarnin
 import { useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router';
 import { CopyButton } from '../components/ui';
+import { t } from '../i18n/en';
 import { envVars, findPlugin, items, unpinnedCount } from '../lib/catalog';
 import { parseSet, sameSet, sessionCommands, settingsJson, shellCommands } from '../lib/install';
 import { useAppState } from '../lib/state';
@@ -9,9 +10,9 @@ import { useAppState } from '../lib/state';
 type Tab = 'shell' | 'session' | 'settings';
 
 const TABS: { id: Tab; label: string; help: string; file: string; type: string }[] = [
-  { id: 'shell', label: 'Terminal', help: 'Run in a terminal where the claude CLI is installed.', file: 'install-plugins.sh', type: 'text/x-sh' },
-  { id: 'session', label: 'In Claude Code', help: 'Paste into a Claude Code session, one line at a time.', file: 'plugin-commands.txt', type: 'text/plain' },
-  { id: 'settings', label: '.claude/settings.json', help: 'Commit to the project so everyone on the team gets the same plugins.', file: 'settings.json', type: 'application/json' },
+  { id: 'shell', ...t.install.tabs.shell, file: 'install-plugins.sh', type: 'text/x-sh' },
+  { id: 'session', ...t.install.tabs.session, file: 'plugin-commands.txt', type: 'text/plain' },
+  { id: 'settings', ...t.install.tabs.settings, file: 'settings.json', type: 'application/json' },
 ];
 
 function download(name: string, type: string, text: string) {
@@ -52,12 +53,12 @@ export function InstallPage() {
   if (!plugins.length) {
     return (
       <div className="page wrap">
-        <h1 className="page-title">Install set</h1>
+        <h1 className="page-title">{t.install.title}</h1>
         <div className="empty">
           <PackageIcon size={24} className="muted" aria-hidden />
-          <h3>Your install set is empty</h3>
-          <p>Add plugins from the catalog with “Add to set”, then come back here for the commands and a settings file for your team.</p>
-          <Link className="btn primary lg" to="/">Browse the catalog</Link>
+          <h3>{t.install.emptyTitle}</h3>
+          <p>{t.install.emptyText}</p>
+          <Link className="btn primary lg" to="/">{t.install.browse}</Link>
         </div>
       </div>
     );
@@ -77,27 +78,27 @@ export function InstallPage() {
         <div className="note-box confirm" role="alert" style={{ marginTop: 0, marginBottom: 24 }}>
           <PackageIcon size={18} aria-hidden />
           <span style={{ flex: 1 }}>
-            This link has <strong>{view.length} plugin{view.length === 1 ? '' : 's'}</strong>. Your saved set has {local.length}: {local.join(', ')}.
+            {t.install.linkHas} <strong>{t.install.plugins(view.length)}</strong>{t.install.savedSet(local.length, local.join(', '))}
           </span>
-          <button type="button" className="btn primary" onClick={() => replaceSet(view)}>Replace my set</button>
-          <button type="button" className="btn" onClick={() => go(local)}>Keep my set</button>
+          <button type="button" className="btn primary" onClick={() => replaceSet(view)}>{t.install.replaceSet}</button>
+          <button type="button" className="btn" onClick={() => go(local)}>{t.install.keepSet}</button>
         </div>
       )}
       <div className="install-grid">
         <div>
-          <h1 className="page-title">Install set</h1>
-          <p className="lede">Share this page's URL, or commit the settings file so the whole team gets the same plugins.</p>
+          <h1 className="page-title">{t.install.title}</h1>
+          <p className="lede">{t.install.lede}</p>
           {plugins.map((p) => {
             const count = items.filter((it) => it.plugin === p).length;
             return (
               <div className="set-row" key={p.name}>
                 <div className="info">
                   <Link className="name" to={`/plugins/${p.name}/`}>{p.name}</Link>
-                  <div className="sum">{count} artifacts · {p.description}</div>
+                  <div className="sum">{t.install.artifactsSummary(count, p.description)}</div>
                 </div>
-                {p.hooks.length > 0 && <span className="ic-badge" title="hook"><LightningIcon aria-label="Runs hooks" /></span>}
-                {p.mcp.length > 0 && <span className="ic-badge" title="MCP server"><PlugsIcon aria-label="Starts MCP servers" /></span>}
-                <button type="button" className="icon-btn" onClick={() => remove(p.name)} aria-label={`Remove ${p.name}`}><XIcon aria-hidden /></button>
+                {p.hooks.length > 0 && <span className="ic-badge" title={t.install.hookTitle}><LightningIcon aria-label={t.install.runsHooks} /></span>}
+                {p.mcp.length > 0 && <span className="ic-badge" title={t.install.mcpTitle}><PlugsIcon aria-label={t.install.startsMcp} /></span>}
+                <button type="button" className="icon-btn" onClick={() => remove(p.name)} aria-label={t.install.remove(p.name)}><XIcon aria-hidden /></button>
               </div>
             );
           })}
@@ -105,21 +106,21 @@ export function InstallPage() {
             <div className="note-box">
               <ShieldWarningIcon size={18} aria-hidden />
               <span>
-                This set runs <strong>{hooks} hook{hooks === 1 ? '' : 's'}</strong> and starts{' '}
-                <strong>{mcp} MCP server{mcp === 1 ? '' : 's'}</strong>.
-                {env.length > 0 && <> Needs <code className="code-inline">{env.join(', ')}</code>.</>}
-                {unpinned > 0 && <> {unpinned} unpinned (heuristic).</>}{' '}
-                <Link to={`/security/?set=${view.join(',')}`}>Review</Link>
+                {t.install.setRuns} <strong>{t.install.hooks(hooks)}</strong> {t.install.andStarts}{' '}
+                <strong>{t.install.mcpServers(mcp)}</strong>.
+                {env.length > 0 && <> {t.install.needs} <code className="code-inline">{env.join(', ')}</code>.</>}
+                {unpinned > 0 && <> {t.install.unpinned(unpinned)}</>}{' '}
+                <Link to={`/security/?set=${view.join(',')}`}>{t.install.review}</Link>
               </span>
             </div>
           )}
           <div style={{ marginTop: 18 }}>
-            <CopyButton text={shareUrl} label="Copy share link" className="btn" />
+            <CopyButton text={shareUrl} label={t.install.copyShareLink} className="btn" />
           </div>
         </div>
 
         <div style={{ minWidth: 0 }}>
-          <div className="tabs" role="tablist" aria-label="Output">
+          <div className="tabs" role="tablist" aria-label={t.install.outputLabel}>
             {TABS.map((t) => (
               <button key={t.id} type="button" role="tab" aria-selected={tab === t.id} className="tab" onClick={() => setTab(t.id)}>
                 {t.label}
@@ -130,8 +131,8 @@ export function InstallPage() {
             <div className="out-head">
               <span className="s">{current.help}</span>
               <div className="acts">
-                <button type="button" className="btn sm" onClick={() => download(current.file, current.type, outputs[tab])}><DownloadSimpleIcon aria-hidden />Download</button>
-                <CopyButton text={outputs[tab]} label="Copy" className="btn sm" />
+                <button type="button" className="btn sm" onClick={() => download(current.file, current.type, outputs[tab])}><DownloadSimpleIcon aria-hidden />{t.install.download}</button>
+                <CopyButton text={outputs[tab]} label={t.install.copy} className="btn sm" />
               </div>
             </div>
             <pre className="out">{outputs[tab]}</pre>

@@ -2,6 +2,7 @@ import { GithubLogoIcon, MagnifyingGlassIcon, MoonIcon, PackageIcon, StackIcon, 
 import { useState, type FormEvent } from 'react';
 import { Link, NavLink, Outlet, useLocation, useNavigate } from 'react-router';
 import { catalog } from '../data/catalog';
+import { t } from '../i18n/en';
 import { useAppState } from '../lib/state';
 
 const REPO_URL = `https://github.com/${catalog.repo}`;
@@ -24,33 +25,33 @@ function Header() {
       <div className="wrap">
         <Link to="/" className="brand">
           <span className="brand-mark"><StackIcon aria-hidden /></span>
-          <span className="brand-name">DevDigest Marketplace</span>
+          <span className="brand-name">{t.brand}</span>
         </Link>
-        <nav className="nav" aria-label="Main">
-          <NavLink to="/" end>Catalog</NavLink>
-          <NavLink to="/security/">Security</NavLink>
-          <a href={`${REPO_URL}/blob/main/CONTRIBUTING.md`}>Contribute</a>
+        <nav className="nav" aria-label={t.nav.label}>
+          <NavLink to="/" end>{t.nav.catalog}</NavLink>
+          <NavLink to="/security/">{t.nav.security}</NavLink>
+          <a href={`${REPO_URL}/blob/main/CONTRIBUTING.md`}>{t.nav.contribute}</a>
         </nav>
         <div className="header-tools">
           {!onHome && (
             <form className="header-search" role="search" onSubmit={submit}>
               <MagnifyingGlassIcon aria-hidden />
-              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search catalog" aria-label="Search catalog" />
+              <input value={q} onChange={(e) => setQ(e.target.value)} placeholder={t.header.searchPlaceholder} aria-label={t.header.searchLabel} />
             </form>
           )}
-          <Link to="/install/" className={`set-btn${set.length ? ' on' : ''}`} aria-label={`Install set, ${set.length} plugins`}>
+          <Link to="/install/" className={`set-btn${set.length ? ' on' : ''}`} aria-label={t.header.installSetLabel(set.length)}>
             <PackageIcon aria-hidden />
-            <span className="label">Install set</span> ({set.length})
+            <span className="label">{t.header.installSet}</span> ({set.length})
           </Link>
-          <div className="theme-toggle" role="group" aria-label="Theme">
-            <button type="button" aria-pressed={theme === 'light'} aria-label="Light theme" onClick={() => setTheme('light')}>
+          <div className="theme-toggle" role="group" aria-label={t.header.themeLabel}>
+            <button type="button" aria-pressed={theme === 'light'} aria-label={t.header.lightTheme} onClick={() => setTheme('light')}>
               <SunIcon aria-hidden />
             </button>
-            <button type="button" aria-pressed={theme === 'dark'} aria-label="Dark theme" onClick={() => setTheme('dark')}>
+            <button type="button" aria-pressed={theme === 'dark'} aria-label={t.header.darkTheme} onClick={() => setTheme('dark')}>
               <MoonIcon aria-hidden />
             </button>
           </div>
-          <a className="icon-link" href={REPO_URL} aria-label="Repository on GitHub">
+          <a className="icon-link" href={REPO_URL} aria-label={t.header.repoLabel}>
             <GithubLogoIcon aria-hidden />
           </a>
         </div>
@@ -64,14 +65,14 @@ function SetBar() {
   const { pathname } = useLocation();
   if (!set.length || pathname.startsWith('/install')) return null;
   return (
-    <div className="set-bar" role="region" aria-label="Install set">
+    <div className="set-bar" role="region" aria-label={t.setBar.label}>
       <PackageIcon size={18} aria-hidden />
       <div>
-        <div style={{ fontSize: 14 }}>{set.length} plugin{set.length === 1 ? '' : 's'} in set</div>
+        <div style={{ fontSize: 14 }}>{t.setBar.count(set.length)}</div>
         <div className="names">{set.join(', ')}</div>
       </div>
-      <Link to={`/install/?set=${set.join(',')}`} className="btn primary lg">Generate install</Link>
-      <button type="button" className="icon-btn" onClick={clearSet} aria-label="Clear install set" title="Clear set">
+      <Link to={`/install/?set=${set.join(',')}`} className="btn primary lg">{t.setBar.generate}</Link>
+      <button type="button" className="icon-btn" onClick={clearSet} aria-label={t.setBar.clearLabel} title={t.setBar.clearTitle}>
         <XIcon aria-hidden />
       </button>
     </div>
@@ -83,10 +84,10 @@ function Footer() {
   return (
     <footer className="footer">
       <div className="wrap">
-        {catalog.sample && <span>Preview with sample plugins: the marketplace has no published plugins yet.</span>}
+        {catalog.sample && <span>{t.footer.sample}</span>}
         {sha && (
           <span>
-            Built from <a href={`${REPO_URL}/commit/${sha}`}>{sha.slice(0, 7)}</a>
+            {t.footer.builtFrom} <a href={`${REPO_URL}/commit/${sha}`}>{sha.slice(0, 7)}</a>
           </span>
         )}
       </div>

@@ -1,21 +1,10 @@
 import { catalog } from '../data/catalog';
 import type { Hook, Kind, McpServer, Plugin } from '../data/types';
+import { t } from '../i18n/en';
 
-export const KIND_LABEL: Record<Kind, string> = {
-  skill: 'Skill',
-  agent: 'Agent',
-  command: 'Command',
-  hook: 'Hook',
-  mcp: 'MCP server',
-};
+export const KIND_LABEL: Record<Kind, string> = t.kinds.label;
 
-export const KIND_PLURAL: Record<Kind, string> = {
-  skill: 'Skills',
-  agent: 'Agents',
-  command: 'Commands',
-  hook: 'Hooks',
-  mcp: 'MCP',
-};
+export const KIND_PLURAL: Record<Kind, string> = t.kinds.plural;
 
 export const KINDS: Kind[] = ['skill', 'agent', 'command', 'hook', 'mcp'];
 
@@ -31,18 +20,18 @@ export function hookName(h: Hook): string {
 export function hookSummary(h: Hook): string {
   switch (h.event) {
     case 'PreToolUse':
-      return h.matcher ? `Runs before Claude uses ${h.matcher}. Can block the call.` : 'Runs before every tool call. Can block the call.';
+      return h.matcher ? t.summaries.hookBeforeTool(h.matcher) : t.summaries.hookBeforeEveryTool;
     case 'PostToolUse':
-      if (!h.matcher || h.matcher === 'Edit|Write') return 'Runs after every file Claude edits or writes.';
-      return `Runs after Claude uses ${h.matcher}.`;
+      if (!h.matcher || h.matcher === 'Edit|Write') return t.summaries.hookAfterEdit;
+      return t.summaries.hookAfterTool(h.matcher);
     case 'SessionStart':
-      return 'Runs when a session starts.';
+      return t.summaries.hookSessionStart;
     case 'UserPromptSubmit':
-      return 'Runs on every prompt you send.';
+      return t.summaries.hookPromptSubmit;
     case 'Stop':
-      return 'Runs when Claude finishes a response.';
+      return t.summaries.hookStop;
     default:
-      return `Runs on ${h.event}.`;
+      return t.summaries.hookOther(h.event);
   }
 }
 
@@ -72,14 +61,14 @@ export function isUnpinned(command: string | null): boolean {
 export function mcpSummary(m: McpServer): string {
   if (m.transport !== 'stdio') {
     try {
-      return `Connects to ${new URL(m.url ?? '').host}.`;
+      return t.summaries.mcpConnects(new URL(m.url ?? '').host);
     } catch {
-      return 'Connects to a remote server.';
+      return t.summaries.mcpConnectsRemote;
     }
   }
   const l = launchedPackage(m.command);
-  if (l) return `Starts with Claude Code. Downloads the package from ${l.launcher === 'uvx' ? 'PyPI' : 'npm'} on first run.`;
-  return `Starts ${m.command?.split(/\s+/)[0] ?? 'a command'} as a local process with Claude Code.`;
+  if (l) return t.summaries.mcpDownloads(l.launcher === 'uvx' ? 'PyPI' : 'npm');
+  return t.summaries.mcpStartsLocal(m.command?.split(/\s+/)[0] ?? t.summaries.mcpACommand);
 }
 
 /** What the invocation column shows for an MCP server: <transport> · <package or url>. */
@@ -96,14 +85,7 @@ export const executes = (p: Plugin) => p.hooks.length + p.mcp.length > 0;
 
 export type SecurityFlag = 'runs-hooks' | 'starts-mcp' | 'remote-mcp' | 'shell-tools' | 'network-heuristic' | 'unpinned-dependency';
 
-export const FLAG_LABEL: Record<SecurityFlag, string> = {
-  'runs-hooks': 'Runs hooks',
-  'starts-mcp': 'Starts MCP',
-  'remote-mcp': 'Remote MCP',
-  'shell-tools': 'Bash tools',
-  'network-heuristic': 'Network · heuristic',
-  'unpinned-dependency': 'Unpinned · heuristic',
-};
+export const FLAG_LABEL: Record<SecurityFlag, string> = t.flags;
 
 export const HEURISTIC_FLAGS: SecurityFlag[] = ['network-heuristic', 'unpinned-dependency'];
 
@@ -123,8 +105,8 @@ export const unpinnedCount = (p: Plugin) => [...p.hooks.map((h) => h.command), .
 /** Short "1 hook · 1 MCP" summary, empty when the plugin runs nothing. */
 export function runsSummary(p: Plugin): string {
   const parts: string[] = [];
-  if (p.hooks.length) parts.push(`${p.hooks.length} hook${p.hooks.length > 1 ? 's' : ''}`);
-  if (p.mcp.length) parts.push(`${p.mcp.length} MCP`);
+  if (p.hooks.length) parts.push(t.summaries.runsHooks(p.hooks.length));
+  if (p.mcp.length) parts.push(t.summaries.runsMcp(p.mcp.length));
   return parts.join(' · ');
 }
 
@@ -179,7 +161,7 @@ export const installCommand = (pluginName: string) => `/plugin install ${pluginN
 
 export const marketplaceAddCommand = () => `/plugin marketplace add ${catalog.repo}`;
 
-export const versionLabel = (p: Plugin) => (p.version ? `v${p.version}` : 'tracks main');
+export const versionLabel = (p: Plugin) => (p.version ? `v${p.version}` : t.summaries.tracksMain);
 
 export const lastUpdated = () => catalog.plugins.map((p) => p.updated).sort().at(-1) ?? '';
 
@@ -191,7 +173,7 @@ export function formatDate(iso: string, withYear = false): string {
 
 export function requestSkillUrl(query: string): string {
   const q = query.trim();
-  const params = new URLSearchParams({ template: 'skill-request.yml', title: `Skill request: ${q}`, need: q });
+  const params = new URLSearchParams({ template: 'skill-request.yml', title: t.summaries.skillRequestTitle(q), need: q });
   return `https://github.com/${catalog.repo}/issues/new?${params}`;
 }
 

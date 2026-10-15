@@ -1,6 +1,7 @@
 import { KeyIcon, LightningIcon, PlugsIcon, ShieldCheckIcon, ShieldWarningIcon, WrenchIcon, type Icon } from '@phosphor-icons/react';
 import { Link, useParams } from 'react-router';
 import { CopyButton, InstallCmd, KindIcon, SetToggle, UnpinnedBadge } from '../components/ui';
+import { t } from '../i18n/en';
 import {
   KIND_LABEL,
   envVars,
@@ -33,7 +34,7 @@ interface Run {
 export function PluginPage() {
   const { name = '' } = useParams();
   const plugin = findPlugin(name);
-  if (!plugin) return <NotFound what={`plugin “${name}”`} />;
+  if (!plugin) return <NotFound what={t.plugin.notFound(name)} />;
 
   const env = envVars(plugin);
   const contents = items.filter((it) => it.plugin === plugin);
@@ -42,12 +43,12 @@ export function PluginPage() {
   const runs: Run[] = [
     ...plugin.hooks.map((h) => {
       const n = hookName(h);
-      return { key: `hook:${n}`, icon: LightningIcon, kind: 'Hook', meta: hookMeta(h), command: h.command, summary: hookSummary(h), note: notes[n], unpinned: isUnpinned(h.command) };
+      return { key: `hook:${n}`, icon: LightningIcon, kind: t.plugin.runKinds.hook, meta: hookMeta(h), command: h.command, summary: hookSummary(h), note: notes[n], unpinned: isUnpinned(h.command) };
     }),
     ...plugin.mcp.map((m) => ({
       key: `mcp:${m.name}`,
       icon: PlugsIcon,
-      kind: 'MCP server',
+      kind: t.plugin.runKinds.mcp,
       meta: `${m.name} · ${m.transport}`,
       command: m.command ?? m.url ?? '',
       summary: mcpSummary(m),
@@ -57,15 +58,15 @@ export function PluginPage() {
     ...env.map((v) => ({
       key: `env:${v}`,
       icon: KeyIcon,
-      kind: 'Env var',
-      meta: 'read by MCP server',
+      kind: t.plugin.runKinds.env,
+      meta: t.plugin.envMeta,
       command: v,
-      summary: `Read by MCP server ${plugin.mcp.filter((m) => m.env.includes(v)).map((m) => m.name).join(', ')}.`,
+      summary: t.plugin.envSummary(plugin.mcp.filter((m) => m.env.includes(v)).map((m) => m.name).join(', ')),
       note: notes[v],
       unpinned: false,
     })),
     ...(plugin.tools.length
-      ? [{ key: 'tools', icon: WrenchIcon, kind: 'Allowed tools', meta: 'pre-approved', command: plugin.tools.join('\n'), summary: 'Claude can run these without asking.', note: undefined, unpinned: false }]
+      ? [{ key: 'tools', icon: WrenchIcon, kind: t.plugin.runKinds.tools, meta: t.plugin.toolsMeta, command: plugin.tools.join('\n'), summary: t.plugin.toolsSummary, note: undefined, unpinned: false }]
       : []),
   ];
   const executes = plugin.hooks.length + plugin.mcp.length > 0;
@@ -76,22 +77,22 @@ export function PluginPage() {
       <div className="plugin-grid">
         <div className="plugin-main">
           <div>
-            <div className="crumbs"><Link to="/">Catalog</Link> / Plugins / {plugin.name}</div>
+            <div className="crumbs"><Link to="/">{t.plugin.crumbsCatalog}</Link> / {t.plugin.crumbsPlugins} / {plugin.name}</div>
             <h1 className="plugin-name">{plugin.name}</h1>
             <p className="plugin-desc">{plugin.description}</p>
             <div className="badges">
-              {plugin.hooks.length > 0 && <span className="badge exec"><LightningIcon aria-hidden />{plugin.hooks.length} hook{plugin.hooks.length > 1 ? 's' : ''}</span>}
-              {plugin.mcp.length > 0 && <span className="badge exec"><PlugsIcon aria-hidden />{plugin.mcp.length} MCP server{plugin.mcp.length > 1 ? 's' : ''}</span>}
-              {env.map((v) => <span key={v} className="badge exec"><KeyIcon aria-hidden />Needs {v}</span>)}
-              {!executes && <span className="badge exec"><ShieldCheckIcon aria-hidden />No hooks or MCP</span>}
+              {plugin.hooks.length > 0 && <span className="badge exec"><LightningIcon aria-hidden />{t.plugin.hooks(plugin.hooks.length)}</span>}
+              {plugin.mcp.length > 0 && <span className="badge exec"><PlugsIcon aria-hidden />{t.plugin.mcpServers(plugin.mcp.length)}</span>}
+              {env.map((v) => <span key={v} className="badge exec"><KeyIcon aria-hidden />{t.plugin.needs(v)}</span>)}
+              {!executes && <span className="badge exec"><ShieldCheckIcon aria-hidden />{t.plugin.noHooksOrMcp}</span>}
             </div>
           </div>
 
           <section id="runs" className={`runs${executes ? '' : ' none'}`} aria-labelledby="runs-title">
             <div className="runs-head">
               {executes ? <ShieldWarningIcon size={20} aria-hidden /> : <ShieldCheckIcon size={20} aria-hidden />}
-              <h3 id="runs-title">What this runs on your machine</h3>
-              <span>Parsed from hooks.json and .mcp.json at build</span>
+              <h3 id="runs-title">{t.plugin.runsTitle}</h3>
+              <span>{t.plugin.runsSource}</span>
             </div>
             <div className="runs-body">
               {runs.length ? (
@@ -110,13 +111,13 @@ export function PluginPage() {
                   </div>
                 ))
               ) : (
-                <p className="muted" style={{ margin: '14px 0 0' }}>No hooks, MCP servers or pre-approved tools. This plugin only adds instructions.</p>
+                <p className="muted" style={{ margin: '14px 0 0' }}>{t.plugin.runsNone}</p>
               )}
             </div>
           </section>
 
           <section className="contents" aria-labelledby="contents-title">
-            <h3 id="contents-title">Contents · {contents.length}</h3>
+            <h3 id="contents-title">{t.plugin.contents(contents.length)}</h3>
             {contents.map((it) => (
               <div className="content-row" key={it.id}>
                 <span className="ic" title={KIND_LABEL[it.kind]}><KindIcon kind={it.kind} size={17} /></span>
@@ -127,8 +128,8 @@ export function PluginPage() {
             ))}
           </section>
 
-          <section className="readme" aria-label="README">
-            <div className="eyebrow">README.md</div>
+          <section className="readme" aria-label={t.plugin.readmeLabel}>
+            <div className="eyebrow">{t.plugin.readmeFile}</div>
             <h2>{plugin.readme.title}</h2>
             {plugin.readme.body.map((p) => <p key={p}>{p}</p>)}
           </section>
@@ -136,24 +137,24 @@ export function PluginPage() {
 
         <aside className="aside">
           <div className="install-box">
-            <div className="eyebrow">Install</div>
+            <div className="eyebrow">{t.plugin.install}</div>
             <div className="cmd">
               <code><InstallCmd text={cmd} /></code>
-              <CopyButton text={cmd} label="Copy install command" className="icon-btn" iconOnly />
+              <CopyButton text={cmd} label={t.plugin.copyInstallCommand} className="icon-btn" iconOnly />
             </div>
             <SetToggle plugin={plugin.name} size="lg" long />
-            <span className="hint">First time? Run <code>{marketplaceAddCommand()}</code></span>
+            <span className="hint">{t.plugin.firstTime} <code>{marketplaceAddCommand()}</code></span>
           </div>
           <dl className="facts">
-            <dt>Version</dt><dd>{versionLabel(plugin)}</dd>
-            <dt>Updated</dt><dd>{formatDate(plugin.updated, true)}</dd>
-            <dt>Owners</dt><dd>{plugin.owners.length ? plugin.owners.join(', ') : '—'}</dd>
-            <dt>License</dt><dd>{plugin.license ?? '—'}</dd>
-            <dt>Source</dt><dd><a href={sourceUrl(plugin)}>plugins/{plugin.name}</a></dd>
+            <dt>{t.plugin.facts.version}</dt><dd>{versionLabel(plugin)}</dd>
+            <dt>{t.plugin.facts.updated}</dt><dd>{formatDate(plugin.updated, true)}</dd>
+            <dt>{t.plugin.facts.owners}</dt><dd>{plugin.owners.length ? plugin.owners.join(', ') : t.empty}</dd>
+            <dt>{t.plugin.facts.license}</dt><dd>{plugin.license ?? t.empty}</dd>
+            <dt>{t.plugin.facts.source}</dt><dd><a href={sourceUrl(plugin)}>{t.plugin.sourcePath(plugin.name)}</a></dd>
           </dl>
           {plugin.changes.length > 0 && (
             <div className="changes">
-              <div className="eyebrow">Recent changes</div>
+              <div className="eyebrow">{t.plugin.recentChanges}</div>
               <ul>
                 {plugin.changes.map((c) => <li key={c.version + c.text}><span className="muted">{c.version}</span> · {c.text}</li>)}
               </ul>
