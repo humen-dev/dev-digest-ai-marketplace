@@ -180,6 +180,42 @@ if (!existsSync(marketplacePath)) {
   }
 }
 
+// Release channels: channels/<name>/.claude-plugin/marketplace.json. Each is a
+// separate marketplace (its own name) whose entries pin a plugin of the main
+// catalog to a release tag: git-subdir source, ref "<plugin>--v<x.y.z>", sha.
+const channelsDir = join(root, 'channels');
+if (existsSync(channelsDir)) {
+  const main = existsSync(marketplacePath) ? readJson(marketplacePath) : null;
+  const mainNames = new Set((main?.plugins ?? []).map((p) => p?.name));
+  for (const d of readdirSync(channelsDir, { withFileTypes: true })) {
+    if (!d.isDirectory()) continue;
+    const file = join(channelsDir, d.name, '.claude-plugin', 'marketplace.json');
+    if (!existsSync(file)) {
+      errors.push(`${rel(join(channelsDir, d.name))}: missing .claude-plugin/marketplace.json`);
+      continue;
+    }
+    const c = readJson(file);
+    if (!c) continue;
+    checkName(c.name, rel(file));
+    if (c.name === main?.name) errors.push(`${rel(file)}: name must differ from the main marketplace name`);
+    if (!c.owner?.name) errors.push(`${rel(file)}: owner.name is required`);
+    for (const [i, p] of (Array.isArray(c.plugins) ? c.plugins : []).entries()) {
+      const where = `${rel(file)} plugins[${i}] (${p?.name})`;
+      if (!mainNames.has(p?.name)) errors.push(`${where}: not a plugin of the main catalog`);
+      const s = p?.source;
+      if (!s || s.source !== 'git-subdir') {
+        errors.push(`${where}: channel entries must use a git-subdir source`);
+        continue;
+      }
+      if (s.path !== `plugins/${p.name}`) errors.push(`${where}: path must be "plugins/${p.name}"`);
+      if (!new RegExp(`^${p.name}--v\\d+\\.\\d+\\.\\d+$`).test(s.ref ?? '')) {
+        errors.push(`${where}: ref must be a release tag "${p.name}--v<x.y.z>"`);
+      }
+      if (!/^[0-9a-f]{40}$/.test(s.sha ?? '')) errors.push(`${where}: must pin a 40-char "sha"`);
+    }
+  }
+}
+
 for (const w of warnings) console.warn(`warning: ${w}`);
 for (const e of errors) console.error(`error:   ${e}`);
 console.log(

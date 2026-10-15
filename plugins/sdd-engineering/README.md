@@ -16,8 +16,9 @@ repository, without copying `.claude/` folders between projects.
 | `ears-requirements` | skill (preloaded by the spec and plan agents) | `sdd-engineering:ears-requirements` |
 | write guard | `PreToolUse` hook (`Write\|Edit`) | automatic — see [Guard hooks](#guard-hooks) |
 | Bash guard | `PreToolUse` hook (`Bash`) | automatic — see [Guard hooks](#guard-hooks) |
+| version trace | `SessionStart` / `SubagentStart` hook | automatic — see [Version trace](#version-trace) |
 | templates | `templates/spec.md`, `templates/plan.md` | used by the agents |
-| eval suite | `evals/` | `claude plugin eval plugins/sdd-engineering` |
+| eval suite | `evals/` | see [Dependencies, evals, versions](#dependencies-evals-versions) |
 
 ## Contents
 
@@ -29,11 +30,12 @@ repository, without copying `.claude/` folders between projects.
 6. [Agents](#agents)
 7. [Skills](#skills)
 8. [Guard hooks](#guard-hooks)
-9. [Artifacts map](#artifacts-map)
-10. [Worked example](#worked-example)
-11. [Cost and when to skip steps](#cost-and-when-to-skip-steps)
-12. [Troubleshooting](#troubleshooting)
-13. [Dependencies, evals, versions](#dependencies-evals-versions)
+9. [Version trace](#version-trace)
+10. [Artifacts map](#artifacts-map)
+11. [Worked example](#worked-example)
+12. [Cost and when to skip steps](#cost-and-when-to-skip-steps)
+13. [Troubleshooting](#troubleshooting)
+14. [Dependencies, evals, versions](#dependencies-evals-versions)
 
 ## What SDD means here
 
@@ -278,7 +280,7 @@ prompt cache.
 | | |
 |---|---|
 | Use when | requirements exist (an approved spec, a design brief or a concrete request) and need an implementation plan before any code |
-| Model | opus · preloads `sdd-engineering:ears-requirements` + the full `engineering-paved-path` coding set |
+| Model | opus · preloads `sdd-engineering:ears-requirements`, the two architecture skills and `security`; stack skills are named in units' *Skills* and read only on demand (since 1.1.0) |
 | Inputs | **requirements source** (spec path / brief / request) · **mode**: `multi-agent` or `single-agent` · answers · optional `template` (absolute path; default `${CLAUDE_PLUGIN_ROOT}/templates/plan.md`) · `plan gap: S<NN>-…` rows from the verifier (adds units in a new wave) |
 | First reply | a **Requirements review** (unclear / conflicting / infeasible / untestable items, recommendations, ≤ 4 questions) and the execution-mode question — skipped when an approved spec and a mode are passed and nothing blocks |
 | Output | `<plansDir>/<slug>.md`, status `draft`: context, affected modules, §3 contracts as code, work units (Kind, **Skills**, **Module**, Wave, Depends on, Owns, Must not touch, Consumes, Produces, Checks with `checkCommand` filled in, Steps, Acceptance criteria citing `SPEC-NN AC-k`), waves, test plan, verification, risks, spec follow-ups |
@@ -448,6 +450,33 @@ Details:
 Tests: `node --test scripts/write-guard.test.mjs scripts/bash-guard.test.mjs`
 (from the plugin folder).
 
+## Version trace
+
+`scripts/trace.mjs` (since 1.1.0) answers "which sdd-engineering is actually
+running here?" without guessing from manifests:
+
+- **`SessionStart`** — adds one line to the session context:
+  `Active plugin: sdd-engineering@<marketplace> version <x.y.z>.` The version is
+  read from the loaded copy's own `.claude-plugin/plugin.json`; the marketplace
+  from the plugin cache path (`<cache>/<marketplace>/sdd-engineering/<version>/`),
+  so it shows the release channel too (`dev-digest-ai-marketplace` = latest,
+  `dev-digest-ai-marketplace-stable` = stable, `local` = loaded in place). Ask
+  Claude "which sdd-engineering version is active?" to see it.
+- **Trace file** — in a project that opted into the workflow (it has
+  `.claude/sdd.json` or an existing `<runStateDir>`), each session start and each
+  `sdd-engineering:*` agent start appends a JSON line to
+  `<runStateDir>/trace.jsonl` (default `.sdd/trace.jsonl`, git-ignored with the
+  rest of `.sdd/`):
+
+  ```json
+  {"ts":"2026-10-15T12:00:00.000Z","event":"SubagentStart","plugin":"sdd-engineering","version":"1.1.0","marketplace":"dev-digest-ai-marketplace","session_id":"…","agent_type":"sdd-engineering:plan-verifier","agent_id":"…"}
+  ```
+
+  Other projects get the context line and nothing on disk.
+- Never blocks and never fails a session: any error exits 0 with no output.
+
+Tests: `node --test scripts/trace.test.mjs`.
+
 ## Artifacts map
 
 | Artifact | Path | Written by |
@@ -543,10 +572,26 @@ Project: `services/api` and `apps/web` modules, `checkCommand` =
 
 - Depends on `engineering-paved-path` `^1.0.0`, `research-tools` `^1.0.0`,
   `architecture-review` `^1.0.0` (installed automatically).
-- Evals (`claude plugin eval` format, `evals/`): a smoke suite —
-  `spec-creator-interview` (a vague request gets a Spec review with questions,
-  no file) and `plan-verifier-no-plan` (no plan path → `Clarification needed`).
-  Run with `claude plugin eval plugins/sdd-engineering`.
+- Evals (`claude plugin eval` format, `evals/`):
+
+  | Case | Tags | Checks |
+  |---|---|---|
+  | `spec-creator-interview` | smoke | a vague request gets a Spec review with questions, no file |
+  | `plan-verifier-no-plan` | smoke | no plan path → `Clarification needed`, no verdict |
+  | `planner-interview` | smoke, cost | a vague request gets a Requirements review with the execution-mode question |
+  | `planner-fast-path` | cost | approved requirements + mode → a plan whose units list the right paved-path *Skills* |
+  | `active-version` | smoke, trace | the session knows the active version from the trace hook |
+
+  Each case loads the dependency plugins via `plugins:`, which must stay inside
+  the directory you run against — so run from the **marketplace root**:
+
+  ```bash
+  claude plugin eval . --eval-dir plugins/sdd-engineering/evals --tag smoke --ablation none
+  claude plugin eval . --eval-dir plugins/sdd-engineering/evals --tag cost --runs 3 --ablation none --allow-tools Write
+  ```
+
+  The cost suite and its numbers: [docs/COST-BASELINE.md](../../docs/COST-BASELINE.md).
+- Version trace: see [Version trace](#version-trace).
 - Script tests: `node --test scripts/*.test.mjs skills/run-plan/scripts/*.test.mjs skills/workflow-retro/scripts/*.test.mjs`
   from the plugin folder.
 - Versioned with SemVer; see [RELEASES.md](RELEASES.md).

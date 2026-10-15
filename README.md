@@ -59,6 +59,19 @@ Auto-update is **off** by default for third-party marketplaces. Update manually:
 or enable auto-update in `/plugin` → Marketplaces. After an update, run
 `/reload-plugins` (or restart) to load the new version.
 
+### Stable channel
+
+`dev-digest-ai-marketplace` tracks `main`. For releases that passed their eval
+gate only, add the **stable** channel — every plugin pinned to a release tag:
+
+```bash
+claude plugin marketplace add https://raw.githubusercontent.com/humen-dev/dev-digest-ai-marketplace/main/channels/stable/.claude-plugin/marketplace.json
+claude plugin install sdd-engineering@dev-digest-ai-marketplace-stable
+```
+
+Switching from latest to stable is also the rollback path. See
+[docs/RELEASES.md → Release channels](docs/RELEASES.md#release-channels).
+
 ## Plugins
 
 | Plugin | Kind | What it adds |
@@ -85,7 +98,9 @@ Installing `sdd-engineering` installs its dependencies automatically.
 plugins/<name>/                   one folder per plugin
 docs/PLUGIN-GUIDELINES.md         how to structure a plugin
 docs/SECURITY.md                  hooks, MCP and secrets policy
-docs/RELEASES.md                  versioning, updates, rollback
+docs/RELEASES.md                  versioning, updates, release channels, rollback
+docs/COST-BASELINE.md             cost per successful workflow, optimization, quality gate
+channels/stable/                  stable channel catalog (plugins pinned to release tags)
 scripts/validate-marketplace.mjs  structural linter (no dependencies)
 site/                             catalog website (Vite + React), see site/README.md
 ```

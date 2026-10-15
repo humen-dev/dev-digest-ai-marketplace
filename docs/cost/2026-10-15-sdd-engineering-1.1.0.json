@@ -1,0 +1,109 @@
+{
+  "claudeVersion": "2.1.300",
+  "startedAt": "2026-10-15T11:18:12.140Z",
+  "plugins": [
+    "sdd-engineering@1.1.0",
+    "engineering-paved-path@1.0.0",
+    "research-tools@1.1.0",
+    "architecture-review@1.0.0"
+  ],
+  "suiteCostUsd": 5.4891,
+  "partial": false,
+  "workflow": [
+    "planner-interview",
+    "planner-fast-path"
+  ],
+  "costPerSuccessfulWorkflowUsd": 1.201,
+  "cases": [
+    {
+      "name": "active-version",
+      "runs": 3,
+      "passed": 3,
+      "score": 1,
+      "agentCostUsd": 0.2501,
+      "costPerSuccessUsd": 0.0834,
+      "runCostsUsd": [
+        0.0834,
+        0.0834,
+        0.0834
+      ],
+      "turns": [
+        1,
+        1,
+        1
+      ]
+    },
+    {
+      "name": "plan-verifier-no-plan",
+      "runs": 3,
+      "passed": 3,
+      "score": 1,
+      "agentCostUsd": 0.4236,
+      "costPerSuccessUsd": 0.1412,
+      "runCostsUsd": [
+        0.1242,
+        0.1507,
+        0.1487
+      ],
+      "turns": [
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "name": "planner-fast-path",
+      "runs": 3,
+      "passed": 3,
+      "score": 1,
+      "agentCostUsd": 2.6639,
+      "costPerSuccessUsd": 0.888,
+      "runCostsUsd": [
+        0.933,
+        0.851,
+        0.8799
+      ],
+      "turns": [
+        4,
+        4,
+        4
+      ]
+    },
+    {
+      "name": "planner-interview",
+      "runs": 3,
+      "passed": 3,
+      "score": 1,
+      "agentCostUsd": 0.9391,
+      "costPerSuccessUsd": 0.313,
+      "runCostsUsd": [
+        0.3273,
+        0.3111,
+        0.3007
+      ],
+      "turns": [
+        2,
+        2,
+        2
+      ]
+    },
+    {
+      "name": "spec-creator-interview",
+      "runs": 3,
+      "passed": 3,
+      "score": 1,
+      "agentCostUsd": 1.2122,
+      "costPerSuccessUsd": 0.4041,
+      "runCostsUsd": [
+        0.4426,
+        0.3806,
+        0.389
+      ],
+      "turns": [
+        2,
+        2,
+        2
+      ]
+    }
+  ]
+}

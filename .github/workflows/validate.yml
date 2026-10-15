@@ -34,3 +34,9 @@ jobs:
             claude plugin validate "$dir" --strict
             echo "::endgroup::"
           done
+          for dir in channels/*/; do
+            [ -d "$dir" ] || continue
+            echo "::group::$dir"
+            claude plugin validate "$dir" --strict
+            echo "::endgroup::"
+          done

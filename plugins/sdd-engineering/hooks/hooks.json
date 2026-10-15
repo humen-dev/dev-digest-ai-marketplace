@@ -1,5 +1,5 @@
 {
-  "description": "sdd-engineering guards: limit what spec-creator, implementation-planner, implementer and plan-verifier may write or run. Inert for the main session and for every other agent.",
+  "description": "sdd-engineering hooks: guards that limit what spec-creator, implementation-planner, implementer and plan-verifier may write or run (inert for the main session and every other agent), and a version trace on SessionStart / SubagentStart.",
   "hooks": {
     "PreToolUse": [
       {
@@ -18,6 +18,29 @@
           {
             "type": "command",
             "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/bash-guard.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs\"",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "matcher": "sdd-engineering:.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"${CLAUDE_PLUGIN_ROOT}/scripts/trace.mjs\"",
             "timeout": 10
           }
         ]
