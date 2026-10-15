@@ -118,9 +118,9 @@ function hasFlag(item: Item, flag: HasFlag): boolean {
 
 export interface SearchResult {
   parsed: ParsedQuery;
-  /** Items that match the most query terms (everything when there are no terms). */
+  /** Items that match every term (everything when there are no terms). */
   best: Item[];
-  /** Items that match fewer terms. */
+  /** Items that match some terms; only filled when there are fewer than 3 best matches. */
   related: Item[];
   /** Best matches hidden by the kind filter. */
   hidden: Item[];
@@ -145,13 +145,13 @@ export function search(all: Item[], query: string, choice: KindChoice = null, so
   let scored = pool.map((it) => score(it, terms));
   if (terms.length) scored = scored.filter((s) => s.hits > 0);
 
-  // Top tier = the items covering the most terms; the rest are "related".
-  const topHits = Math.max(0, ...scored.map((s) => s.hits));
-  const bestAll = terms.length ? scored.filter((s) => s.hits === topHits) : scored;
-  const relatedAll = terms.length ? scored.filter((s) => s.hits < topHits) : [];
+  // §7.2/§7.4: AND results form the main grid. When there are fewer than
+  // three, OR results are added in a separate "Related" section.
+  const bestAll = terms.length ? scored.filter((s) => s.hits === terms.length) : scored;
+  const relatedAll = terms.length && bestAll.length < 3 ? scored.filter((s) => s.hits < terms.length) : [];
 
   const kindCounts = { skill: 0, agent: 0, command: 0, hook: 0, mcp: 0 } as Record<Kind, number>;
-  for (const s of scored) kindCounts[s.item.kind]++;
+  for (const s of [...bestAll, ...relatedAll]) kindCounts[s.item.kind]++;
 
   let kind: Kind | null = null;
   let autoKind = false;

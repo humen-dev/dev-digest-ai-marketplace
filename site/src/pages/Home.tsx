@@ -10,7 +10,6 @@ import {
   KINDS,
   formatDate,
   installCommand,
-  invocation,
   items,
   lastUpdated,
   requestSkillUrl,
@@ -32,6 +31,18 @@ function readKind(v: string | null): KindChoice {
   return (KINDS as string[]).includes(v ?? '') ? (v as Kind) : null;
 }
 
+/** Invocation with its own copy icon, or the <Event> · <matcher> / <transport> · <package> line (§7.5, §6.1). */
+function Invocation({ item }: { item: Item }) {
+  if (!item.invocation) return <span className="invoke meta">{item.meta}</span>;
+  return (
+    <span className="invoke">
+      <code>{item.invocation}</code>
+      <CopyButton text={item.invocation} label={`Copy ${item.invocation}`} className="icon-btn xs" iconOnly />
+    </span>
+  );
+}
+
+// §7.5: the whole card links to the plugin page; the buttons inside do not navigate.
 function ArtifactCard({ item, terms }: { item: Item; terms: string[] }) {
   const p = item.plugin;
   const runs = runsSummary(p);
@@ -39,18 +50,17 @@ function ArtifactCard({ item, terms }: { item: Item; terms: string[] }) {
     <article className="card">
       <div className="card-top">
         <span className="badge kind"><KindIcon kind={item.kind} />{KIND_LABEL[item.kind]}</span>
-        <span className="in">in <Link to={`/plugins/${p.name}/`}>{p.name}</Link></span>
+        <span className="in">in <span className="plug">{p.name}</span></span>
         <span className="ver">{versionLabel(p)}</span>
       </div>
       <div>
-        <h3><Link to={`/plugins/${p.name}/`}><Highlight text={item.name} terms={terms} /></Link></h3>
+        <h3><Link className="card-link" to={`/plugins/${p.name}/`}><Highlight text={item.name} terms={terms} /></Link></h3>
         <p><Highlight text={item.description} terms={terms} /></p>
       </div>
-      <code className="invoke">{invocation(item)}</code>
+      <Invocation item={item} />
       {runs && <span className="badge exec" style={{ alignSelf: 'flex-start' }}><PlugsIcon aria-hidden />plugin runs {runs}</span>}
       <div className="card-actions">
         <CopyButton text={installCommand(p.name)} label="Copy install" className="btn primary" title={installCommand(p.name)} />
-        <Link className="btn" to={`/plugins/${p.name}/`}>Details</Link>
         <SetToggle plugin={p.name} />
       </div>
     </article>
@@ -64,7 +74,7 @@ function RelatedRow({ item, terms }: { item: Item; terms: string[] }) {
       <span className="ic"><KindIcon kind={item.kind} size={16} /></span>
       <Link className="name" to={`/plugins/${p.name}/`}><Highlight text={item.name} terms={terms} /></Link>
       <span className="desc"><Highlight text={item.description} terms={terms} /></span>
-      <span className="meta">{p.name} · {versionLabel(p)}</span>
+      <span className="meta">{item.invocation ?? item.meta} · {p.name}</span>
       <CopyButton text={installCommand(p.name)} label="Copy install" className="btn sm" title={installCommand(p.name)} />
     </div>
   );
@@ -204,7 +214,7 @@ export function Home() {
       <section className="results wrap" aria-labelledby="results-title">
         <div className="results-head">
           <h2 id="results-title" aria-live="polite">
-            {hasQuery ? (total ? `${best.length} match${best.length === 1 ? '' : 'es'}` : 'No matches') : 'All artifacts'}
+            {!hasQuery ? 'All artifacts' : best.length ? `${best.length} match${best.length === 1 ? '' : 'es'}` : total || hidden.length ? 'No result has all your words' : 'No matches'}
           </h2>
           {kind && (
             <span className="filter-chip">
@@ -233,7 +243,14 @@ export function Home() {
           </div>
         )}
 
-        {total > 0 || hidden.length > 0 ? (
+        {!catalog.plugins.length ? (
+          <div className="empty">
+            <h3>No plugins yet</h3>
+            <p>The marketplace is empty. Add the first plugin or ask for one.</p>
+            <a className="btn primary lg" href={`https://github.com/${catalog.repo}/blob/main/CONTRIBUTING.md`}>Contributing guide</a>{' '}
+            <a className="btn lg" href={requestSkillUrl(query)}>Request a skill</a>
+          </div>
+        ) : total > 0 || hidden.length > 0 ? (
           <>
             <div className="grid">
               {best.map((it) => <ArtifactCard key={it.id} item={it} terms={terms} />)}
@@ -241,7 +258,7 @@ export function Home() {
                 <div className="hidden-card">
                   <span className="why"><EyeSlashIcon aria-hidden />Hidden by the {KIND_PLURAL[kind]} filter{hidden.length > 1 ? ` · ${hidden.length}` : ''}</span>
                   <span className="kind"><KindIcon kind={hidden[0].kind} />{KIND_LABEL[hidden[0].kind]}</span>
-                  <code>{invocation(hidden[0])}</code>
+                  <code>{hidden[0].invocation ?? hidden[0].meta}</code>
                   <span className="desc">{hidden[0].description}</span>
                   <button type="button" className="link-btn" onClick={() => setParam('type', 'all')}>Show all types</button>
                 </div>

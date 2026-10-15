@@ -10,6 +10,7 @@ import {
   type Icon,
 } from '@phosphor-icons/react';
 import type { Kind } from '../data/types';
+import { securityDocUrl } from '../lib/catalog';
 import { highlight } from '../lib/search';
 import { useAppState, useCopy } from '../lib/state';
 
@@ -70,5 +71,27 @@ export function CopyButton({ text, label, className = 'btn', iconOnly = false, t
       {!iconOnly && (done ? 'Copied' : label)}
       <span className="sr-only" aria-live="polite">{done ? 'Copied to clipboard' : ''}</span>
     </button>
+  );
+}
+
+/** Install command that may wrap only after "@" (§9.2): no mid-word breaks. */
+export function InstallCmd({ text }: { text: string }) {
+  const at = text.lastIndexOf('@');
+  if (at < 0) return <span className="nowrap">{text}</span>;
+  return (
+    <>
+      <span className="nowrap">{text.slice(0, at + 1)}</span>
+      <wbr />
+      <span className="nowrap">{text.slice(at + 1)}</span>
+    </>
+  );
+}
+
+/** Per-entry badge for the unpinned-dependency heuristic (§8). */
+export function UnpinnedBadge() {
+  return (
+    <a className="badge heur" href={securityDocUrl()} title="npx/uvx/bunx package without an exact version. Heuristic: see docs/SECURITY.md">
+      unpinned · heuristic
+    </a>
   );
 }

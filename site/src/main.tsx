@@ -16,11 +16,14 @@ import { NotFound } from './pages/NotFound';
 import { PluginPage } from './pages/PluginPage';
 import { SecurityPage } from './pages/SecurityPage';
 
+// New page: scroll to the #anchor if there is one, else to the top.
 function ScrollToTop() {
-  const { pathname } = useLocation();
+  const { pathname, hash } = useLocation();
   useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+    const el = hash ? document.getElementById(decodeURIComponent(hash.slice(1))) : null;
+    if (el) el.scrollIntoView();
+    else window.scrollTo(0, 0);
+  }, [pathname, hash]);
   return null;
 }
 

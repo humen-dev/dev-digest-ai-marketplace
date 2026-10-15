@@ -34,11 +34,24 @@ describe('search', () => {
     expect(r.autoKind).toBe(true);
   });
 
-  it('splits best matches from related ones and reports items hidden by the kind filter', () => {
-    const r = search(items, 'skill for writing release notes');
+  it('§14.8: the main grid has only skills matching all terms; weaker matches go to Related', () => {
+    const r = search(items, 'I need a skill for release notes');
     expect(names(r.best)).toEqual(['skill:release-notes', 'skill:changelog-keeper']);
+    expect(r.best.every((i) => i.kind === 'skill')).toBe(true);
     expect(names(r.hidden)).toEqual(['command:release-notes']);
-    expect(names(r.related)).toEqual(expect.arrayContaining(['skill:readme-polish', 'skill:adr-writer']));
+    expect(r.related.every((i) => i.kind === 'skill')).toBe(true);
+  });
+
+  it('keeps items missing a term out of the main grid', () => {
+    const r = search(items, 'skill for writing release notes');
+    expect(r.best).toEqual([]);
+    expect(names(r.related)).toEqual(expect.arrayContaining(['skill:release-notes', 'skill:readme-polish', 'skill:adr-writer']));
+  });
+
+  it('shows Related only when there are fewer than 3 AND matches', () => {
+    const r = search(items, 'review', 'all');
+    expect(r.best.length).toBeGreaterThanOrEqual(3);
+    expect(r.related).toEqual([]);
   });
 
   it('finds the release skill from a Ukrainian query', () => {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import { installCommand } from './catalog';
-import { parseSet, settingsJson, shellCommands } from './install';
+import { parseSet, sessionCommands, settingsJson, shellCommands } from './install';
 
 describe('install set', () => {
   it('keeps only known plugins, in catalog order', () => {
@@ -12,8 +12,15 @@ describe('install set', () => {
     expect(installCommand('devdigest-backend')).toBe('/plugin install devdigest-backend@dev-digest-ai-marketplace');
   });
 
-  it('shell commands add the marketplace first', () => {
+  it('shell commands use the claude CLI and add the marketplace first', () => {
     expect(shellCommands(['devdigest-backend']).split('\n')).toEqual([
+      'claude plugin marketplace add humen-dev/dev-digest-ai-marketplace',
+      'claude plugin install devdigest-backend@dev-digest-ai-marketplace',
+    ]);
+  });
+
+  it('in-session commands are the same steps as slash commands', () => {
+    expect(sessionCommands(['devdigest-backend']).split('\n')).toEqual([
       '/plugin marketplace add humen-dev/dev-digest-ai-marketplace',
       '/plugin install devdigest-backend@dev-digest-ai-marketplace',
     ]);

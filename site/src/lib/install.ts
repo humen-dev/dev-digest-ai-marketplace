@@ -1,7 +1,16 @@
 import { catalog } from '../data/catalog';
 import { installCommand, marketplaceAddCommand } from './catalog';
 
+/** For a terminal: the `claude` CLI. */
 export function shellCommands(names: string[]): string {
+  return [
+    `claude plugin marketplace add ${catalog.repo}`,
+    ...names.map((n) => `claude plugin install ${n}@${catalog.marketplace}`),
+  ].join('\n');
+}
+
+/** For inside a Claude Code session: slash commands. */
+export function sessionCommands(names: string[]): string {
   return [marketplaceAddCommand(), ...names.map(installCommand)].join('\n');
 }
 
@@ -24,3 +33,5 @@ export function parseSet(param: string | null): string[] {
   const wanted = new Set(param.split(',').map((s) => s.trim()).filter(Boolean));
   return catalog.plugins.map((p) => p.name).filter((n) => wanted.has(n));
 }
+
+export const sameSet = (a: string[], b: string[]) => a.length === b.length && a.every((n, i) => n === b[i]);
