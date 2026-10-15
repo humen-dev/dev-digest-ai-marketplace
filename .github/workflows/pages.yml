@@ -5,16 +5,28 @@ name: Site
 #   Site: tests   — unit tests
 #   Site: build   — type-check and production build
 #   Site: deploy  — publish to GitHub Pages (pushes to main only)
+#
+# The build generates the catalog from .claude-plugin/marketplace.json,
+# plugins/, CODEOWNERS and git history (site/scripts/build-catalog.mjs), so
+# changes to those paths rebuild the site. Tests use site/test/fixtures.
 
 on:
   push:
     branches: [main]
     paths:
       - site/**
+      - plugins/**
+      - .claude-plugin/**
+      - CODEOWNERS
+      - scripts/validate-marketplace.mjs
       - .github/workflows/pages.yml
   pull_request:
     paths:
       - site/**
+      - plugins/**
+      - .claude-plugin/**
+      - CODEOWNERS
+      - scripts/validate-marketplace.mjs
       - .github/workflows/pages.yml
   workflow_dispatch:
 
@@ -48,12 +60,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          # Full history: plugin "updated" dates and recent changes come from git log.
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
           cache-dependency-path: site/package-lock.json
       - run: npm ci
+      # prebuild generates src/generated/catalog.json from the repository.
       - run: npm run build
       - if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
