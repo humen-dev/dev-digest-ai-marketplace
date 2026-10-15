@@ -45,15 +45,69 @@ plugin README.
 
 ## How users receive updates
 
-- Auto-update is **off** by default for this marketplace. Users either enable it
-  in `/plugin` → Marketplaces, or run:
+Verified end to end on 2026-10-15 (research-tools 1.0.0 → 1.1.0, PR #7, tag
+`research-tools--v1.1.0`). Reference:
+[When auto-update runs](https://code.claude.com/docs/en/plugins/loading#when-auto-update-runs),
+[Keep users up to date](https://code.claude.com/docs/en/plugins/host-marketplace#keep-users-up-to-date).
 
-  ```text
-  /plugin marketplace update dev-digest-ai-marketplace
+### Enable auto-update
+
+Auto-update is **off** by default for third-party marketplaces, and
+`marketplace.json` has no field to turn it on — each user (or org) enables it:
+
+- `/plugin` → Marketplaces → `dev-digest-ai-marketplace` → Enable auto-update, or
+- `"autoUpdate": true` on the marketplace's `extraKnownMarketplaces` entry in
+  `~/.claude/settings.json`:
+
+  ```json
+  {
+    "extraKnownMarketplaces": {
+      "dev-digest-ai-marketplace": {
+        "source": { "source": "github", "repo": "humen-dev/dev-digest-ai-marketplace" },
+        "autoUpdate": true
+      }
+    }
+  }
   ```
 
-- The running session keeps the old version until `/reload-plugins` or restart.
+  The same entry works in a consumer repo's `.claude/settings.json` (applies
+  after the folder is trusted) or in managed settings for the whole org.
+
+Without auto-update, users update manually:
+
+```text
+/plugin marketplace update dev-digest-ai-marketplace
+```
+
+### Auto-update is silently blocked by
+
+`DISABLE_AUTOUPDATER`, `DISABLE_UPDATES` or
+`CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC`. If any is set, the plugin
+auto-update pass is off and the `/plugin` toggle is hidden. Some launchers set
+`DISABLE_AUTOUPDATER=1` themselves. Override with `FORCE_AUTOUPDATE_PLUGINS=1`,
+e.g. in `settings.json`:
+
+```json
+{ "env": { "FORCE_AUTOUPDATE_PLUGINS": "1" } }
+```
+
+### Timing
+
+- The check runs only in an interactive session, after the first message, after
+  a random delay of up to 10 minutes.
+- "Plugin updated … Run /reload-plugins to apply" is a transient footer toast,
+  not a transcript line — easy to miss.
+- The running session keeps the old version until `/reload-plugins`; new
+  sessions load the new one.
 - Old cached versions are removed 14 days after update.
+
+### Verify an update
+
+1. Bump `version` in `plugin.json`, merge, tag (`claude plugin tag … --push`).
+2. In a session where the plugin is installed (auto-update on), send a message.
+3. Wait up to 10 minutes for the toast.
+4. Run `/reload-plugins`.
+5. Run a version-printing command, e.g. `/research-tools:about`.
 
 ## Rollback
 
