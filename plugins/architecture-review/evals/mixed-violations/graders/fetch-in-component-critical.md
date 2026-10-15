@@ -3,4 +3,4 @@ type: llm
 weight: 1
 ---
 
-The report flags the `fetch(...)` call inside the `InsightPanel` component as CRITICAL.
+The report flags the `fetch(...)` call inside the `PaymentHistory` component as CRITICAL.

@@ -148,7 +148,9 @@ node --test "plugins/architecture-review/scripts/*.test.mjs"
 ## Evals
 
 `evals/` holds five `claude plugin eval` cases. Each prompt inlines a diff of a
-small sample project (server / client / engine modules) plus its architecture
+neutral sample commerce app — the same one the architecture skills use
+(`api/` backend with `src/modules/orders|payments|…`, `web/` Next.js admin UI,
+`pricing-core/` pure library) — plus its architecture
 notes and asks the main session to delegate to the agent; graders check:
 
 | Case | What it checks |
@@ -157,7 +159,7 @@ notes and asks the main session to delegate to the agent; graders check:
 | `client-fetch` | `fetch` in a component → CRITICAL, target data hook; cross-route `_components` import |
 | `server-service-request` | HTTP request type leaking into a service → CRITICAL; unchanged pre-existing drift ignored |
 | `client-warnings-only` | judgement-level issues only → no CRITICAL, verdict `comment`/`approve` |
-| `mixed-violations` | many problems at once — every CRITICAL survives (SDK outside adapters, engine I/O, prompt-guard change, relative reach-in) |
+| `mixed-violations` | many problems at once — every CRITICAL survives (SDK outside adapters, I/O in the pure library, security-critical constant change, relative reach-in) |
 
 Every case has one `tool_used` grader (the agent was dispatched; counted only
 in the with-plugin arm) and one `llm` rubric grader per expected behaviour.

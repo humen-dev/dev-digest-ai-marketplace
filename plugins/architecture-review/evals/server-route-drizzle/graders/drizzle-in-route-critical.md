@@ -3,4 +3,4 @@ type: llm
 weight: 1
 ---
 
-The report flags the Drizzle query (`db.select()...from(digests)`) inside `server/src/modules/digests/routes.ts` as a CRITICAL finding.
+The report flags the Drizzle query (`db.select()...from(orders)`) inside `api/src/modules/orders/routes.ts` as a CRITICAL finding.
