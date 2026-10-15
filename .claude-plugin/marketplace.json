@@ -1,10 +1,61 @@
 {
   "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "dev-digest-ai-marketplace",
-  "description": "Claude Code plugins (skills, agents, commands, hooks) for building and maintaining DevDigest.",
+  "description": "Spec-Driven Development agents, engineering skills and reviewers for Claude Code. Project-agnostic; configured per repository via .claude/sdd.json.",
   "owner": {
     "name": "humen-dev",
     "url": "https://github.com/humen-dev"
   },
-  "plugins": []
+  "plugins": [
+    {
+      "name": "engineering-paved-path",
+      "source": "./plugins/engineering-paved-path",
+      "description": "Paved-path engineering skills: React, Next.js, Fastify, Drizzle, PostgreSQL, TypeScript, Zod, testing, security, architecture and Mermaid diagrams.",
+      "category": "development",
+      "tags": [
+        "skills",
+        "react",
+        "nextjs",
+        "fastify",
+        "typescript",
+        "architecture",
+        "security"
+      ]
+    },
+    {
+      "name": "research-tools",
+      "source": "./plugins/research-tools",
+      "description": "Read-only researcher agent that answers questions about a codebase or the web with an evidence-backed, structured report.",
+      "category": "productivity",
+      "tags": [
+        "research",
+        "agent",
+        "read-only"
+      ]
+    },
+    {
+      "name": "architecture-review",
+      "source": "./plugins/architecture-review",
+      "description": "Read-only architecture reviewer agent that checks a change set against layering and placement rules and returns a verdict with file:line findings.",
+      "category": "development",
+      "tags": [
+        "architecture",
+        "code-review",
+        "agent"
+      ]
+    },
+    {
+      "name": "sdd-engineering",
+      "source": "./plugins/sdd-engineering",
+      "description": "Spec-Driven Development workflow: spec-creator, implementation-planner, implementer and plan-verifier agents, run-plan and workflow-retro skills, guard hooks.",
+      "category": "development",
+      "tags": [
+        "sdd",
+        "spec-driven-development",
+        "agents",
+        "workflow",
+        "planning"
+      ]
+    }
+  ]
 }

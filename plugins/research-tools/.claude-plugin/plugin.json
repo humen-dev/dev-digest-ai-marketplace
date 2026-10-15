@@ -1,0 +1,15 @@
+{
+  "name": "research-tools",
+  "version": "1.0.0",
+  "description": "Read-only researcher agent that answers questions about a codebase or the web with an evidence-backed, structured report.",
+  "author": {
+    "name": "humen-dev",
+    "url": "https://github.com/humen-dev"
+  },
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "research",
+    "agent",
+    "read-only"
+  ]
+}

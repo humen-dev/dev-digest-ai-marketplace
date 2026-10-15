@@ -1,0 +1,21 @@
+{
+  "name": "architecture-review",
+  "version": "1.0.0",
+  "description": "Read-only architecture reviewer agent that checks a change set against layering and placement rules and returns a verdict with file:line findings.",
+  "author": {
+    "name": "humen-dev",
+    "url": "https://github.com/humen-dev"
+  },
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "architecture",
+    "code-review",
+    "agent"
+  ],
+  "dependencies": [
+    {
+      "name": "engineering-paved-path",
+      "version": "^1.0.0"
+    }
+  ]
+}
