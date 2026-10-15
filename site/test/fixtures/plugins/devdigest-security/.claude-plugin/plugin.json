@@ -1,0 +1,28 @@
+{
+  "name": "devdigest-security",
+  "version": "1.0.3",
+  "description": "Dependency audits, secret scanning and a guard that blocks destructive shell commands.",
+  "author": {
+    "name": "humen-dev"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "devdigest"
+  ],
+  "hooks": {
+    "hooks": {
+      "PreToolUse": [
+        {
+          "matcher": "Bash",
+          "hooks": [
+            {
+              "type": "command",
+              "command": "${CLAUDE_PLUGIN_ROOT}/scripts/block-dangerous.sh"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

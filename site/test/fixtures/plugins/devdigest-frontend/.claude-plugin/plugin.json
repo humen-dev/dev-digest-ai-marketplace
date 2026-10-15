@@ -1,0 +1,13 @@
+{
+  "name": "devdigest-frontend",
+  "version": "2.1.0",
+  "description": "Component patterns, accessibility checks and lint-on-save for the DevDigest web app.",
+  "author": {
+    "name": "humen-dev"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "devdigest"
+  ]
+}

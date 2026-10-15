@@ -9,5 +9,11 @@ Thumbs.db
 # Node
 node_modules/
 
+# Site build output
+site/dist/
+
+# Generated catalog (site/scripts/build-catalog.mjs)
+site/src/generated/
+
 # claude plugin eval output
 plugins/*/evals/results/

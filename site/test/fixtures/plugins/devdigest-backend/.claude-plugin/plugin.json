@@ -1,0 +1,13 @@
+{
+  "name": "devdigest-backend",
+  "version": "1.4.0",
+  "description": "Conventions for the DevDigest API: Postgres migrations, endpoint scaffolding and a backend review agent.",
+  "author": {
+    "name": "humen-dev"
+  },
+  "license": "MIT",
+  "repository": "https://github.com/humen-dev/dev-digest-ai-marketplace",
+  "keywords": [
+    "devdigest"
+  ]
+}

@@ -1,0 +1,92 @@
+name: Site
+
+# Catalog site (site/, Vite + React). Separate from "Validate marketplace",
+# which checks the plugin harness. Each job shows as its own check:
+#   Site: tests   — unit tests
+#   Site: build   — type-check and production build
+#   Site: deploy  — publish to GitHub Pages (pushes to main only)
+#
+# The build generates the catalog from .claude-plugin/marketplace.json,
+# plugins/, CODEOWNERS and git history (site/scripts/build-catalog.mjs), so
+# changes to those paths rebuild the site. Tests use site/test/fixtures.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - site/**
+      - plugins/**
+      - .claude-plugin/**
+      - CODEOWNERS
+      - scripts/validate-marketplace.mjs
+      - .github/workflows/pages.yml
+  pull_request:
+    paths:
+      - site/**
+      - plugins/**
+      - .claude-plugin/**
+      - CODEOWNERS
+      - scripts/validate-marketplace.mjs
+      - .github/workflows/pages.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: true
+
+defaults:
+  run:
+    working-directory: site
+
+jobs:
+  test:
+    name: 'Site: tests'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      - run: npm test
+
+  build:
+    name: 'Site: build'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          # Full history: plugin "updated" dates and recent changes come from git log.
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: site/package-lock.json
+      - run: npm ci
+      # prebuild generates src/generated/catalog.json from the repository.
+      - run: npm run build
+      - if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site/dist
+
+  deploy:
+    name: 'Site: deploy'
+    if: github.event_name != 'pull_request'
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
