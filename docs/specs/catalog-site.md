@@ -6,7 +6,7 @@
 | Owner | @humen-dev |
 | Created | 2026-10-14 |
 | Site URL | `https://humen-dev.github.io/dev-digest-ai-marketplace/` |
-| Stack | Astro (static output), Preact islands, MiniSearch |
+| Stack | **Vite + React SPA** in `site/` (changed 2026-10-14 from ~~Astro static output + Preact islands~~). Search uses a small in-house scorer for now; MiniSearch (§7.1) is still the plan. Not yet revised for the new stack: §5, §5.1, §9.5 (RSS), §10.1 (JS budget), §10.3 (pages need JS), §10.4 (islands), §11, §15.2. |
 
 ## 1. Summary
 
