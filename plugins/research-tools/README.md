@@ -7,8 +7,11 @@ also says plainly what it could **not** find.
 | Component | Type | Invoke as |
 |---|---|---|
 | `researcher` | agent | `research-tools:researcher` |
+| `about` | skill | `/research-tools:about` |
 
-No skills, hooks, commands or MCP servers.
+`/research-tools:about` prints the installed plugin version and its components —
+use it to confirm that an update has reached your session. No hooks, commands or
+MCP servers.
 
 ## Install
 
