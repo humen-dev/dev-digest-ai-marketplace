@@ -65,6 +65,25 @@ const isFile = (p) => existsSync(p) && statSync(p).isFile();
 
 /* ---------- markdown ---------- */
 
+/**
+ * Quotes top-level plain values that contain ": ", e.g.
+ * `description: Use after a commit, with scope: all` — strict YAML rejects
+ * these, but Claude Code reads such frontmatter fine.
+ */
+function quoteColonValues(src) {
+  const keys = [];
+  const text = src
+    .split('\n')
+    .map((line) => {
+      const m = /^([A-Za-z][\w-]*):[ \t]+(.+)$/.exec(line);
+      if (!m || /^["'[{|>&*!]/.test(m[2]) || !/:\s/.test(m[2])) return line;
+      keys.push(m[1]);
+      return `${m[1]}: ${JSON.stringify(m[2].trimEnd())}`;
+    })
+    .join('\n');
+  return { text, keys };
+}
+
 /** Splits YAML frontmatter from a markdown file. Invalid YAML → `error`, empty data. */
 export function splitFrontmatter(text) {
   const m = /^---[ \t]*\n([\s\S]*?)\n?---[ \t]*(?:\n|$)/.exec(text);
@@ -75,6 +94,17 @@ export function splitFrontmatter(text) {
     if (!isObject(data)) return { data: {}, body, error: 'frontmatter is not a YAML mapping' };
     return { data, body, error: null };
   } catch (e) {
+    const lenient = quoteColonValues(m[1]);
+    if (lenient.keys.length) {
+      try {
+        const data = parseYaml(lenient.text) ?? {};
+        if (isObject(data)) {
+          return { data, body, error: `frontmatter is not strict YAML (unquoted ": " in ${lenient.keys.join(', ')}); read leniently` };
+        }
+      } catch {
+        /* fall through to the original error */
+      }
+    }
     return { data: {}, body, error: `invalid YAML frontmatter (${String(e.message).split('\n')[0]})` };
   }
 }

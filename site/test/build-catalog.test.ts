@@ -224,6 +224,19 @@ describe('edge cases', () => {
     expect(catalog.diagnostics).toEqual(diagnostics);
   });
 
+  it('reads frontmatter with an unquoted ": " in a value, as Claude Code does, and reports it', () => {
+    const root = tempMarketplace({
+      '.claude-plugin/marketplace.json': marketplace([{ name: 'p', source: './plugins/p', description: 'P.' }]),
+      ...localPlugin('p', {
+        'agents/verifier.md': '---\nname: verifier\ndescription: Run once with `scope: all` at the end.\ntools: Read, Grep\n---\n\nBody.\n',
+      }),
+    });
+    const { catalog, diagnostics } = buildCatalog({ root, history: {}, repo: REPO });
+    expect(catalog.plugins[0].artifacts[0]).toMatchObject({ kind: 'agent', name: 'verifier', description: 'Run once with `scope: all` at the end.' });
+    expect(catalog.plugins[0].tools).toEqual(['Grep', 'Read']);
+    expect(diagnostics).toEqual([{ path: 'plugins/p/agents/verifier.md', message: expect.stringMatching(/^frontmatter is not strict YAML \(unquoted ": " in description\)/) }]);
+  });
+
   it('prints diagnostics as warnings and still writes the catalog', () => {
     const root = tempMarketplace({
       '.claude-plugin/marketplace.json': marketplace([{ name: 'p', source: './plugins/p', description: 'P.' }]),
